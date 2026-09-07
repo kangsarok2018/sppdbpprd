@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Font Trebuchet MS & Inter -->
+  <!-- Google Font Trebuchet MS & Fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,17 +32,17 @@
 
     /* Garis Ganda Kop Surat Kedinasan */
     .kop-garis-ganda {
-      border-bottom: 3.5px solid #000000;
+      border-bottom: 3px solid #000000;
       position: relative;
-      margin-bottom: 12px;
-      padding-bottom: 4px;
+      margin-bottom: 10px;
+      padding-bottom: 3px;
     }
     .kop-garis-ganda::after {
       content: "";
       position: absolute;
       left: 0;
       right: 0;
-      bottom: -4.5px;
+      bottom: -4px;
       border-bottom: 1px solid #000000;
     }
 
@@ -55,10 +55,10 @@
     .spd-box-table th, 
     .spd-box-table td {
       border: 1px solid #000000;
-      padding: 4px 7px;
+      padding: 3px 6px;
       vertical-align: top;
-      font-size: 12px;
-      line-height: 1.35;
+      font-size: 11.5px;
+      line-height: 1.3;
     }
 
     .form-input {
@@ -77,13 +77,14 @@
       box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
     }
 
+    /* Ukuran dan Page Setup Kertas Persis Standar Dokumen */
     .kertas-dokumen {
       background: #ffffff;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.12);
       border: 1px solid #e2e8f0;
       width: 100%;
       max-width: 790px;
-      padding: 40px 48px;
+      padding: 2.5cm 2.2cm 2.5cm 2.2cm;
       margin: 0 auto 28px auto;
     }
 
@@ -110,13 +111,13 @@
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
-        margin: 0 0 3cm 0 !important;
+        margin: 0 0 2cm 0 !important;
         width: 100% !important;
         max-width: 100% !important;
       }
       @page {
         size: A4 portrait;
-        margin: 1.5cm 2cm 1.5cm 2cm;
+        margin: 1.8cm 2cm 1.8cm 2cm;
       }
     }
   </style>
@@ -331,7 +332,8 @@
               <input type="text" id="f_ttdTanggal" class="form-input" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Atas Nama / Jabatan Penandatangan</label>
+              <input type="text" id="f_ttdAtasNama" class="form-input font-semibold mb-1.5" placeholder="An. KEPALA" oninput="ubahData('ttdAtasNama', this.value)">
               <input type="text" id="f_ttdJabatan" class="form-input font-medium" oninput="ubahData('ttdJabatan', this.value)">
             </div>
             <div class="col-span-2">
@@ -458,17 +460,18 @@
                       <tr style="border-bottom: 1px solid #000000;">
                         <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                         <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
-                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">November 2025</td>
+                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">Februari 2025</td>
                       </tr>
                     </tbody>
                   </table>
 
                   <div class="text-center mt-3">
-                    <p class="t-ttdJabatan font-bold uppercase tracking-tight">Pengguna Anggaran</p>
-                    <div style="height: 75px;"></div>
-                    <p class="t-ttdNama font-bold underline text-[14px] leading-tight">Hj. SITI AMINAH, MM</p>
-                    <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
-                    <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19690805 200012 2 002</span></p>
+                    <p class="t-ttdAtasNama font-bold uppercase tracking-tight">An. KEPALA</p>
+                    <p class="t-ttdJabatan font-bold uppercase tracking-tight leading-snug">Kasubbid Pendaftaran dan Pendataan BPPRD<br>Kabupaten Merangin</p>
+                    <div style="height: 60px;"></div>
+                    <p class="t-ttdNama font-bold underline text-[14px] leading-tight">SYORAYA, S.Pd</p>
+                    <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Penata TK. I (III/D)</p>
+                    <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19740124 199604 2 001</span></p>
                   </div>
                 </div>
               </div>
@@ -501,21 +504,21 @@
       dasar: "Dokumen Pelaksanaan Anggaran Nomor : DPA/A.1/5.02.0.00.0.00.04.0000/001/2025 Tahun Anggaran 2025",
       pegawai: [
         {
-          nama: "SYORAYA, S.Pd",
-          nip: "19740124 199604 2 001",
-          pangkat: "Penata TK. I (III/D)",
-          jabatan: "Kasubbid Pendaftaran dan Pendataan BPPRD Kabupaten Merangin"
+          nama: "MUHAMMAD FUAD, S.Si",
+          nip: "-",
+          pangkat: "-",
+          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
         },
         {
           nama: "DIAN MUNAWAROH, S.Pd, AUD",
           nip: "-",
           pangkat: "-",
-          jabatan: "Pengelola Pendaftaran dan Pendataan Pajak Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
+          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
         }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Lembah Masurai Kabupaten Merangin.",
-        "Tugas tersebut dilaksanakan tanggal 12 November 2025 selama 1 (Satu) hari",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        "Tugas tersebut dilaksanakan tanggal 12 Februari 2025 selama 1 (Satu) hari kerja.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas tersebut."
       ],
@@ -525,22 +528,23 @@
         nomor: "",
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
         tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Lembah Masurai Kabupaten Merangin.",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Lembah Masurai",
+        tempatTujuan: "Desa Muara Kibul Kecamatan Tabir Barat",
         lamaHari: "1 ( Satu)   hari",
-        tglBerangkat: "12 November 2025",
-        tglKembali: "12 November 2025",
+        tglBerangkat: "12 Februari 2025",
+        tglKembali: "12 Februari 2025",
         instansiBeban: "BPPRD Kab. Merangin",
         mataAnggaran: ""
       },
       ttdTempat: "Bangko",
-      ttdTanggal: "     November 2025",
-      ttdJabatan: "Pengguna Anggaran",
-      ttdNama: "Hj. SITI AMINAH, MM",
-      ttdPangkat: "Pembina Utama Muda (IV/C)",
-      ttdNip: "19690805 200012 2 002"
+      ttdTanggal: "     Februari 2025",
+      ttdAtasNama: "An. KEPALA",
+      ttdJabatan: "Kasubbid Pendaftaran dan Pendataan BPPRD\nKabupaten Merangin",
+      ttdNama: "SYORAYA, S.Pd",
+      ttdPangkat: "Penata TK. I (III/D)",
+      ttdNip: "19740124 199604 2 001"
     };
 
     let state = JSON.parse(JSON.stringify(dataDefault));
@@ -727,6 +731,7 @@
 
       document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
+      document.getElementById('f_ttdAtasNama').value = state.ttdAtasNama || '';
       document.getElementById('f_ttdJabatan').value = state.ttdJabatan || '';
       document.getElementById('f_ttdNama').value = state.ttdNama || '';
       document.getElementById('f_ttdPangkat').value = state.ttdPangkat || '';
@@ -748,7 +753,9 @@
 
       document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
       document.querySelectorAll('.t-ttdTanggal').forEach(el => el.textContent = state.ttdTanggal || '');
-      document.querySelectorAll('.t-ttdJabatan').forEach(el => el.textContent = state.ttdJabatan || 'Pengguna Anggaran');
+      
+      document.querySelectorAll('.t-ttdAtasNama').forEach(el => el.textContent = state.ttdAtasNama || '');
+      document.querySelectorAll('.t-ttdJabatan').forEach(el => el.innerHTML = (state.ttdJabatan || '').replace(/\n/g, '<br>'));
       document.querySelectorAll('.t-ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
       document.querySelectorAll('.t-ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
       document.querySelectorAll('.t-ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
@@ -821,7 +828,7 @@
 
       state.pegawai.forEach((p, idx) => {
         const lembar = document.createElement('div');
-        lembar.className = 'kertas-dokumen font-official text-black text-[12.5px] leading-snug page-break';
+        lembar.className = 'kertas-dokumen font-official text-black text-[12px] leading-snug page-break';
 
         lembar.innerHTML = `
           <!-- KOP SURAT SPD -->
@@ -850,7 +857,7 @@
 
           <!-- NOMOR SPD -->
           <div class="flex justify-end my-1">
-            <table style="width: 220px; border-collapse: collapse;" class="text-[12px]">
+            <table style="width: 220px; border-collapse: collapse;" class="text-[11.5px]">
               <tbody>
                 <tr>
                   <td style="width: 80px; padding: 1px 0;">Lembar ke</td>
@@ -881,7 +888,7 @@
             <tbody>
               <tr>
                 <td style="width: 26px; text-align: center;">1.</td>
-                <td style="width: 240px;">Pejabat Yang Memberi Perintah</td>
+                <td style="width: 230px;">Pejabat Yang Memberi Perintah</td>
                 <td class="font-bold uppercase">${state.spd.pejabatPemberi || 'KEPALA BPPRD KAB.MERANGIN'}</td>
               </tr>
               <tr>
@@ -944,14 +951,14 @@
                 <td style="padding: 0;" colspan="2">
                   <table style="width: 100%; border-collapse: collapse; border: none;">
                     <tr>
-                      <td style="border: none; border-right: 1px solid #000000; width: 240px; padding: 4px 7px;">Pengikut : Nama</td>
-                      <td style="border: none; border-right: 1px solid #000000; width: 140px; text-align: center; padding: 4px 7px;">Tanggal Lahir</td>
-                      <td style="border: none; text-align: center; padding: 4px 7px;">Keterangan</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 230px; padding: 3px 6px;">Pengikut : Nama</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 140px; text-align: center; padding: 3px 6px;">Tanggal Lahir</td>
+                      <td style="border: none; text-align: center; padding: 3px 6px;">Keterangan</td>
                     </tr>
                     <tr style="border-top: 1px solid #000000;">
-                      <td style="border: none; border-right: 1px solid #000000; padding: 4px 7px;">-</td>
-                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 4px 7px;">-</td>
-                      <td style="border: none; text-align: center; padding: 4px 7px;">-</td>
+                      <td style="border: none; border-right: 1px solid #000000; padding: 3px 6px;">-</td>
+                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 3px 6px;">-</td>
+                      <td style="border: none; text-align: center; padding: 3px 6px;">-</td>
                     </tr>
                   </table>
                 </td>
@@ -998,7 +1005,7 @@
           <!-- TANDA TANGAN SPD -->
           <div class="mt-6 flex justify-end">
             <div style="width: 290px;">
-              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12px]">
+              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[11.5px]">
                 <colgroup>
                   <col style="width: 110px;">
                   <col style="width: 15px;">
@@ -1019,11 +1026,12 @@
               </table>
 
               <div class="text-center mt-3">
-                <p class="font-bold uppercase tracking-tight">${state.ttdJabatan || 'Pengguna Anggaran'}</p>
-                <div style="height: 65px;"></div>
-                <p class="font-bold underline text-[13.5px] leading-tight">${state.ttdNama || '-'}</p>
-                <p class="text-[12.5px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
-                <p class="text-[12.5px] leading-tight">NIP. ${state.ttdNip || '-'}</p>
+                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || 'An. KEPALA'}</p>
+                <p class="font-bold uppercase tracking-tight leading-snug">${state.ttdJabatan || 'Kasubbid Pendaftaran dan Pendataan BPPRD\nKabupaten Merangin'}</p>
+                <div style="height: 55px;"></div>
+                <p class="font-bold underline text-[13px] leading-tight">${state.ttdNama || '-'}</p>
+                <p class="text-[12px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
+                <p class="text-[12px] leading-tight">NIP. ${state.ttdNip || '-'}</p>
               </div>
             </div>
           </div>
