@@ -1023,7 +1023,7 @@
             </tbody>
           </table>
 
-          <!-- TANDA TANGAN SPD -->
+          <!-- TANDA TANGAN SPD (DISAMAKAN PERSIS DENGAN ST) -->
           <div class="mt-6 flex justify-end">
             <div style="width: 290px;">
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[11.5px]">
@@ -1047,8 +1047,8 @@
               </table>
 
               <div class="text-center mt-3">
-                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || 'An. KEPALA'}</p>
-                <p class="font-bold uppercase tracking-tight leading-snug">${state.ttdJabatan || 'Kasubbid Pendaftaran dan Pendataan BPPRD\nKabupaten Merangin'}</p>
+                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || ''}</p>
+                <p class="font-bold uppercase tracking-tight leading-snug">${(state.ttdJabatan || '').replace(/\n/g, '<br>')}</p>
                 <div style="height: 55px;"></div>
                 <p class="font-bold underline text-[13px] leading-tight">${state.ttdNama || '-'}</p>
                 <p class="text-[12px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
