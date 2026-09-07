@@ -101,23 +101,40 @@
       .no-print {
         display: none !important;
       }
+      
+      /* Reset spacing dari layout web Tailwind agar tidak mendorong konten turun saat dicetak */
+      main {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .grid {
+        display: block !important;
+      }
+      .sticky {
+        position: static !important;
+      }
+      
       .print-wrapper {
         padding: 0 !important;
         margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
       }
+      
       .kertas-dokumen {
         box-shadow: none !important;
         border: none !important;
-        /* Mengaplikasikan Margin Persis seperti Setup Excel */
-        padding: 0.6cm 1cm 1.9cm 1cm !important;
-        margin: 0 0 0 0 !important;
+        /* Hapus padding simulasi web agar tidak menjadi margin ganda saat dicetak */
+        padding: 0 !important;
+        margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
       }
+      
       @page {
-        size: A4 portrait;
+        /* size auto memungkinkan kertas menyesuaikan dengan dialog (misal F4) */
+        size: auto; 
+        /* Margin kertas presisi persis seperti pengaturan Excel */
         margin-top: 0.6cm;
         margin-bottom: 1.9cm;
         margin-left: 1cm;
