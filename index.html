@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Surat Tugas & SPD - BPPRD Merangin</title>
-  
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts Kedinasan Resmi -->
+  <!-- Google Font Tinos (Times New Roman Kedinasan) & Inter (UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
   <style>
-    * {
+    /* Reset & Dasar */
+    *, *::before, *::after {
       box-sizing: border-box;
     }
     body {
@@ -24,58 +25,70 @@
       background-color: #f1f5f9;
       color: #0f172a;
     }
-    
+
+    /* Font Khusus Naskah Dinas Resmi */
     .font-official {
       font-family: 'Tinos', 'Times New Roman', Times, serif;
     }
 
-    /* Garis Ganda Standar Kop Surat Resmi */
-    .kop-divider {
-      border-bottom: 3.5px solid #000;
+    /* Garis Ganda Standar Kop Surat Resmi Kedinasan */
+    .kop-garis-ganda {
+      border-bottom: 3.5px solid #000000;
       position: relative;
       margin-bottom: 14px;
     }
-    .kop-divider::after {
+    .kop-garis-ganda::after {
       content: "";
       position: absolute;
       left: 0;
       right: 0;
       bottom: -3px;
-      border-bottom: 1.2px solid #000;
+      border-bottom: 1.2px solid #000000;
     }
 
-    /* Tabel SPD Bergaris Penuh Standar Kedinasan */
-    .spd-table {
+    /* Tabel SPD Bergaris Kotak Kedinasan */
+    .spd-box-table {
       width: 100%;
       border-collapse: collapse;
-      border: 1.5px solid #000;
+      border: 1.5px solid #000000;
     }
-    .spd-table th, .spd-table td {
-      border: 1px solid #000;
-      padding: 4px 7px;
+    .spd-box-table th, 
+    .spd-box-table td {
+      border: 1px solid #000000;
+      padding: 4.5px 7px;
       vertical-align: top;
       font-size: 12.5px;
       line-height: 1.35;
     }
 
-    /* Styling Form Input */
+    /* Styling Komponen Form Input */
     .form-input {
       width: 100%;
-      padding: 6px 10px;
+      padding: 6px 9px;
       font-size: 13px;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       outline: none;
-      transition: all 0.15s ease-in-out;
       background-color: #ffffff;
-      color: #1e293b;
+      color: #0f172a;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
     .form-input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      border-color: #1d4ed8;
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
     }
 
-    /* Pemisah Halaman untuk Mode Cetak / PDF */
+    /* Pengaturan Cetak Standar Kertas A4 / F4 */
+    .kertas-dokumen {
+      background: #ffffff;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.12);
+      border: 1px solid #e2e8f0;
+      width: 100%;
+      max-width: 790px;
+      padding: 40px 48px;
+      margin: 0 auto 28px auto;
+    }
+
     .page-break {
       page-break-after: always;
       break-after: page;
@@ -92,19 +105,20 @@
       .print-wrapper {
         padding: 0 !important;
         margin: 0 !important;
-        max-width: 100% !important;
         width: 100% !important;
+        max-width: 100% !important;
       }
-      .page-card {
+      .kertas-dokumen {
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
-        margin: 0 !important;
+        margin: 0 0 3cm 0 !important;
+        width: 100% !important;
         max-width: 100% !important;
       }
       @page {
         size: A4 portrait;
-        margin: 1.2cm 1.8cm 1.2cm 1.8cm;
+        margin: 1.5cm 2cm 1.5cm 2cm;
       }
     }
   </style>
@@ -113,36 +127,36 @@
 
   <!-- ================= NAVBAR ATAS (no-print) ================= -->
   <header class="bg-blue-900 text-white shadow-md no-print sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 bg-amber-400 rounded-lg flex items-center justify-center text-blue-950 font-black text-base shadow">
+        <div class="w-9 h-9 bg-amber-400 rounded-lg flex items-center justify-center text-blue-950 font-black text-sm shadow">
           ST
         </div>
         <div>
-          <h1 class="font-bold text-sm sm:text-base leading-tight">Generator Surat Tugas & SPD</h1>
-          <p class="text-[11px] text-blue-200">BPPRD Pemerintah Kabupaten Merangin</p>
+          <h1 class="font-bold text-sm sm:text-base leading-tight">Generator Surat Perintah Tugas & SPD</h1>
+          <p class="text-[11px] text-blue-200">Badan Pengelola Pajak dan Retribusi Daerah Kab. Merangin</p>
         </div>
       </div>
 
-      <!-- Tombol Aksi Cepat -->
+      <!-- Tombol Aksi Dokumen -->
       <div class="flex items-center gap-2">
         <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-1.5 shadow transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
           <span>Cetak / PDF</span>
         </button>
 
-        <button onclick="exportDataJSON()" title="Ekspor Draf ke JSON" class="bg-blue-800 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+        <button onclick="eksporJSON()" title="Simpan data ke JSON" class="bg-blue-800 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           <span class="hidden sm:inline">Simpan Draf</span>
         </button>
 
-        <label title="Impor Draf dari JSON" class="bg-blue-800 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-xs transition cursor-pointer flex items-center gap-1">
+        <label title="Muat draf JSON" class="bg-blue-800 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg text-xs transition cursor-pointer flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
           <span class="hidden sm:inline">Buka Draf</span>
-          <input type="file" id="fileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
+          <input type="file" id="fileImport" accept=".json" onchange="imporJSON(event)" class="hidden">
         </label>
 
-        <button onclick="resetDataDefault()" title="Kembalikan Draf Awal" class="bg-rose-700 hover:bg-rose-800 text-white px-2.5 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+        <button onclick="kembalikanDefault()" title="Reset ke format awal" class="bg-rose-700 hover:bg-rose-800 text-white px-2.5 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           <span class="hidden sm:inline">Reset</span>
         </button>
@@ -150,25 +164,25 @@
     </div>
   </header>
 
-  <!-- ================= KONTEN UTAMA ================= -->
+  <!-- ================= KONTEN UTAMA: DUA KOLOM ================= -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- ================= KOLOM KIRI: FORMULIR INPUT (no-print) ================= -->
+      <!-- ================= KOLOM KIRI: FORM EDITOR (no-print) ================= -->
       <div class="lg:col-span-5 space-y-4 no-print">
 
         <!-- Tab Tombol Form Input -->
         <div class="flex border border-slate-200 bg-white rounded-xl p-1 gap-1 shadow-sm">
-          <button id="btn-tab-form-st" onclick="switchFormTab('st')" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm">
+          <button id="tab-form-st" onclick="gantiTabForm('st')" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm">
             Form Surat Tugas
           </button>
-          <button id="btn-tab-form-spd" onclick="switchFormTab('spd')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100">
+          <button id="tab-form-spd" onclick="gantiTabForm('spd')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100">
             Form SPD Tambahan
           </button>
         </div>
 
-        <!-- ============ FORM GROUP 1: SURAT TUGAS ============ -->
-        <div id="form-group-st" class="space-y-4">
+        <!-- ============ FORM BAGIAN 1: SURAT TUGAS ============ -->
+        <div id="form-st-group" class="space-y-4">
           <!-- 1. Nomor & Dasar -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
@@ -179,16 +193,16 @@
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">Format Nomor Surat Tugas</label>
                 <div class="grid grid-cols-4 gap-1.5">
-                  <input type="text" id="inp_nomorPrefix" class="form-input text-center font-semibold text-xs" placeholder="094" oninput="updateField('nomorPrefix', this.value)">
-                  <input type="text" id="inp_nomorUrut" class="form-input text-center text-xs" placeholder="No Urut" oninput="updateField('nomorUrut', this.value)">
-                  <input type="text" id="inp_nomorKode" class="form-input text-center text-xs" placeholder="ST/ P3-BPPRD" oninput="updateField('nomorKode', this.value)">
-                  <input type="text" id="inp_nomorTahun" class="form-input text-center text-xs" placeholder="2025" oninput="updateField('nomorTahun', this.value)">
+                  <input type="text" id="f_nomorPrefix" class="form-input text-center font-semibold text-xs" placeholder="094" oninput="ubahData('nomorPrefix', this.value)">
+                  <input type="text" id="f_nomorUrut" class="form-input text-center text-xs" placeholder="No Urut" oninput="ubahData('nomorUrut', this.value)">
+                  <input type="text" id="f_nomorKode" class="form-input text-center text-xs" placeholder="ST/ P3-BPPRD" oninput="ubahData('nomorKode', this.value)">
+                  <input type="text" id="f_nomorTahun" class="form-input text-center text-xs" placeholder="2025" oninput="ubahData('nomorTahun', this.value)">
                 </div>
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">Dasar Pelaksanaan (DPA / SK)</label>
-                <textarea id="inp_dasar" rows="3" class="form-input text-xs" oninput="updateField('dasar', this.value)"></textarea>
+                <textarea id="f_dasar" rows="3" class="form-input text-xs" oninput="ubahData('dasar', this.value)"></textarea>
               </div>
             </div>
           </div>
@@ -201,13 +215,13 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700">1 Lembar SPD otomatis digenerate per pegawai</span>
+                <span class="text-[10px] text-blue-700 font-medium">1 Lembar SPD otomatis digenerasi per pegawai</span>
               </div>
               <button onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
               </button>
             </div>
-            <div id="container-pegawai-form" class="space-y-3"></div>
+            <div id="form-pegawai-list" class="space-y-3"></div>
           </div>
 
           <!-- 3. Untuk / Poin Tugas -->
@@ -221,12 +235,12 @@
                 + Poin
               </button>
             </div>
-            <div id="container-instruksi-form" class="space-y-2"></div>
+            <div id="form-instruksi-list" class="space-y-2"></div>
           </div>
         </div>
 
-        <!-- ============ FORM GROUP 2: SPD TAMBAHAN ============ -->
-        <div id="form-group-spd" class="space-y-4 hidden">
+        <!-- ============ FORM BAGIAN 2: SPD TAMBAHAN ============ -->
+        <div id="form-spd-group" class="space-y-4 hidden">
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
               <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">★</span>
@@ -235,73 +249,73 @@
             <div class="space-y-3 text-xs">
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">1. Pejabat Yang Memberi Perintah</label>
-                <input type="text" id="inp_spdPejabatPemberi" class="form-input font-semibold" oninput="updateFieldSpd('pejabatPemberi', this.value)">
+                <input type="text" id="f_spdPejabatPemberi" class="form-input font-semibold" oninput="ubahDataSpd('pejabatPemberi', this.value)">
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">3.c. Tingkat Biaya Perjalanan Dinas</label>
-                <input type="text" id="inp_spdTingkatBiaya" class="form-input" placeholder="Tingkat C / -" oninput="updateFieldSpd('tingkatBiaya', this.value)">
+                <input type="text" id="f_spdTingkatBiaya" class="form-input" placeholder="Tingkat C / -" oninput="ubahDataSpd('tingkatBiaya', this.value)">
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">4. Maksud Perjalanan Dinas</label>
-                <textarea id="inp_spdMaksud" rows="2" class="form-input" oninput="updateFieldSpd('maksud', this.value)"></textarea>
+                <textarea id="f_spdMaksud" rows="2" class="form-input" oninput="ubahDataSpd('maksud', this.value)"></textarea>
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">5. Alat Angkutan yang Dipergunakan</label>
-                <input type="text" id="inp_spdAlatAngkut" class="form-input" placeholder="Kendaraan Roda Dua" oninput="updateFieldSpd('alatAngkut', this.value)">
+                <input type="text" id="f_spdAlatAngkut" class="form-input" placeholder="Kendaraan Roda Dua" oninput="ubahDataSpd('alatAngkut', this.value)">
               </div>
 
               <div class="grid grid-cols-2 gap-2">
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">6.a. Tempat Berangkat</label>
-                  <input type="text" id="inp_spdTempatBerangkat" class="form-input" oninput="updateFieldSpd('tempatBerangkat', this.value)">
+                  <input type="text" id="f_spdTempatBerangkat" class="form-input" oninput="ubahDataSpd('tempatBerangkat', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">6.b. Tempat Tujuan</label>
-                  <input type="text" id="inp_spdTempatTujuan" class="form-input" oninput="updateFieldSpd('tempatTujuan', this.value)">
+                  <input type="text" id="f_spdTempatTujuan" class="form-input" oninput="ubahDataSpd('tempatTujuan', this.value)">
                 </div>
               </div>
 
               <div class="grid grid-cols-3 gap-2">
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">7.a. Lama Hari</label>
-                  <input type="text" id="inp_spdLamaHari" class="form-input" placeholder="1 ( Satu) hari" oninput="updateFieldSpd('lamaHari', this.value)">
+                  <input type="text" id="f_spdLamaHari" class="form-input" placeholder="1 ( Satu)   hari" oninput="ubahDataSpd('lamaHari', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">7.b. Tgl Berangkat</label>
-                  <input type="text" id="inp_spdTglBerangkat" class="form-input" oninput="updateFieldSpd('tglBerangkat', this.value)">
+                  <input type="text" id="f_spdTglBerangkat" class="form-input" oninput="ubahDataSpd('tglBerangkat', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">7.c. Tgl Kembali</label>
-                  <input type="text" id="inp_spdTglKembali" class="form-input" oninput="updateFieldSpd('tglKembali', this.value)">
+                  <input type="text" id="f_spdTglKembali" class="form-input" oninput="ubahDataSpd('tglKembali', this.value)">
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-2">
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">9.a. Instansi Pembebanan</label>
-                  <input type="text" id="inp_spdInstansiBeban" class="form-input" oninput="updateFieldSpd('instansiBeban', this.value)">
+                  <input type="text" id="f_spdInstansiBeban" class="form-input" oninput="ubahDataSpd('instansiBeban', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">9.b. Kode Mata Anggaran</label>
-                  <input type="text" id="inp_spdMataAnggaran" class="form-input" placeholder="-" oninput="updateFieldSpd('mataAnggaran', this.value)">
+                  <input type="text" id="f_spdMataAnggaran" class="form-input" placeholder="-" oninput="ubahDataSpd('mataAnggaran', this.value)">
                 </div>
               </div>
 
               <div class="grid grid-cols-3 gap-2 border-t pt-2 mt-2">
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">Lembar ke</label>
-                  <input type="text" id="inp_spdLembarKe" class="form-input" placeholder="-" oninput="updateFieldSpd('lembarKe', this.value)">
+                  <input type="text" id="f_spdLembarKe" class="form-input" placeholder="-" oninput="ubahDataSpd('lembarKe', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">Kode No</label>
-                  <input type="text" id="inp_spdKodeNo" class="form-input" placeholder="-" oninput="updateFieldSpd('kodeNo', this.value)">
+                  <input type="text" id="f_spdKodeNo" class="form-input" placeholder="-" oninput="ubahDataSpd('kodeNo', this.value)">
                 </div>
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor SPD</label>
-                  <input type="text" id="inp_spdNomor" class="form-input" placeholder="-" oninput="updateFieldSpd('nomor', this.value)">
+                  <input type="text" id="f_spdNomor" class="form-input" placeholder="-" oninput="ubahDataSpd('nomor', this.value)">
                 </div>
               </div>
             </div>
@@ -317,27 +331,27 @@
           <div class="grid grid-cols-2 gap-2 text-xs">
             <div>
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Dikeluarkan di</label>
-              <input type="text" id="inp_ttdTempat" class="form-input" oninput="updateField('ttdTempat', this.value)">
+              <input type="text" id="f_ttdTempat" class="form-input" oninput="ubahData('ttdTempat', this.value)">
             </div>
             <div>
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Pada Tanggal</label>
-              <input type="text" id="inp_ttdTanggal" class="form-input" oninput="updateField('ttdTanggal', this.value)">
+              <input type="text" id="f_ttdTanggal" class="form-input" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
-              <input type="text" id="inp_ttdJabatan" class="form-input font-medium" oninput="updateField('ttdJabatan', this.value)">
+              <input type="text" id="f_ttdJabatan" class="form-input font-medium" oninput="ubahData('ttdJabatan', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
-              <input type="text" id="inp_ttdNama" class="form-input font-bold" oninput="updateField('ttdNama', this.value)">
+              <input type="text" id="f_ttdNama" class="form-input font-bold" oninput="ubahData('ttdNama', this.value)">
             </div>
             <div>
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Pangkat / Golongan</label>
-              <input type="text" id="inp_ttdPangkat" class="form-input" oninput="updateField('ttdPangkat', this.value)">
+              <input type="text" id="f_ttdPangkat" class="form-input" oninput="ubahData('ttdPangkat', this.value)">
             </div>
             <div>
               <label class="block text-[11px] font-medium text-slate-600 mb-1">NIP Pejabat</label>
-              <input type="text" id="inp_ttdNip" class="form-input" oninput="updateField('ttdNip', this.value)">
+              <input type="text" id="f_ttdNip" class="form-input" oninput="ubahData('ttdNip', this.value)">
             </div>
           </div>
         </div>
@@ -346,35 +360,35 @@
 
       <!-- ================= KOLOM KANAN: PRATINJAU DOKUMEN CETAK ================= -->
       <div class="lg:col-span-7">
-        <div class="sticky top-20">
-          
+        <div class="sticky top-16">
+
           <!-- TAB NAVIGASI PRATINJAU DOKUMEN (no-print) -->
-          <div class="no-print bg-white p-2.5 rounded-t-xl border border-b-0 border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+          <div class="no-print bg-white p-2 rounded-t-xl border border-b-0 border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
             <div class="flex items-center gap-2">
-              <button id="btn-preview-tab-st" onclick="switchPreviewTab('st')" class="px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5">
+              <button id="tab-pratinjau-st" onclick="gantiTabPratinjau('st')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5">
                 <span>📄 1. Surat Tugas (ST)</span>
               </button>
-              <button id="btn-preview-tab-spd" onclick="switchPreviewTab('spd')" class="px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5">
+              <button id="tab-pratinjau-spd" onclick="gantiTabPratinjau('spd')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5">
                 <span>🚗 2. Surat Perjalanan Dinas (SPD)</span>
-                <span id="badge-spd-count" class="bg-blue-200 text-blue-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">2 Lembar</span>
+                <span id="label-spd-total" class="bg-blue-200 text-blue-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">2 Lembar</span>
               </button>
             </div>
-            <div class="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+            <div class="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Pratinjau Aktif</span>
+              <span>Pratinjau Presisi</span>
             </div>
           </div>
 
-          <!-- KONTENER KERTAS DOKUMEN -->
+          <!-- KONTENER KERTAS DOKUMEN CETAK -->
           <div class="print-wrapper">
 
             <!-- ================= DOKUMEN 1: SURAT TUGAS ================= -->
-            <div id="view-surat-tugas" class="page-card bg-white shadow-xl rounded-b-xl lg:rounded-xl p-8 sm:p-12 border border-slate-200 font-official text-black text-[13px] leading-relaxed mx-auto max-w-3xl">
+            <div id="lembar-surat-tugas" class="kertas-dokumen font-official text-black text-[13px] leading-relaxed">
 
               <!-- KOP SURAT RESMI -->
-              <div class="flex items-center gap-4 pb-2 kop-divider">
+              <div class="flex items-center gap-4 pb-2 kop-garis-ganda">
                 <div class="w-24 h-28 flex-shrink-0 flex items-center justify-center">
-                  <!-- Logo Lambang Daerah Kabupaten Merangin -->
+                  <!-- Logo Lambang Daerah Kabupaten Merangin Asli -->
                   <svg viewBox="0 0 200 240" class="w-full h-full drop-shadow-sm">
                     <path d="M20 20 H180 V150 C180 200 100 230 100 230 C100 230 20 200 20 150 Z" fill="#2094f3" stroke="#b91c1c" stroke-width="6"/>
                     <rect x="50" y="32" width="100" height="20" rx="4" fill="#ffffff" stroke="#1e3a8a" stroke-width="2"/>
@@ -407,57 +421,72 @@
               <div class="text-center my-4">
                 <h1 class="text-[16px] font-bold tracking-wider underline uppercase">SURAT TUGAS</h1>
                 <p class="text-[13px] font-normal mt-0.5">
-                  Nomor : <span class="pv_nomorPrefix">094</span> / 
-                  <span class="pv_nomorUrut inline-block px-3 font-medium">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> / 
-                  <span class="pv_nomorKode">ST/ P3-BPPRD</span> / <span class="pv_nomorTahun">2025</span>
+                  Nomor : <span class="t-nomorPrefix">094</span> / 
+                  <span class="t-nomorUrut inline-block px-3 font-medium">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> / 
+                  <span class="t-nomorKode">ST/ P3-BPPRD</span> / <span class="t-nomorTahun">2025</span>
                 </p>
               </div>
 
-              <!-- ISI SURAT (DENGAN STRUKTUR TABEL TITIK DUA TERATUR SEJAJAR) -->
-              <table class="w-full border-collapse mt-4 text-[13px]">
+              <!-- TABEL KONTEN SURAT TUGAS (SEJAJAR VERTIKAL 100%) -->
+              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="mt-4 text-[13px]">
+                <colgroup>
+                  <col style="width: 75px;">
+                  <col style="width: 20px;">
+                  <col style="width: auto;">
+                </colgroup>
                 <tbody>
+                  <!-- 1. DASAR -->
                   <tr>
-                    <td class="w-20 align-top py-1.5 font-normal">Dasar</td>
-                    <td class="w-5 align-top py-1.5 text-center font-normal">:</td>
-                    <td id="pv_dasar" class="align-top py-1.5 text-justify leading-relaxed"></td>
+                    <td style="vertical-align: top; padding: 3px 0;">Dasar</td>
+                    <td style="vertical-align: top; text-align: center; padding: 3px 0;">:</td>
+                    <td id="t-dasar" style="vertical-align: top; text-align: justify; line-height: 1.45; padding: 3px 0;"></td>
                   </tr>
+
+                  <!-- 2. KEPADA -->
                   <tr>
-                    <td class="w-20 align-top py-1.5 font-normal">Kepada</td>
-                    <td class="w-5 align-top py-1.5 text-center font-normal">:</td>
-                    <td id="pv_pegawai" class="align-top py-1.5"></td>
+                    <td style="vertical-align: top; padding: 6px 0 3px 0;">Kepada</td>
+                    <td style="vertical-align: top; text-align: center; padding: 6px 0 3px 0;">:</td>
+                    <td id="t-pegawai" style="vertical-align: top; padding: 6px 0 3px 0;"></td>
                   </tr>
+
+                  <!-- 3. UNTUK -->
                   <tr>
-                    <td class="w-20 align-top py-1.5 font-normal">Untuk</td>
-                    <td class="w-5 align-top py-1.5 text-center font-normal">:</td>
-                    <td id="pv_instruksi" class="align-top py-1.5"></td>
+                    <td style="vertical-align: top; padding: 6px 0 3px 0;">Untuk</td>
+                    <td style="vertical-align: top; text-align: center; padding: 6px 0 3px 0;">:</td>
+                    <td id="t-instruksi" style="vertical-align: top; padding: 6px 0 3px 0;"></td>
                   </tr>
                 </tbody>
               </table>
 
-              <!-- AREA TANDA TANGAN SURAT TUGAS -->
+              <!-- AREA PENGESAHAN DAN TANDA TANGAN -->
               <div class="mt-8 flex justify-end">
-                <div class="w-72">
-                  <table class="w-full border-collapse text-[13px]">
+                <div style="width: 290px;">
+                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[13px]">
+                    <colgroup>
+                      <col style="width: 110px;">
+                      <col style="width: 15px;">
+                      <col style="width: auto;">
+                    </colgroup>
                     <tbody>
                       <tr>
-                        <td class="w-28 py-0.5">Dikeluarkan di</td>
-                        <td class="w-4 py-0.5 text-center">:</td>
-                        <td class="pv_ttdTempat py-0.5">Bangko</td>
+                        <td style="padding: 1px 0;">Dikeluarkan di</td>
+                        <td style="text-align: center; padding: 1px 0;">:</td>
+                        <td class="t-ttdTempat" style="padding: 1px 0;">Bangko</td>
                       </tr>
-                      <tr class="border-b border-black">
-                        <td class="py-0.5 pb-1">Pada Tanggal</td>
-                        <td class="py-0.5 pb-1 text-center">:</td>
-                        <td class="pv_ttdTanggal py-0.5 pb-1">November 2025</td>
+                      <tr style="border-bottom: 1px solid #000000;">
+                        <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
+                        <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
+                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">November 2025</td>
                       </tr>
                     </tbody>
                   </table>
 
                   <div class="text-center mt-3">
-                    <p class="pv_ttdJabatan font-bold uppercase tracking-tight">Pengguna Anggaran</p>
-                    <div class="h-20 sm:h-24"></div>
-                    <p class="pv_ttdNama font-bold underline text-[14px] leading-tight">Hj. SITI AMINAH, MM</p>
-                    <p class="pv_ttdPangkat text-[13px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
-                    <p class="text-[13px] leading-tight">NIP. <span class="pv_ttdNip">19690805 200012 2 002</span></p>
+                    <p class="t-ttdJabatan font-bold uppercase tracking-tight">Pengguna Anggaran</p>
+                    <div style="height: 75px;"></div>
+                    <p class="t-ttdNama font-bold underline text-[14px] leading-tight">Hj. SITI AMINAH, MM</p>
+                    <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
+                    <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19690805 200012 2 002</span></p>
                   </div>
                 </div>
               </div>
@@ -465,8 +494,8 @@
             </div>
 
             <!-- ================= DOKUMEN 2: SURAT PERJALANAN DINAS (SPD) ================= -->
-            <div id="view-surat-spd" class="space-y-8 hidden">
-              <!-- Otomatis di-render 1 lembar per orang pegawai oleh JavaScript -->
+            <div id="lembar-spd-wrapper" class="space-y-6 hidden">
+              <!-- Di-render dinamis oleh JavaScript per orang pegawai -->
             </div>
 
           </div>
@@ -479,12 +508,13 @@
   <!-- Notifikasi Toast -->
   <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-xl text-sm items-center gap-3 border border-slate-700 transition-all">
     <span class="text-emerald-400 font-bold">✓</span>
-    <span id="toast-message">Notifikasi</span>
+    <span id="toast-text">Notifikasi</span>
   </div>
 
   <!-- ================= LOGIKA JAVASCRIPT MANDIRI ================= -->
   <script>
-    const defaultData = {
+    // Data bawaan standar dokumen dinas
+    const dataDefault = {
       nomorPrefix: "094",
       nomorUrut: "",
       nomorKode: "ST/ P3-BPPRD",
@@ -534,12 +564,12 @@
       ttdNip: "19690805 200012 2 002"
     };
 
-    let state = JSON.parse(JSON.stringify(defaultData));
+    let state = JSON.parse(JSON.stringify(dataDefault));
 
-    function showToast(pesan) {
+    function tampilkanToast(msg) {
       const toast = document.getElementById('toast');
-      const msg = document.getElementById('toast-message');
-      msg.textContent = pesan;
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
       toast.classList.remove('hidden');
       toast.classList.add('flex');
       setTimeout(() => {
@@ -548,11 +578,11 @@
       }, 2500);
     }
 
-    function switchFormTab(tab) {
-      const btnSt = document.getElementById('btn-tab-form-st');
-      const btnSpd = document.getElementById('btn-tab-form-spd');
-      const formSt = document.getElementById('form-group-st');
-      const formSpd = document.getElementById('form-group-spd');
+    function gantiTabForm(tab) {
+      const btnSt = document.getElementById('tab-form-st');
+      const btnSpd = document.getElementById('tab-form-spd');
+      const formSt = document.getElementById('form-st-group');
+      const formSpd = document.getElementById('form-spd-group');
 
       if (tab === 'st') {
         btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
@@ -567,57 +597,57 @@
       }
     }
 
-    function switchPreviewTab(tab) {
-      const btnSt = document.getElementById('btn-preview-tab-st');
-      const btnSpd = document.getElementById('btn-preview-tab-spd');
-      const viewSt = document.getElementById('view-surat-tugas');
-      const viewSpd = document.getElementById('view-surat-spd');
+    function gantiTabPratinjau(tab) {
+      const btnSt = document.getElementById('tab-pratinjau-st');
+      const btnSpd = document.getElementById('tab-pratinjau-spd');
+      const viewSt = document.getElementById('lembar-surat-tugas');
+      const viewSpd = document.getElementById('lembar-spd-wrapper');
 
       if (tab === 'st') {
-        btnSt.className = 'px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
-        btnSpd.className = 'px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
+        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
+        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
         viewSt.classList.remove('hidden');
         viewSpd.classList.add('hidden');
       } else {
-        btnSpd.className = 'px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
-        btnSt.className = 'px-3.5 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
+        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
+        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
         viewSpd.classList.remove('hidden');
         viewSt.classList.add('hidden');
       }
     }
 
-    function updateField(key, value) {
-      state[key] = value;
-      updatePreview();
+    function ubahData(kunci, nilai) {
+      state[kunci] = nilai;
+      perbaruiPratinjau();
     }
 
-    function updateFieldSpd(key, value) {
-      state.spd[key] = value;
-      updatePreview();
+    function ubahDataSpd(kunci, nilai) {
+      state.spd[kunci] = nilai;
+      perbaruiPratinjau();
     }
 
-    function updatePegawaiField(index, key, val) {
-      state.pegawai[index][key] = val;
-      updatePreview();
+    function ubahDataPegawai(idx, kunci, nilai) {
+      state.pegawai[idx][kunci] = nilai;
+      perbaruiPratinjau();
     }
 
     function tambahPegawai() {
       state.pegawai.push({ nama: "", nip: "", pangkat: "", jabatan: "" });
-      renderPegawaiForm();
-      updatePreview();
-      showToast("Pegawai baru ditambahkan (SPD bertambah)");
+      renderFormPegawai();
+      perbaruiPratinjau();
+      tampilkanToast("Pegawai baru ditambahkan (SPD otomatis bertambah)");
     }
 
-    function hapusPegawai(index) {
+    function hapusPegawai(idx) {
       if (state.pegawai.length > 1) {
-        state.pegawai.splice(index, 1);
-        renderPegawaiForm();
-        updatePreview();
+        state.pegawai.splice(idx, 1);
+        renderFormPegawai();
+        perbaruiPratinjau();
       }
     }
 
-    function renderPegawaiForm() {
-      const container = document.getElementById('container-pegawai-form');
+    function renderFormPegawai() {
+      const container = document.getElementById('form-pegawai-list');
       container.innerHTML = '';
 
       state.pegawai.forEach((p, idx) => {
@@ -631,51 +661,51 @@
           <div class="space-y-2 text-xs">
             <div>
               <label class="block text-slate-600 mb-0.5">Nama & Gelar</label>
-              <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="updatePegawaiField(${idx}, 'nama', this.value)">
+              <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahDataPegawai(${idx}, 'nama', this.value)">
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block text-slate-600 mb-0.5">NIP</label>
-                <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="updatePegawaiField(${idx}, 'nip', this.value)">
+                <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahDataPegawai(${idx}, 'nip', this.value)">
               </div>
               <div>
                 <label class="block text-slate-600 mb-0.5">Pangkat / Gol.</label>
-                <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="updatePegawaiField(${idx}, 'pangkat', this.value)">
+                <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahDataPegawai(${idx}, 'pangkat', this.value)">
               </div>
             </div>
             <div>
               <label class="block text-slate-600 mb-0.5">Jabatan</label>
-              <textarea rows="2" class="form-input text-xs" oninput="updatePegawaiField(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
+              <textarea rows="2" class="form-input text-xs" oninput="ubahDataPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
             </div>
           </div>
         `;
         container.appendChild(div);
       });
 
-      document.getElementById('badge-spd-count').textContent = `${state.pegawai.length} Lembar`;
+      document.getElementById('label-spd-total').textContent = `${state.pegawai.length} Lembar`;
     }
 
-    function updateInstruksiField(index, val) {
-      state.instruksi[index] = val;
-      updatePreview();
+    function ubahDataInstruksi(idx, nilai) {
+      state.instruksi[idx] = nilai;
+      perbaruiPratinjau();
     }
 
     function tambahInstruksi() {
       state.instruksi.push("");
-      renderInstruksiForm();
-      updatePreview();
+      renderFormInstruksi();
+      perbaruiPratinjau();
     }
 
-    function hapusInstruksi(index) {
+    function hapusInstruksi(idx) {
       if (state.instruksi.length > 1) {
-        state.instruksi.splice(index, 1);
-        renderInstruksiForm();
-        updatePreview();
+        state.instruksi.splice(idx, 1);
+        renderFormInstruksi();
+        perbaruiPratinjau();
       }
     }
 
-    function renderInstruksiForm() {
-      const container = document.getElementById('container-instruksi-form');
+    function renderFormInstruksi() {
+      const container = document.getElementById('form-instruksi-list');
       container.innerHTML = '';
 
       state.instruksi.forEach((inst, idx) => {
@@ -683,7 +713,7 @@
         div.className = 'flex gap-2 items-start';
         div.innerHTML = `
           <span class="text-xs font-bold text-slate-500 mt-2">${idx + 1}.</span>
-          <textarea rows="2" class="form-input text-xs flex-1" oninput="updateInstruksiField(${idx}, this.value)">${inst}</textarea>
+          <textarea rows="2" class="form-input text-xs flex-1" oninput="ubahDataInstruksi(${idx}, this.value)">${inst}</textarea>
           ${state.instruksi.length > 1 ? `
             <button onclick="hapusInstruksi(${idx})" class="text-rose-500 hover:text-rose-700 mt-2 p-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -694,130 +724,135 @@
       });
     }
 
-    function initFormInputs() {
-      try {
-        document.getElementById('inp_nomorPrefix').value = state.nomorPrefix || '';
-        document.getElementById('inp_nomorUrut').value = state.nomorUrut || '';
-        document.getElementById('inp_nomorKode').value = state.nomorKode || '';
-        document.getElementById('inp_nomorTahun').value = state.nomorTahun || '';
-        document.getElementById('inp_dasar').value = state.dasar || '';
+    function inisialisasiForm() {
+      document.getElementById('f_nomorPrefix').value = state.nomorPrefix || '';
+      document.getElementById('f_nomorUrut').value = state.nomorUrut || '';
+      document.getElementById('f_nomorKode').value = state.nomorKode || '';
+      document.getElementById('f_nomorTahun').value = state.nomorTahun || '';
+      document.getElementById('f_dasar').value = state.dasar || '';
 
-        document.getElementById('inp_spdPejabatPemberi').value = state.spd.pejabatPemberi || '';
-        document.getElementById('inp_spdTingkatBiaya').value = state.spd.tingkatBiaya || '';
-        document.getElementById('inp_spdMaksud').value = state.spd.maksud || '';
-        document.getElementById('inp_spdAlatAngkut').value = state.spd.alatAngkut || '';
-        document.getElementById('inp_spdTempatBerangkat').value = state.spd.tempatBerangkat || '';
-        document.getElementById('inp_spdTempatTujuan').value = state.spd.tempatTujuan || '';
-        document.getElementById('inp_spdLamaHari').value = state.spd.lamaHari || '';
-        document.getElementById('inp_spdTglBerangkat').value = state.spd.tglBerangkat || '';
-        document.getElementById('inp_spdTglKembali').value = state.spd.tglKembali || '';
-        document.getElementById('inp_spdInstansiBeban').value = state.spd.instansiBeban || '';
-        document.getElementById('inp_spdMataAnggaran').value = state.spd.mataAnggaran || '';
-        document.getElementById('inp_spdLembarKe').value = state.spd.lembarKe || '';
-        document.getElementById('inp_spdKodeNo').value = state.spd.kodeNo || '';
-        document.getElementById('inp_spdNomor').value = state.spd.nomor || '';
+      document.getElementById('f_spdPejabatPemberi').value = state.spd.pejabatPemberi || '';
+      document.getElementById('f_spdTingkatBiaya').value = state.spd.tingkatBiaya || '';
+      document.getElementById('f_spdMaksud').value = state.spd.maksud || '';
+      document.getElementById('f_spdAlatAngkut').value = state.spd.alatAngkut || '';
+      document.getElementById('f_spdTempatBerangkat').value = state.spd.tempatBerangkat || '';
+      document.getElementById('f_spdTempatTujuan').value = state.spd.tempatTujuan || '';
+      document.getElementById('f_spdLamaHari').value = state.spd.lamaHari || '';
+      document.getElementById('f_spdTglBerangkat').value = state.spd.tglBerangkat || '';
+      document.getElementById('f_spdTglKembali').value = state.spd.tglKembali || '';
+      document.getElementById('f_spdInstansiBeban').value = state.spd.instansiBeban || '';
+      document.getElementById('f_spdMataAnggaran').value = state.spd.mataAnggaran || '';
+      document.getElementById('f_spdLembarKe').value = state.spd.lembarKe || '';
+      document.getElementById('f_spdKodeNo').value = state.spd.kodeNo || '';
+      document.getElementById('f_spdNomor').value = state.spd.nomor || '';
 
-        document.getElementById('inp_ttdTempat').value = state.ttdTempat || '';
-        document.getElementById('inp_ttdTanggal').value = state.ttdTanggal || '';
-        document.getElementById('inp_ttdJabatan').value = state.ttdJabatan || '';
-        document.getElementById('inp_ttdNama').value = state.ttdNama || '';
-        document.getElementById('inp_ttdPangkat').value = state.ttdPangkat || '';
-        document.getElementById('inp_ttdNip').value = state.ttdNip || '';
+      document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
+      document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
+      document.getElementById('f_ttdJabatan').value = state.ttdJabatan || '';
+      document.getElementById('f_ttdNama').value = state.ttdNama || '';
+      document.getElementById('f_ttdPangkat').value = state.ttdPangkat || '';
+      document.getElementById('f_ttdNip').value = state.ttdNip || '';
 
-        renderPegawaiForm();
-        renderInstruksiForm();
-        updatePreview();
-      } catch (err) {
-        console.error("Init error:", err);
-      }
+      renderFormPegawai();
+      renderFormInstruksi();
+      perbaruiPratinjau();
     }
 
-    function updatePreview() {
-      document.querySelectorAll('.pv_nomorPrefix').forEach(el => el.textContent = state.nomorPrefix || '094');
-      document.querySelectorAll('.pv_nomorUrut').forEach(el => el.textContent = state.nomorUrut ? ` ${state.nomorUrut} ` : '        ');
-      document.querySelectorAll('.pv_nomorKode').forEach(el => el.textContent = state.nomorKode || 'ST/ P3-BPPRD');
-      document.querySelectorAll('.pv_nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2025');
+    function perbaruiPratinjau() {
+      // 1. Nomor Surat
+      document.querySelectorAll('.t-nomorPrefix').forEach(el => el.textContent = state.nomorPrefix || '094');
+      document.querySelectorAll('.t-nomorUrut').forEach(el => el.textContent = state.nomorUrut ? ` ${state.nomorUrut} ` : '        ');
+      document.querySelectorAll('.t-nomorKode').forEach(el => el.textContent = state.nomorKode || 'ST/ P3-BPPRD');
+      document.querySelectorAll('.t-nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2025');
 
-      const elDasar = document.getElementById('pv_dasar');
+      // 2. Dasar
+      const elDasar = document.getElementById('t-dasar');
       if (elDasar) elDasar.textContent = state.dasar || '-';
 
-      document.querySelectorAll('.pv_ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
-      document.querySelectorAll('.pv_ttdTanggal').forEach(el => el.textContent = state.ttdTanggal || '');
-      document.querySelectorAll('.pv_ttdJabatan').forEach(el => el.textContent = state.ttdJabatan || 'Pengguna Anggaran');
-      document.querySelectorAll('.pv_ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
-      document.querySelectorAll('.pv_ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
-      document.querySelectorAll('.pv_ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
+      // 3. Tanda Tangan
+      document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
+      document.querySelectorAll('.t-ttdTanggal').forEach(el => el.textContent = state.ttdTanggal || '');
+      document.querySelectorAll('.t-ttdJabatan').forEach(el => el.textContent = state.ttdJabatan || 'Pengguna Anggaran');
+      document.querySelectorAll('.t-ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
+      document.querySelectorAll('.t-ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
+      document.querySelectorAll('.t-ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
 
-      // 1. Render Pegawai Surat Tugas
+      // 4. Render Pegawai Surat Tugas (Tabel Sejajar Presisi)
       let pegawaiHtml = '';
       state.pegawai.forEach((p, idx) => {
-        const mb = idx < state.pegawai.length - 1 ? 'margin-bottom: 12px;' : '';
+        const mb = idx < state.pegawai.length - 1 ? 'margin-bottom: 10px;' : '';
         pegawaiHtml += `
           <div style="${mb}">
-            <table style="width: 100%; border-collapse: collapse;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+              <colgroup>
+                <col style="width: 22px;">
+                <col style="width: 105px;">
+                <col style="width: 16px;">
+                <col style="width: auto;">
+              </colgroup>
               <tbody>
                 <tr>
-                  <td style="width: 22px; vertical-align: top; padding: 2px 0;">${idx + 1}.</td>
-                  <td style="width: 110px; vertical-align: top; padding: 2px 0;">Nama</td>
-                  <td style="width: 18px; text-align: center; vertical-align: top; padding: 2px 0;">:</td>
-                  <td style="vertical-align: top; font-weight: bold; padding: 2px 0;">${p.nama || '-'}</td>
+                  <td style="vertical-align: top; padding: 1px 0;">${idx + 1}.</td>
+                  <td style="vertical-align: top; padding: 1px 0;">Nama</td>
+                  <td style="vertical-align: top; text-align: center; padding: 1px 0;">:</td>
+                  <td style="vertical-align: top; font-weight: bold; padding: 1px 0;">${p.nama || '-'}</td>
                 </tr>
                 <tr>
-                  <td style="width: 22px; vertical-align: top; padding: 2px 0;"></td>
-                  <td style="width: 110px; vertical-align: top; padding: 2px 0;">NIP</td>
-                  <td style="width: 18px; text-align: center; vertical-align: top; padding: 2px 0;">:</td>
-                  <td style="vertical-align: top; padding: 2px 0;">${p.nip || '-'}</td>
+                  <td style="vertical-align: top; padding: 1px 0;"></td>
+                  <td style="vertical-align: top; padding: 1px 0;">NIP</td>
+                  <td style="vertical-align: top; text-align: center; padding: 1px 0;">:</td>
+                  <td style="vertical-align: top; padding: 1px 0;">${p.nip || '-'}</td>
                 </tr>
                 <tr>
-                  <td style="width: 22px; vertical-align: top; padding: 2px 0;"></td>
-                  <td style="width: 110px; vertical-align: top; padding: 2px 0;">Pangkat / Gol.</td>
-                  <td style="width: 18px; text-align: center; vertical-align: top; padding: 2px 0;">:</td>
-                  <td style="vertical-align: top; padding: 2px 0;">${p.pangkat || '-'}</td>
+                  <td style="vertical-align: top; padding: 1px 0;"></td>
+                  <td style="vertical-align: top; padding: 1px 0;">Pangkat / Gol.</td>
+                  <td style="vertical-align: top; text-align: center; padding: 1px 0;">:</td>
+                  <td style="vertical-align: top; padding: 1px 0;">${p.pangkat || '-'}</td>
                 </tr>
                 <tr>
-                  <td style="width: 22px; vertical-align: top; padding: 2px 0;"></td>
-                  <td style="width: 110px; vertical-align: top; padding: 2px 0;">Jabatan</td>
-                  <td style="width: 18px; text-align: center; vertical-align: top; padding: 2px 0;">:</td>
-                  <td style="vertical-align: top; text-align: justify; line-height: 1.35; padding: 2px 0;">${p.jabatan || '-'}</td>
+                  <td style="vertical-align: top; padding: 1px 0;"></td>
+                  <td style="vertical-align: top; padding: 1px 0;">Jabatan</td>
+                  <td style="vertical-align: top; text-align: center; padding: 1px 0;">:</td>
+                  <td style="vertical-align: top; text-align: justify; line-height: 1.35; padding: 1px 0;">${p.jabatan || '-'}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         `;
       });
-      const elPegawai = document.getElementById('pv_pegawai');
+      const elPegawai = document.getElementById('t-pegawai');
       if (elPegawai) elPegawai.innerHTML = pegawaiHtml;
 
-      // 2. Render Instruksi Surat Tugas
-      let instruksiHtml = '<table style="width: 100%; border-collapse: collapse;"><tbody>';
+      // 5. Render Instruksi Surat Tugas
+      let instruksiHtml = '<table style="width: 100%; border-collapse: collapse; table-layout: fixed;"><colgroup><col style="width: 22px;"><col style="width: auto;"></colgroup><tbody>';
       state.instruksi.forEach((inst, idx) => {
         instruksiHtml += `
           <tr>
-            <td style="width: 22px; vertical-align: top; padding: 3px 0;">${idx + 1}.</td>
-            <td style="vertical-align: top; text-align: justify; line-height: 1.45; padding: 3px 0;">${inst || '-'}</td>
+            <td style="vertical-align: top; padding: 2px 0;">${idx + 1}.</td>
+            <td style="vertical-align: top; text-align: justify; line-height: 1.45; padding: 2px 0;">${inst || '-'}</td>
           </tr>
         `;
       });
       instruksiHtml += '</tbody></table>';
-      const elInst = document.getElementById('pv_instruksi');
+      const elInst = document.getElementById('t-instruksi');
       if (elInst) elInst.innerHTML = instruksiHtml;
 
-      // 3. Render SPD Otomatis
-      renderSpdDocuments();
+      // 6. Render Lembar-lembar SPD
+      renderLembarSpd();
     }
 
-    function renderSpdDocuments() {
-      const container = document.getElementById('view-surat-spd');
+    function renderLembarSpd() {
+      const container = document.getElementById('lembar-spd-wrapper');
       if (!container) return;
       container.innerHTML = '';
 
       state.pegawai.forEach((p, idx) => {
-        const pageCard = document.createElement('div');
-        pageCard.className = 'page-card bg-white shadow-xl rounded-b-xl lg:rounded-xl p-8 sm:p-12 border border-slate-200 font-official text-black text-[12.5px] leading-snug mx-auto max-w-3xl page-break mb-8';
+        const lembar = document.createElement('div');
+        lembar.className = 'kertas-dokumen font-official text-black text-[12.5px] leading-snug page-break';
 
-        pageCard.innerHTML = `
+        lembar.innerHTML = `
           <!-- KOP SURAT RESMI -->
-          <div class="flex items-center gap-4 pb-2 kop-divider">
+          <div class="flex items-center gap-4 pb-2 kop-garis-ganda">
             <div class="w-24 h-28 flex-shrink-0 flex items-center justify-center">
               <svg viewBox="0 0 200 240" class="w-full h-full drop-shadow-sm">
                 <path d="M20 20 H180 V150 C180 200 100 230 100 230 C100 230 20 200 20 150 Z" fill="#2094f3" stroke="#b91c1c" stroke-width="6"/>
@@ -846,24 +881,24 @@
             </div>
           </div>
 
-          <!-- BAGIAN ATAS: LEMBAR KE, KODE NO, NOMOR -->
+          <!-- LEMBAR KE, KODE NO, NOMOR (RATA KANAN ATAS) -->
           <div class="flex justify-end my-1">
-            <table class="text-[12px]">
+            <table style="width: 220px; border-collapse: collapse;" class="text-[12px]">
               <tbody>
                 <tr>
-                  <td class="w-24 py-0.2">Lembar ke</td>
-                  <td class="w-4 text-center">:</td>
-                  <td>${state.spd.lembarKe || ''}</td>
+                  <td style="width: 80px; padding: 1px 0;">Lembar ke</td>
+                  <td style="width: 14px; text-align: center; padding: 1px 0;">:</td>
+                  <td style="padding: 1px 0;">${state.spd.lembarKe || ''}</td>
                 </tr>
                 <tr>
-                  <td class="py-0.2">Kode No</td>
-                  <td class="text-center">:</td>
-                  <td>${state.spd.kodeNo || ''}</td>
+                  <td style="padding: 1px 0;">Kode No</td>
+                  <td style="text-align: center; padding: 1px 0;">:</td>
+                  <td style="padding: 1px 0;">${state.spd.kodeNo || ''}</td>
                 </tr>
                 <tr>
-                  <td class="py-0.2">Nomor</td>
-                  <td class="text-center">:</td>
-                  <td>${state.spd.nomor || ''}</td>
+                  <td style="padding: 1px 0;">Nomor</td>
+                  <td style="text-align: center; padding: 1px 0;">:</td>
+                  <td style="padding: 1px 0;">${state.spd.nomor || ''}</td>
                 </tr>
               </tbody>
             </table>
@@ -874,12 +909,12 @@
             <h1 class="text-[15px] font-bold tracking-wider underline uppercase">SURAT PERJALANAN DINAS</h1>
           </div>
 
-          <!-- TABEL RINCIAN SPD RESMI 10 NOMOR -->
-          <table class="spd-table mt-2">
+          <!-- TABEL SPD RESMI 10 NOMOR BERGARIS KOTAK -->
+          <table class="spd-box-table mt-2">
             <tbody>
               <tr>
-                <td style="width: 25px; text-align: center;">1.</td>
-                <td style="width: 235px;">Pejabat Yang Memberi Perintah</td>
+                <td style="width: 26px; text-align: center;">1.</td>
+                <td style="width: 240px;">Pejabat Yang Memberi Perintah</td>
                 <td class="font-bold uppercase">${state.spd.pejabatPemberi || 'KEPALA BPPRD KAB.MERANGIN'}</td>
               </tr>
               <tr>
@@ -942,13 +977,13 @@
                 <td style="padding: 0;" colspan="2">
                   <table style="width: 100%; border-collapse: collapse; border: none;">
                     <tr>
-                      <td style="border: none; border-right: 1px solid #000; width: 235px; padding: 4px 7px;">Pengikut : Nama</td>
-                      <td style="border: none; border-right: 1px solid #000; width: 140px; text-align: center; padding: 4px 7px;">Tanggal Lahir</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 240px; padding: 4px 7px;">Pengikut : Nama</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 140px; text-align: center; padding: 4px 7px;">Tanggal Lahir</td>
                       <td style="border: none; text-align: center; padding: 4px 7px;">Keterangan</td>
                     </tr>
-                    <tr style="border-top: 1px solid #000;">
-                      <td style="border: none; border-right: 1px solid #000; padding: 4px 7px;">-</td>
-                      <td style="border: none; border-right: 1px solid #000; text-align: center; padding: 4px 7px;">-</td>
+                    <tr style="border-top: 1px solid #000000;">
+                      <td style="border: none; border-right: 1px solid #000000; padding: 4px 7px;">-</td>
+                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 4px 7px;">-</td>
                       <td style="border: none; text-align: center; padding: 4px 7px;">-</td>
                     </tr>
                   </table>
@@ -971,10 +1006,15 @@
                 <td style="text-align: center;">10.</td>
                 <td>Keterangan Lain</td>
                 <td>
-                  <table style="width: 100%; border-collapse: collapse;">
+                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                    <colgroup>
+                      <col style="width: 55px;">
+                      <col style="width: 14px;">
+                      <col style="width: auto;">
+                    </colgroup>
                     <tr>
-                      <td style="border: none; padding: 0; width: 55px;">Nomor</td>
-                      <td style="border: none; padding: 0; width: 15px; text-align: center;">:</td>
+                      <td style="border: none; padding: 0;">Nomor</td>
+                      <td style="border: none; padding: 0; text-align: center;">:</td>
                       <td style="border: none; padding: 0;">${state.nomorPrefix || '094'}/ &nbsp; ${state.nomorUrut || ''} &nbsp; /${state.nomorKode || 'P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
                     </tr>
                     <tr>
@@ -990,25 +1030,30 @@
 
           <!-- TANDA TANGAN SPD -->
           <div class="mt-6 flex justify-end">
-            <div class="w-72">
-              <table class="w-full border-collapse text-[12px]">
+            <div style="width: 290px;">
+              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12px]">
+                <colgroup>
+                  <col style="width: 110px;">
+                  <col style="width: 15px;">
+                  <col style="width: auto;">
+                </colgroup>
                 <tbody>
                   <tr>
-                    <td class="w-28 py-0.5">Dikeluarkan di</td>
-                    <td class="w-4 py-0.5 text-center">:</td>
-                    <td class="py-0.5">${state.ttdTempat || 'Bangko'}</td>
+                    <td style="padding: 1px 0;">Dikeluarkan di</td>
+                    <td style="text-align: center; padding: 1px 0;">:</td>
+                    <td style="padding: 1px 0;">${state.ttdTempat || 'Bangko'}</td>
                   </tr>
-                  <tr class="border-b border-black">
-                    <td class="py-0.5 pb-1">Pada Tanggal</td>
-                    <td class="py-0.5 pb-1 text-center">:</td>
-                    <td class="py-0.5 pb-1">${state.ttdTanggal || ''}</td>
+                  <tr style="border-bottom: 1px solid #000000;">
+                    <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
+                    <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
+                    <td style="padding: 1px 0 3px 0;">${state.ttdTanggal || ''}</td>
                   </tr>
                 </tbody>
               </table>
 
               <div class="text-center mt-3">
                 <p class="font-bold uppercase tracking-tight">${state.ttdJabatan || 'Pengguna Anggaran'}</p>
-                <div class="h-16 sm:h-20"></div>
+                <div style="height: 65px;"></div>
                 <p class="font-bold underline text-[13.5px] leading-tight">${state.ttdNama || '-'}</p>
                 <p class="text-[12.5px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
                 <p class="text-[12.5px] leading-tight">NIP. ${state.ttdNip || '-'}</p>
@@ -1017,45 +1062,46 @@
           </div>
         `;
 
-        container.appendChild(pageCard);
+        container.appendChild(lembar);
       });
     }
 
-    function exportDataJSON() {
+    function eksporJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const a = document.createElement('a');
       a.setAttribute("href", dataStr);
       a.setAttribute("download", `surat_tugas_spd_${state.nomorUrut || 'bpprd'}.json`);
       a.click();
-      showToast("Draft berhasil diekspor ke JSON");
+      tampilkanToast("Draft berhasil disimpan ke file JSON");
     }
 
-    function importDataJSON(event) {
+    function imporJSON(event) {
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
         try {
           state = JSON.parse(e.target.result);
-          initFormInputs();
-          showToast("Data draf berhasil dimuat!");
+          inisialisasiForm();
+          tampilkanToast("Data draf berhasil dimuat!");
         } catch (err) {
-          showToast("Gagal membaca file JSON.");
+          tampilkanToast("Gagal membaca file JSON.");
         }
       };
       reader.readAsText(file);
     }
 
-    function resetDataDefault() {
-      state = JSON.parse(JSON.stringify(defaultData));
-      initFormInputs();
-      showToast("Form dikembalikan ke data awal");
+    function kembalikanDefault() {
+      state = JSON.parse(JSON.stringify(dataDefault));
+      inisialisasiForm();
+      tampilkanToast("Form dikembalikan ke format awal");
     }
 
+    // Eksekusi inisialisasi awal
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initFormInputs);
+      document.addEventListener('DOMContentLoaded', inisialisasiForm);
     } else {
-      initFormInputs();
+      inisialisasiForm();
     }
   </script>
 </body>
