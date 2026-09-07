@@ -8,10 +8,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Font Tinos & Inter -->
+  <!-- Google Font Trebuchet MS & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after {
@@ -25,14 +25,9 @@
       color: #0f172a;
     }
 
-    /* Font Khusus Kop Surat Resmi Trebuchet MS */
-    .font-kop {
-      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
-
-    /* Font Khusus Naskah Dinas */
+    /* Font Resmi Keseluruhan Naskah Dinas: Trebuchet MS */
     .font-official {
-      font-family: 'Tinos', 'Times New Roman', Times, serif;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
     }
 
     /* Garis Ganda Kop Surat Kedinasan */
@@ -373,18 +368,18 @@
             </div>
             <div class="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Trebuchet MS Official Kop</span>
+              <span>Trebuchet MS Font Official</span>
             </div>
           </div>
 
-          <!-- KONTENER KERTAS CETAK -->
+          <!-- KONTENER KERTAS CETAK (MENGGUNAKAN .font-official) -->
           <div class="print-wrapper">
 
             <!-- ================= DOKUMEN 1: SURAT TUGAS ================= -->
             <div id="lembar-surat-tugas" class="kertas-dokumen font-official text-black text-[13px] leading-relaxed">
 
               <!-- KOP SURAT (DENGAN LOGO MERANGIN ASLI & FONT TREBUCHET MS) -->
-              <div class="font-kop pb-1 kop-garis-ganda">
+              <div class="font-official pb-1 kop-garis-ganda">
                 <div class="flex items-center gap-4">
                   <!-- Logo Resmi Kabupaten Merangin -->
                   <div class="w-24 h-28 flex-shrink-0 flex items-center justify-center">
@@ -830,7 +825,7 @@
 
         lembar.innerHTML = `
           <!-- KOP SURAT SPD -->
-          <div class="font-kop pb-1 kop-garis-ganda">
+          <div class="font-official pb-1 kop-garis-ganda">
             <div class="flex items-center gap-4">
               <div class="w-24 h-28 flex-shrink-0 flex items-center justify-center">
                 <img src="https://lh3.googleusercontent.com/d/1_7FZisvkbSmNCadKTjaRVrFQpgPoIgNF" 
