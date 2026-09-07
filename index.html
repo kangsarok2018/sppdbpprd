@@ -102,7 +102,6 @@
         display: none !important;
       }
       
-      /* Reset spacing dari layout web Tailwind agar tidak mendorong konten turun saat dicetak */
       main {
         padding: 0 !important;
         margin: 0 !important;
@@ -124,7 +123,6 @@
       .kertas-dokumen {
         box-shadow: none !important;
         border: none !important;
-        /* Hapus padding simulasi web agar tidak menjadi margin ganda saat dicetak */
         padding: 0 !important;
         margin: 0 !important;
         width: 100% !important;
@@ -132,9 +130,7 @@
       }
       
       @page {
-        /* size auto memungkinkan kertas menyesuaikan dengan dialog (misal F4) */
         size: auto; 
-        /* Margin kertas presisi persis seperti pengaturan Excel */
         margin-top: 0.6cm;
         margin-bottom: 1.9cm;
         margin-left: 1cm;
@@ -354,8 +350,8 @@
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Atas Nama / Jabatan Penandatangan</label>
-              <input type="text" id="f_ttdAtasNama" class="form-input font-semibold mb-1.5" placeholder="An. KEPALA" oninput="ubahData('ttdAtasNama', this.value)">
-              <input type="text" id="f_ttdJabatan" class="form-input font-medium" oninput="ubahData('ttdJabatan', this.value)">
+              <input type="text" id="f_ttdAtasNama" class="form-input font-semibold mb-1.5" placeholder="Pengguna Anggaran" oninput="ubahData('ttdAtasNama', this.value)">
+              <input type="text" id="f_ttdJabatan" class="form-input font-medium hidden" oninput="ubahData('ttdJabatan', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
@@ -481,18 +477,17 @@
                       <tr style="border-bottom: 1px solid #000000;">
                         <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                         <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
-                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">Februari 2025</td>
+                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       </tr>
                     </tbody>
                   </table>
 
                   <div class="text-center mt-3">
-                    <p class="t-ttdAtasNama font-bold uppercase tracking-tight">An. KEPALA</p>
-                    <p class="t-ttdJabatan font-bold uppercase tracking-tight leading-snug">Kasubbid Pendaftaran dan Pendataan BPPRD<br>Kabupaten Merangin</p>
+                    <p class="t-ttdAtasNama font-bold uppercase tracking-tight">Pengguna Anggaran</p>
                     <div style="height: 60px;"></div>
-                    <p class="t-ttdNama font-bold underline text-[14px] leading-tight">SYORAYA, S.Pd</p>
-                    <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Penata TK. I (III/D)</p>
-                    <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19740124 199604 2 001</span></p>
+                    <p class="t-ttdNama font-bold underline text-[14px] leading-tight">Hj. SITI AMINAH, MM</p>
+                    <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
+                    <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19690805 200012 2 002</span></p>
                   </div>
                 </div>
               </div>
@@ -560,12 +555,12 @@
         mataAnggaran: ""
       },
       ttdTempat: "Bangko",
-      ttdTanggal: "     Februari 2025",
-      ttdAtasNama: "An. KEPALA",
-      ttdJabatan: "Kasubbid Pendaftaran dan Pendataan BPPRD\nKabupaten Merangin",
-      ttdNama: "SYORAYA, S.Pd",
-      ttdPangkat: "Penata TK. I (III/D)",
-      ttdNip: "19740124 199604 2 001"
+      ttdTanggal: "",
+      ttdAtasNama: "Pengguna Anggaran",
+      ttdJabatan: "",
+      ttdNama: "Hj. SITI AMINAH, MM",
+      ttdPangkat: "Pembina Utama Muda (IV/C)",
+      ttdNip: "19690805 200012 2 002"
     };
 
     let state = JSON.parse(JSON.stringify(dataDefault));
@@ -773,10 +768,11 @@
       if (elDasar) elDasar.textContent = state.dasar || '-';
 
       document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
-      document.querySelectorAll('.t-ttdTanggal').forEach(el => el.textContent = state.ttdTanggal || '');
+      
+      const tglFormatted = state.ttdTanggal ? state.ttdTanggal : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+      document.querySelectorAll('.t-ttdTanggal').forEach(el => el.innerHTML = tglFormatted);
       
       document.querySelectorAll('.t-ttdAtasNama').forEach(el => el.textContent = state.ttdAtasNama || '');
-      document.querySelectorAll('.t-ttdJabatan').forEach(el => el.innerHTML = (state.ttdJabatan || '').replace(/\n/g, '<br>'));
       document.querySelectorAll('.t-ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
       document.querySelectorAll('.t-ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
       document.querySelectorAll('.t-ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
@@ -850,6 +846,8 @@
       state.pegawai.forEach((p, idx) => {
         const lembar = document.createElement('div');
         lembar.className = 'kertas-dokumen font-official text-black text-[12px] leading-snug page-break';
+
+        const tglSpdFormatted = state.ttdTanggal ? state.ttdTanggal : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
         lembar.innerHTML = `
           <!-- KOP SURAT SPD -->
@@ -1023,7 +1021,7 @@
             </tbody>
           </table>
 
-          <!-- TANDA TANGAN SPD (DISAMAKAN PERSIS DENGAN ST) -->
+          <!-- TANDA TANGAN SPD -->
           <div class="mt-6 flex justify-end">
             <div style="width: 290px;">
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[11.5px]">
@@ -1041,14 +1039,13 @@
                   <tr style="border-bottom: 1px solid #000000;">
                     <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                     <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
-                    <td style="padding: 1px 0 3px 0;">${state.ttdTanggal || ''}</td>
+                    <td style="padding: 1px 0 3px 0;">${tglSpdFormatted}</td>
                   </tr>
                 </tbody>
               </table>
 
               <div class="text-center mt-3">
-                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || ''}</p>
-                <p class="font-bold uppercase tracking-tight leading-snug">${(state.ttdJabatan || '').replace(/\n/g, '<br>')}</p>
+                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || 'Pengguna Anggaran'}</p>
                 <div style="height: 55px;"></div>
                 <p class="font-bold underline text-[13px] leading-tight">${state.ttdNama || '-'}</p>
                 <p class="text-[12px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
