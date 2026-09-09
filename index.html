@@ -339,6 +339,22 @@
             <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">4</span>
             Penandatangan & Pengesahan
           </h2>
+
+          <!-- Tombol Pintas Preset Pejabat -->
+          <div class="mb-3 bg-slate-50 p-2 rounded-lg border border-slate-200">
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilihan Cepat Pejabat Penandatangan:</span>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button type="button" onclick="pilihPresetPejabat('pa')" class="text-[11px] py-1.5 px-2 rounded bg-white hover:bg-blue-50 hover:text-blue-900 border border-slate-300 font-semibold text-slate-700 text-left transition flex items-center gap-1.5 shadow-sm">
+                <span>👑</span>
+                <span class="truncate">Pengguna Anggaran</span>
+              </button>
+              <button type="button" onclick="pilihPresetPejabat('kabid')" class="text-[11px] py-1.5 px-2 rounded bg-white hover:bg-blue-50 hover:text-blue-900 border border-slate-300 font-semibold text-slate-700 text-left transition flex items-center gap-1.5 shadow-sm">
+                <span>✍️</span>
+                <span class="truncate">An. Kabid Penagihan</span>
+              </button>
+            </div>
+          </div>
+
           <div class="grid grid-cols-2 gap-2 text-xs">
             <div>
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Dikeluarkan di</label>
@@ -349,8 +365,12 @@
               <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika Pengguna Anggaran)</label>
+              <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD (atau kosongkan)" oninput="ubahData('ttdAn', this.value)">
+            </div>
+            <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
-              <input type="text" id="f_ttdAtasNama" class="form-input font-semibold mb-1.5" placeholder="Pengguna Anggaran" oninput="ubahData('ttdAtasNama', this.value)">
+              <input type="text" id="f_ttdJabatan" class="form-input font-semibold mb-1" placeholder="Contoh: Kabid Penagihan dan Penghapusan" oninput="ubahData('ttdJabatan', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
@@ -482,8 +502,8 @@
                   </table>
 
                   <div class="text-center mt-3">
-                    <p class="t-ttdAtasNama font-bold uppercase tracking-tight">Pengguna Anggaran</p>
-                    <div style="height: 60px;"></div>
+                    <div id="t-ttdJabatanWrapper"></div>
+                    <div style="height: 52px;"></div>
                     <p class="t-ttdNama font-bold underline text-[14px] leading-tight">Hj. SITI AMINAH, MM</p>
                     <p class="t-ttdPangkat text-[13px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
                     <p class="text-[13px] leading-tight">NIP. <span class="t-ttdNip">19690805 200012 2 002</span></p>
@@ -556,7 +576,8 @@
       },
       ttdTempat: "Bangko",
       ttdTanggal: "Februari 2025",
-      ttdAtasNama: "Pengguna Anggaran",
+      ttdAn: "",
+      ttdJabatan: "Pengguna Anggaran",
       ttdNama: "Hj. SITI AMINAH, MM",
       ttdPangkat: "Pembina Utama Muda (IV/C)",
       ttdNip: "19690805 200012 2 002"
@@ -564,198 +585,41 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
-    function tampilkanToast(msg) {
-      const toast = document.getElementById('toast');
-      const text = document.getElementById('toast-text');
-      text.textContent = msg;
-      toast.classList.remove('hidden');
-      toast.classList.add('flex');
-      setTimeout(() => {
-        toast.classList.add('hidden');
-        toast.classList.remove('flex');
-      }, 2500);
-    }
-
-    function gantiTabForm(tab) {
-      const btnSt = document.getElementById('tab-form-st');
-      const btnSpd = document.getElementById('tab-form-spd');
-      const formSt = document.getElementById('form-st-group');
-      const formSpd = document.getElementById('form-spd-group');
-
-      if (tab === 'st') {
-        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
-        formSt.classList.remove('hidden');
-        formSpd.classList.add('hidden');
-      } else {
-        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
-        formSpd.classList.remove('hidden');
-        formSt.classList.add('hidden');
-      }
-    }
-
-    function gantiTabPratinjau(tab) {
-      const btnSt = document.getElementById('tab-pratinjau-st');
-      const btnSpd = document.getElementById('tab-pratinjau-spd');
-      const viewSt = document.getElementById('lembar-surat-tugas');
-      const viewSpd = document.getElementById('lembar-spd-wrapper');
-
-      if (tab === 'st') {
-        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
-        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
-        viewSt.classList.remove('hidden');
-        viewSpd.classList.add('hidden');
-      } else {
-        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
-        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
-        viewSpd.classList.remove('hidden');
-        viewSt.classList.add('hidden');
-      }
-    }
-
-    function ubahData(kunci, nilai) {
-      state[kunci] = nilai;
-      perbaruiPratinjau();
-    }
-
-    function ubahDataSpd(kunci, nilai) {
-      state.spd[kunci] = nilai;
-      if (kunci === 'maksud') {
-        state.instruksi[0] = nilai;
-        const elInst0 = document.getElementById('inst-input-0');
-        if (elInst0) elInst0.value = nilai;
-      }
-      perbaruiPratinjau();
-    }
-
-    function ubahDataPegawai(idx, kunci, nilai) {
-      state.pegawai[idx][kunci] = nilai;
-      perbaruiPratinjau();
-    }
-
-    function tambahPegawai() {
-      state.pegawai.push({ nama: "", nip: "", pangkat: "", jabatan: "" });
-      renderFormPegawai();
-      perbaruiPratinjau();
-      tampilkanToast("Pegawai baru ditambahkan (SPD otomatis bertambah)");
-    }
-
-    function hapusPegawai(idx) {
-      if (state.pegawai.length > 1) {
-        state.pegawai.splice(idx, 1);
-        renderFormPegawai();
-        perbaruiPratinjau();
-      }
-    }
-
-    function renderFormPegawai() {
-      const container = document.getElementById('form-pegawai-list');
-      container.innerHTML = '';
-
-      state.pegawai.forEach((p, idx) => {
-        const div = document.createElement('div');
-        div.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg relative';
-        div.innerHTML = `
-          <div class="flex justify-between items-center mb-1.5">
-            <span class="text-xs font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">Pegawai ${idx + 1}</span>
-            ${state.pegawai.length > 1 ? `<button onclick="hapusPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-xs font-semibold">Hapus</button>` : ''}
-          </div>
-          <div class="space-y-2 text-xs">
-            <div>
-              <label class="block text-slate-600 mb-0.5">Nama & Gelar</label>
-              <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahDataPegawai(${idx}, 'nama', this.value)">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-slate-600 mb-0.5">NIP</label>
-                <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahDataPegawai(${idx}, 'nip', this.value)">
-              </div>
-              <div>
-                <label class="block text-slate-600 mb-0.5">Pangkat / Gol.</label>
-                <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahDataPegawai(${idx}, 'pangkat', this.value)">
-              </div>
-            </div>
-            <div>
-              <label class="block text-slate-600 mb-0.5">Jabatan</label>
-              <textarea rows="2" class="form-input text-xs" oninput="ubahDataPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
-            </div>
-          </div>
+    function formatTtdJabatanHtml() {
+      if (state.ttdAn && state.ttdAn.trim() !== '') {
+        return `
+          <p class="font-bold uppercase tracking-tight leading-snug text-[13.5px]">${state.ttdAn}</p>
+          <p class="font-bold tracking-tight leading-snug mt-0.5 text-[13px]">${state.ttdJabatan || ''}</p>
         `;
-        container.appendChild(div);
-      });
-
-      document.getElementById('label-spd-total').textContent = `${state.pegawai.length} Lembar`;
-    }
-
-    function ubahDataInstruksi(idx, nilai) {
-      state.instruksi[idx] = nilai;
-      if (idx === 0) {
-        state.spd.maksud = nilai;
-        const elSpdMaksud = document.getElementById('f_spdMaksud');
-        if (elSpdMaksud) elSpdMaksud.value = nilai;
-      }
-      perbaruiPratinjau();
-    }
-
-    function tambahInstruksi() {
-      state.instruksi.push("");
-      renderFormInstruksi();
-      perbaruiPratinjau();
-    }
-
-    function hapusInstruksi(idx) {
-      // Poin 3 dan 4 tidak boleh dihapus
-      if (idx === 2 || idx === 3) return;
-      if (state.instruksi.length > 1) {
-        state.instruksi.splice(idx, 1);
-        renderFormInstruksi();
-        perbaruiPratinjau();
+      } else {
+        return `<p class="font-bold uppercase tracking-tight text-[13.5px]">${state.ttdJabatan || 'Pengguna Anggaran'}</p>`;
       }
     }
 
-    function renderFormInstruksi() {
-      const container = document.getElementById('form-instruksi-list');
-      container.innerHTML = '';
+    function pilihPresetPejabat(tipe) {
+      if (tipe === 'pa') {
+        state.ttdAn = "";
+        state.ttdJabatan = "Pengguna Anggaran";
+        state.ttdNama = "Hj. SITI AMINAH, MM";
+        state.ttdPangkat = "Pembina Utama Muda (IV/C)";
+        state.ttdNip = "19690805 200012 2 002";
+        tampilkanToast("Beralih ke format: Pengguna Anggaran");
+      } else if (tipe === 'kabid') {
+        state.ttdAn = "An. KEPALA BPPRD";
+        state.ttdJabatan = "Kabid Penagihan dan Penghapusan";
+        state.ttdNama = "NURAINI SETIAWATI, S. KOM";
+        state.ttdPangkat = "Penata TK.I (III/D)";
+        state.ttdNip = "19820820 201101 2 002";
+        tampilkanToast("Beralih ke format: An. Kabid Penagihan dan Penghapusan");
+      }
 
-      state.instruksi.forEach((inst, idx) => {
-        const isLocked = (idx === 2 || idx === 3);
-        const isPoint1 = (idx === 0);
+      document.getElementById('f_ttdAn').value = state.ttdAn;
+      document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
+      document.getElementById('f_ttdNama').value = state.ttdNama;
+      document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
+      document.getElementById('f_ttdNip').value = state.ttdNip;
 
-        const div = document.createElement('div');
-        div.className = `p-2 rounded-lg border transition-all ${isLocked ? 'bg-slate-100 border-slate-300' : 'bg-white border-slate-200'}`;
-        
-        div.innerHTML = `
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-[11px] font-bold ${isLocked ? 'text-slate-600' : 'text-blue-900'}">
-              Poin ${idx + 1}
-            </span>
-            ${isPoint1 ? `
-              <span class="text-[10px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded font-medium border border-blue-200">
-                Tersinkron ke SPD (Poin 4)
-              </span>
-            ` : ''}
-            ${isLocked ? `
-              <span class="text-[10px] text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded font-medium border border-amber-200 flex items-center gap-1">
-                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                Terkunci (Baku)
-              </span>
-            ` : ''}
-          </div>
-          <div class="flex gap-2 items-start">
-            <textarea id="inst-input-${idx}" rows="2" 
-              class="form-input text-xs flex-1 ${isLocked ? 'bg-slate-100 text-slate-700 cursor-not-allowed resize-none' : ''}" 
-              ${isLocked ? 'readonly title="Poin ini merupakan format baku naskah dinas dan terkunci"' : `oninput="ubahDataInstruksi(${idx}, this.value)"`}
-            >${inst}</textarea>
-            ${!isLocked && state.instruksi.length > 2 ? `
-              <button onclick="hapusInstruksi(${idx})" class="text-rose-500 hover:text-rose-700 p-1" title="Hapus Poin">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-              </button>
-            ` : ''}
-          </div>
-        `;
-        container.appendChild(div);
-      });
+      perbaruiPratinjau();
     }
 
     function inisialisasiForm() {
@@ -782,7 +646,8 @@
 
       document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
-      document.getElementById('f_ttdAtasNama').value = state.ttdAtasNama || '';
+      document.getElementById('f_ttdAn').value = state.ttdAn || '';
+      document.getElementById('f_ttdJabatan').value = state.ttdJabatan || '';
       document.getElementById('f_ttdNama').value = state.ttdNama || '';
       document.getElementById('f_ttdPangkat').value = state.ttdPangkat || '';
       document.getElementById('f_ttdNip').value = state.ttdNip || '';
@@ -803,13 +668,14 @@
 
       document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
       
-      // Memberikan ruang spasi proporsional (sekitar 2 digit tanggal) sebelum bulan & tahun
       const tglFormatted = state.ttdTanggal 
         ? `<span style="display:inline-block; width: 26px;"></span>${state.ttdTanggal}` 
         : '<span style="display:inline-block; width: 26px;"></span>';
       document.querySelectorAll('.t-ttdTanggal').forEach(el => el.innerHTML = tglFormatted);
       
-      document.querySelectorAll('.t-ttdAtasNama').forEach(el => el.textContent = state.ttdAtasNama || '');
+      const ttdWrapper = document.getElementById('t-ttdJabatanWrapper');
+      if (ttdWrapper) ttdWrapper.innerHTML = formatTtdJabatanHtml();
+
       document.querySelectorAll('.t-ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
       document.querySelectorAll('.t-ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
       document.querySelectorAll('.t-ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
@@ -1060,7 +926,7 @@
             </tbody>
           </table>
 
-          <!-- TANDA TANGAN SPD (PENGGUNA ANGGARAN DEFAULT) -->
+          <!-- TANDA TANGAN SPD (SINKRON DENGAN ST) -->
           <div class="mt-6 flex justify-end">
             <div style="width: 290px;">
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[11.5px]">
@@ -1084,8 +950,8 @@
               </table>
 
               <div class="text-center mt-3">
-                <p class="font-bold uppercase tracking-tight">${state.ttdAtasNama || 'Pengguna Anggaran'}</p>
-                <div style="height: 55px;"></div>
+                ${formatTtdJabatanHtml()}
+                <div style="height: 48px;"></div>
                 <p class="font-bold underline text-[13px] leading-tight">${state.ttdNama || '-'}</p>
                 <p class="text-[12px] font-bold leading-tight">${state.ttdPangkat || '-'}</p>
                 <p class="text-[12px] leading-tight">NIP. ${state.ttdNip || '-'}</p>
