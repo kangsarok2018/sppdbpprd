@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Font Inter untuk Antarmuka Form -->
+  <!-- Google Font Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,14 +25,14 @@
       color: #0f172a;
     }
 
-    /* Font Resmi Dokumen Kedinasan: Trebuchet MS dengan Default Ukuran 12pt */
+    /* Font Resmi Dokumen: Trebuchet MS Ukuran Standar 12pt */
     .font-official {
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
       font-size: 12pt;
       line-height: 1.4;
     }
 
-    /* Garis Ganda Standar Kop Surat Dinas */
+    /* Garis Ganda Kop Surat Dinas */
     .kop-garis-ganda {
       border-bottom: 3px solid #000000;
       position: relative;
@@ -48,7 +48,7 @@
       border-bottom: 1px solid #000000;
     }
 
-    /* Tabel SPD Kotak Bergaris Penuh dengan Font 12pt */
+    /* Tabel SPD Kotak Bergaris Penuh */
     .spd-box-table {
       width: 100%;
       border-collapse: collapse;
@@ -79,7 +79,7 @@
       box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
     }
 
-    /* Ukuran Kertas Default ST & SPD Depan: Top 0.6cm, Bottom 1.9cm, Left 1cm, Right 1cm */
+    /* Format Cetak F4 ST & SPD Depan: Top 0.6cm, Bottom 1.9cm, Left 1cm, Right 1cm */
     .kertas-dokumen {
       background: #ffffff;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.12);
@@ -90,7 +90,7 @@
       margin: 0 auto 28px auto;
     }
 
-    /* Khusus Lembar Punggung SPD Sesuai Page Setup Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm */
+    /* Khusus Punggung SPD Sesuai Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm */
     .kertas-spd-punggung {
       max-width: 820px;
       padding: 2.5cm 0.5cm 1.5cm 0.5cm !important;
@@ -110,7 +110,6 @@
       .no-print {
         display: none !important;
       }
-      
       main {
         padding: 0 !important;
         margin: 0 !important;
@@ -121,14 +120,12 @@
       .sticky {
         position: static !important;
       }
-      
       .print-wrapper {
         padding: 0 !important;
         margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
       }
-      
       .kertas-dokumen {
         box-shadow: none !important;
         border: none !important;
@@ -137,7 +134,6 @@
         width: 100% !important;
         max-width: 100% !important;
       }
-
       .kertas-spd-punggung {
         height: 28.8cm !important;
         min-height: 28.8cm !important;
@@ -147,7 +143,6 @@
     }
   </style>
 
-  <!-- Style Tag Dinamis untuk Mengontrol Margin Cetak @page Sesuai Dokumen Aktif -->
   <style id="print-page-style">
     @page {
       size: auto; 
@@ -160,7 +155,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- ================= NAVBAR ATAS (no-print) ================= -->
+  <!-- NAVBAR ATAS -->
   <header class="bg-blue-900 text-white shadow-md no-print sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
@@ -198,14 +193,14 @@
     </div>
   </header>
 
-  <!-- ================= KONTEN UTAMA ================= -->
+  <!-- KONTEN UTAMA -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- KOLOM KIRI: FORM EDITOR -->
       <div class="lg:col-span-5 space-y-4 no-print">
 
-        <!-- TAB NAVIGASI FORM (STICKY TETAP DI ATAS) -->
+        <!-- TAB NAVIGASI FORM -->
         <div class="sticky top-[56px] z-30 bg-[#f1f5f9] py-1">
           <div class="flex border border-slate-200 bg-white rounded-xl p-1 gap-1 shadow-sm">
             <button id="tab-form-st" onclick="gantiTabForm('st')" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm">
@@ -254,7 +249,7 @@
                 </h2>
                 <span class="text-[10px] text-blue-700 font-medium">Bisa pilih via dropdown atau ketik manual</span>
               </div>
-              <button onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
+              <button type="button" onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
               </button>
             </div>
@@ -267,7 +262,7 @@
                 <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">3</span>
                 Poin Tugas (Untuk)
               </h2>
-              <button onclick="tambahInstruksi()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
+              <button type="button" onclick="tambahInstruksi()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Poin
               </button>
             </div>
@@ -355,7 +350,7 @@
                 </div>
               </div>
 
-              <!-- PENGATURAN PPTK UNTUK PUNGGUNG SPD -->
+              <!-- PENGATURAN PPTK -->
               <div class="border-t pt-2.5 mt-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                 <span class="block text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-2">Pejabat Pelaksana Teknis Kegiatan (PPTK - Punggung SPD):</span>
                 <div class="space-y-2">
@@ -390,7 +385,6 @@
             Penandatangan & Pengesahan
           </h2>
 
-          <!-- Dropdown Pilihan Pejabat Penandatangan -->
           <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
             <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
               <span>✍️ Pilih Pejabat Penandatangan:</span>
@@ -409,12 +403,12 @@
               <input type="text" id="f_ttdTempat" class="form-input" oninput="ubahData('ttdTempat', this.value)">
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun</label>
               <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika Pengguna Anggaran)</label>
-              <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD (atau kosongkan)" oninput="ubahData('ttdAn', this.value)">
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika PA)</label>
+              <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD" oninput="ubahData('ttdAn', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
@@ -437,7 +431,7 @@
 
       </div>
 
-      <!-- FORM MASTER DATA PEGAWAI (TAB KHUSUS) -->
+      <!-- FORM MASTER DATA PEGAWAI -->
       <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
           <div class="flex items-center justify-between border-b pb-2 mb-3">
@@ -453,10 +447,10 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="sinkronkanKeCloud()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
+              <button type="button" onclick="sinkronkanKeCloud()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
                 ☁️ Sinkron
               </button>
-              <button onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+              <button type="button" onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
                 <span>+ Tambah</span>
               </button>
             </div>
@@ -467,7 +461,7 @@
 
           <div class="mt-3 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
             <span class="text-slate-500 text-[11px]" id="db-source-info">Memuat data...</span>
-            <button onclick="resetMasterPegawaiDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
+            <button type="button" onclick="resetMasterPegawaiDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
               Kembalikan Pegawai Bawaan
             </button>
           </div>
@@ -478,7 +472,7 @@
       <div class="lg:col-span-7">
         <div class="relative">
 
-          <!-- TAB NAVIGASI PRATINJAU (STICKY TETAP DI ATAS) -->
+          <!-- TAB NAVIGASI PRATINJAU -->
           <div class="sticky top-[56px] z-30 bg-[#f1f5f9] py-1 no-print">
             <div class="bg-white p-2 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -501,30 +495,24 @@
             </div>
           </div>
 
-          <!-- KONTENER KERTAS CETAK (MENGGUNAKAN .font-official) -->
+          <!-- KONTENER KERTAS CETAK -->
           <div class="print-wrapper mt-2">
 
-            <!-- ================= DOKUMEN 1: SURAT TUGAS ================= -->
+            <!-- DOKUMEN 1: SURAT TUGAS -->
             <div id="lembar-surat-tugas" class="kertas-dokumen font-official text-black text-[12pt] leading-normal">
-
-              <!-- KOP SURAT (DENGAN LOGO MERANGIN ASLI & FONT TREBUCHET MS) -->
               <div class="font-official pb-1 kop-garis-ganda">
                 <div class="flex items-center gap-3">
-                  <!-- Logo Resmi Kabupaten Merangin -->
                   <div class="w-20 h-26 flex-shrink-0 flex items-center justify-center">
                     <img src="https://lh3.googleusercontent.com/d/1_7FZisvkbSmNCadKTjaRVrFQpgPoIgNF" 
                          alt="Logo Merangin" 
                          class="w-full h-full object-contain drop-shadow-sm"
                          onerror="this.onerror=null; this.src='https://placehold.co/100x120/93c5fd/1e3a8a?text=MERANGIN';">
                   </div>
-
-                  <!-- Teks Kop Surat -->
                   <div class="flex-1 text-center pr-1">
                     <h3 class="font-bold tracking-tight uppercase leading-none whitespace-nowrap" style="font-size: 16pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
                     <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 15.5pt; letter-spacing: -0.3px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
                     <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 1px 0;">Jln. Jenderal Sudirman No. 5 Bangko - Merangin - Jambi</p>
                     <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 2px 0;">e-mail : bpprd.merangin@gmail.com</p>
-                    
                     <div class="relative flex items-center justify-center" style="margin-top: 2px;">
                       <span class="font-bold tracking-wider uppercase leading-none" style="font-size: 13pt;">BANGKO</span>
                       <span class="absolute right-0 bottom-0 font-normal leading-none" style="font-size: 10pt;">Kode Pos : 37314</span>
@@ -543,7 +531,7 @@
                 </p>
               </div>
 
-              <!-- TABEL KONTEN SURAT TUGAS (FONT 12pt) -->
+              <!-- TABEL KONTEN SURAT TUGAS -->
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="mt-3 text-[12pt]">
                 <colgroup>
                   <col style="width: 75px;">
@@ -595,24 +583,20 @@
                   <div class="text-center mt-3">
                     <div id="t-ttdJabatanWrapper"></div>
                     <div style="height: 52px;"></div>
-                    <p class="t-ttdNama font-bold underline text-[13pt] leading-tight">Hj. SITI AMINAH, MM</p>
-                    <p class="t-ttdPangkat text-[12pt] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
-                    <p class="text-[12pt] leading-tight">NIP. <span class="t-ttdNip">19690805 200012 2 002</span></p>
+                    <p class="t-ttdNama font-bold underline text-[13pt] leading-tight"></p>
+                    <p class="t-ttdPangkat text-[12pt] font-bold leading-tight"></p>
+                    <p class="text-[12pt] leading-tight">NIP. <span class="t-ttdNip"></span></p>
                   </div>
                 </div>
               </div>
 
             </div>
 
-            <!-- ================= DOKUMEN 2: SURAT PERJALANAN DINAS (SPD) ================= -->
-            <div id="lembar-spd-wrapper" class="space-y-6 hidden">
-              <!-- Render otomatis per pegawai via JavaScript -->
-            </div>
+            <!-- DOKUMEN 2: SURAT PERJALANAN DINAS (SPD) -->
+            <div id="lembar-spd-wrapper" class="space-y-6 hidden"></div>
 
-            <!-- ================= DOKUMEN 3: PUNGGUNG SURAT PERJALANAN DINAS ================= -->
-            <div id="lembar-spd-belakang-wrapper" class="space-y-6 hidden">
-              <!-- Render otomatis per pegawai via JavaScript -->
-            </div>
+            <!-- DOKUMEN 3: PUNGGUNG SURAT PERJALANAN DINAS -->
+            <div id="lembar-spd-belakang-wrapper" class="space-y-6 hidden"></div>
 
           </div>
         </div>
@@ -626,12 +610,71 @@
     <span id="toast-text">Notifikasi</span>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <!-- JAVASCRIPT -->
   <script>
-    // Endpoint Firebase Realtime Database milik BPPRD
     const FIREBASE_RTDB_ENDPOINT = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app/pegawai.json";
 
-    // Database Master Pegawai BPPRD Merangin (Bawaan)
+    // Data Default Formulir
+    const dataDefault = {
+      nomorPrefix: "094",
+      nomorUrut: "",
+      nomorKode: "ST/ P3-BPPRD",
+      nomorTahun: "2025",
+      dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2025 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2025.",
+      ttdTempat: "Bangko",
+      ttdTanggal: "Februari 2025",
+      ttdAn: "An. KEPALA BPPRD",
+      ttdJabatan: "Kabid Penagihan dan Penghapusan",
+      ttdNama: "NURAINI SETIAWATI, S. KOM",
+      ttdPangkat: "Penata TK.I (III/D)",
+      ttdNip: "19820820 201101 2 002",
+      pegawai: [
+        {
+          nama: "MUHAMMAD FUAD, S.Si",
+          nip: "-",
+          pangkat: "-",
+          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
+        },
+        {
+          nama: "DIAN MUNAWAROH, S.Pd, AUD",
+          nip: "-",
+          pangkat: "-",
+          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
+        }
+      ],
+      instruksi: [
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        "Melaksanakan tugas ini dengan penuh tanggung jawab dan menyampaikan laporan selambat-lambatnya 7 (tujuh) hari setelah pelaksanaan tugas.",
+        "Kepada instansi atau pejabat terkait dimohon bantuan demi kelancaran pelaksanaan tugas yang dimaksud."
+      ],
+      spd: {
+        pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
+        tingkatBiaya: "Tingkat B",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        alatAngkut: "Kendaraan Roda Dua",
+        tempatBerangkat: "Bangko",
+        tempatTujuan: "Kecamatan Tabir Barat",
+        lamaHari: "3 (Tiga) Hari",
+        tglBerangkat: "",
+        tglKembali: "",
+        instansiBeban: "BPPRD Kab. Merangin",
+        mataAnggaran: "5.1.02.04.01.0001",
+        lembarKe: "",
+        kodeNo: "",
+        nomor: ""
+      },
+      pptk: {
+        nama: "SYORAYA, S.Pd",
+        nip: "19740124 199604 2 001",
+        pangkat: "Penata TK.I (III/D)",
+        jabatan: "Kasubbid Pendataan dan Pendaftaran",
+        subJabatan: "Selaku Pelaksana Teknis Kegiatan"
+      }
+    };
+
+    let state = JSON.parse(JSON.stringify(dataDefault));
+
+    // Master Pegawai Bawaan
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -667,6 +710,7 @@
 
     let masterPegawai = [...masterPegawaiDefault];
 
+    // Logika Status Cloud Firebase
     function perbaruiStatusBadge(status, pesan) {
       const badge = document.getElementById('cloud-status-badge');
       const info = document.getElementById('db-source-info');
@@ -694,14 +738,12 @@
         const data = await resp.json();
 
         if (Array.isArray(data) && data.length > 0) {
-          // Bersihkan item kosong/null jika ada index kosong
           masterPegawai = data.filter(p => p && p.nama);
           perbaruiStatusBadge('online');
         } else if (data && typeof data === 'object') {
           masterPegawai = Object.values(data).filter(p => p && p.nama);
           perbaruiStatusBadge('online');
         } else {
-          // Jika database di Firebase masih kosong, gunakan bawaan lalu unggah otomatis
           await simpanMasterPegawaiCloud(masterPegawaiDefault);
           perbaruiStatusBadge('online');
         }
@@ -742,6 +784,109 @@
       }
     }
 
+    // Navigasi Tab Form
+    function gantiTabForm(tab) {
+      const btnSt = document.getElementById('tab-form-st');
+      const btnSpd = document.getElementById('tab-form-spd');
+      const btnMaster = document.getElementById('tab-form-master');
+      const grpSt = document.getElementById('form-st-group');
+      const grpSpd = document.getElementById('form-spd-group');
+      const grpMaster = document.getElementById('form-master-group');
+
+      btnSt.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100";
+      btnSpd.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100";
+      btnMaster.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1";
+
+      grpSt.classList.add('hidden');
+      grpSpd.classList.add('hidden');
+      grpMaster.classList.add('hidden');
+
+      if (tab === 'st') {
+        btnSt.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm";
+        grpSt.classList.remove('hidden');
+      } else if (tab === 'spd') {
+        btnSpd.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm";
+        grpSpd.classList.remove('hidden');
+      } else if (tab === 'master') {
+        btnMaster.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center justify-center gap-1";
+        grpMaster.classList.remove('hidden');
+      }
+    }
+
+    // Render Master Pegawai di Tab Khusus
+    function renderListMasterPegawai() {
+      const container = document.getElementById('list-master-pegawai');
+      if (!container) return;
+      container.innerHTML = '';
+
+      masterPegawai.forEach((m, idx) => {
+        const item = document.createElement('div');
+        item.className = 'p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs hover:border-slate-300 transition';
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-900">${m.nama}</div>
+            <div class="text-[11px] text-slate-500">${m.pangkat} | NIP. ${m.nip}</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">${m.jabatan}</div>
+          </div>
+          <button type="button" onclick="hapusMasterPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1">
+            Hapus
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    async function tambahMasterPegawaiModal() {
+      const nama = prompt("Nama Lengkap & Gelar Pegawai:");
+      if (!nama || !nama.trim()) return;
+      const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
+      const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
+      const jabatan = prompt("Jabatan Lengkap:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
+
+      const pegawaiBaru = {
+        nama: nama.trim(),
+        nip: nip.trim(),
+        pangkat: pangkat.trim(),
+        jabatan: jabatan.trim()
+      };
+
+      masterPegawai.push(pegawaiBaru);
+      renderListMasterPegawai();
+      renderFormPegawai();
+      tampilkanToast(`Menyimpan ${nama} ke Cloud...`);
+
+      const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
+      if (berhasil) {
+        tampilkanToast(`Pegawai ${nama} tersimpan online di Firebase!`);
+      }
+    }
+
+    async function hapusMasterPegawai(idx) {
+      if (confirm(`Hapus ${masterPegawai[idx].nama} dari Database Master?`)) {
+        const namaDihapus = masterPegawai[idx].nama;
+        masterPegawai.splice(idx, 1);
+        renderListMasterPegawai();
+        renderFormPegawai();
+        tampilkanToast(`Menghapus ${namaDihapus} dari Cloud...`);
+
+        const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
+        if (berhasil) {
+          tampilkanToast("Data pegawai diperbarui di Cloud");
+        }
+      }
+    }
+
+    async function resetMasterPegawaiDefault() {
+      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin dan perbarui Cloud?")) {
+        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
+        renderListMasterPegawai();
+        renderFormPegawai();
+        await simpanMasterPegawaiCloud(masterPegawai);
+        tampilkanToast("Master pegawai dikembalikan ke default & disinkronkan ke Cloud");
+      }
+    }
+
+    // Render Pegawai pada Form Surat Tugas
     function renderFormPegawai() {
       const container = document.getElementById('form-pegawai-list');
       if (!container) return;
@@ -751,7 +896,6 @@
         const card = document.createElement('div');
         card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
 
-        // Buat opsi dropdown pegawai dari database master
         let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
           const terpilih = (m.nama.trim().toUpperCase() === (p.nama || '').trim().toUpperCase()) ? 'selected' : '';
@@ -768,7 +912,6 @@
             ` : ''}
           </div>
 
-          <!-- Pilihan Dropdown Pegawai -->
           <div class="bg-blue-50/70 p-2 rounded-md border border-blue-200/80">
             <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi Data):</label>
             <select class="form-input text-xs font-semibold bg-white cursor-pointer" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
@@ -845,71 +988,6 @@
       perbaruiPratinjau();
     }
 
-    // ================= PENGELOLAAN MASTER PEGAWAI =================
-    function renderListMasterPegawai() {
-      const container = document.getElementById('list-master-pegawai');
-      if (!container) return;
-      container.innerHTML = '';
-    async function tambahMasterPegawaiModal() {
-      const nama = prompt("Nama Lengkap & Gelar Pegawai:");
-      if (!nama || !nama.trim()) return;
-      const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
-      const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
-      const jabatan = prompt("Jabatan Lengkap:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
-
-      const pegawaiBaru = {
-        nama: nama.trim(),
-        nip: nip.trim(),
-        pangkat: pangkat.trim(),
-        jabatan: jabatan.trim()
-      };
-
-      masterPegawai.push(pegawaiBaru);
-      renderListMasterPegawai();
-      renderFormPegawai();
-      tampilkanToast(`Menyimpan ${nama} ke Cloud...`);
-
-      const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
-      if (berhasil) {
-        tampilkanToast(`Pegawai ${nama} tersimpan online di Firebase!`);
-      }
-    }
-
-    async function hapusMasterPegawai(idx) {
-      if (confirm(`Hapus ${masterPegawai[idx].nama} dari Database Master?`)) {
-        const namaDihapus = masterPegawai[idx].nama;
-        masterPegawai.splice(idx, 1);
-        renderListMasterPegawai();
-        renderFormPegawai();
-        tampilkanToast(`Menghapus ${namaDihapus} dari Cloud...`);
-
-        const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
-        if (berhasil) {
-          tampilkanToast("Data pegawai diperbarui di Cloud");
-        }
-      }
-    }
-
-    async function resetMasterPegawaiDefault() {
-      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin dan perbarui Cloud?")) {
-        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
-        renderListMasterPegawai();
-        renderFormPegawai();
-        await simpanMasterPegawaiCloud(masterPegawai);
-        tampilkanToast("Master pegawai dikembalikan ke default & disinkronkan ke Cloud");
-      }
-    }
-
-    function resetMasterPegawaiDefault() {
-      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin?")) {
-        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
-        simpanMasterPegawai(masterPegawai);
-        renderListMasterPegawai();
-        renderFormPegawai();
-        tampilkanToast("Master pegawai dikembalikan ke default");
-      }
-    }
-
     function gantiTabPratinjau(tab) {
       const btnSt = document.getElementById('tab-pratinjau-st');
       const btnSpd = document.getElementById('tab-pratinjau-spd');
@@ -942,7 +1020,6 @@
       } else if (tab === 'spd-belakang') {
         btnSpdBelakang.className = 'px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
         docSpdBelakang.classList.remove('hidden');
-        // Sesuai Page Setup Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm
         if (printPageStyle) {
           printPageStyle.innerHTML = '@page { size: auto; margin-top: 2.5cm; margin-bottom: 1.5cm; margin-left: 0.5cm; margin-right: 0.5cm; }';
         }
@@ -983,53 +1060,13 @@
       perbaruiPratinjau();
     }
 
-    function renderFormPegawai() {
-      const container = document.getElementById('form-pegawai-list');
-      if (!container) return;
-      container.innerHTML = '';
-
-      state.pegawai.forEach((p, idx) => {
-        const card = document.createElement('div');
-        card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
-        card.innerHTML = `
-          <div class="flex justify-between items-center pb-1 border-b border-slate-200">
-            <span class="text-[11px] font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">Pegawai ${idx + 1}</span>
-            ${state.pegawai.length > 1 ? `
-              <button type="button" onclick="hapusPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold transition">
-                Hapus
-              </button>
-            ` : ''}
-          </div>
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama & Gelar</label>
-            <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahPegawai(${idx}, 'nama', this.value)">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">NIP</label>
-              <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahPegawai(${idx}, 'nip', this.value)">
-            </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Pangkat / Golongan</label>
-              <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahPegawai(${idx}, 'pangkat', this.value)">
-            </div>
-          </div>
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jabatan</label>
-            <textarea rows="2" class="form-input text-xs" oninput="ubahPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
     function renderFormInstruksi() {
       const container = document.getElementById('form-instruksi-list');
       if (!container) return;
       container.innerHTML = '';
 
       state.instruksi.forEach((inst, idx) => {
-        const isLocked = (idx === 2 || idx === 3);
+        const isLocked = (idx === 1 || idx === 2);
         const row = document.createElement('div');
         row.className = 'space-y-1';
         row.innerHTML = `
@@ -1039,7 +1076,7 @@
               ${idx === 0 ? '<span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-300">Sinkron ke SPD</span>' : ''}
               ${isLocked ? '<span class="text-[9px] bg-slate-200 text-slate-700 font-semibold px-1.5 py-0.5 rounded">Terkunci (Baku)</span>' : ''}
             </span>
-            ${!isLocked && state.instruksi.length > 2 && idx >= 4 ? `
+            ${!isLocked && state.instruksi.length > 2 && idx >= 3 ? `
               <button type="button" onclick="hapusInstruksi(${idx})" class="text-rose-600 hover:text-rose-800 text-[10px] font-semibold">Hapus</button>
             ` : ''}
           </div>
@@ -1080,7 +1117,7 @@
     }
 
     function hapusInstruksi(idx) {
-      if (idx !== 2 && idx !== 3 && state.instruksi.length > 1) {
+      if (idx !== 1 && idx !== 2 && state.instruksi.length > 1) {
         state.instruksi.splice(idx, 1);
         renderFormInstruksi();
         perbaruiPratinjau();
@@ -1111,30 +1148,20 @@
       }
     }
 
-    function pilihPresetPejabat(tipe) {
-      if (tipe === 'pa') {
-        state.ttdAn = "";
-        state.ttdJabatan = "Pengguna Anggaran";
-        state.ttdNama = "Hj. SITI AMINAH, MM";
-        state.ttdPangkat = "Pembina Utama Muda (IV/C)";
-        state.ttdNip = "19690805 200012 2 002";
-        tampilkanToast("Beralih ke format: Pengguna Anggaran");
-      } else if (tipe === 'kabid') {
-        state.ttdAn = "An. KEPALA BPPRD";
-        state.ttdJabatan = "Kabid Penagihan dan Penghapusan";
-        state.ttdNama = "NURAINI SETIAWATI, S. KOM";
-        state.ttdPangkat = "Penata TK.I (III/D)";
-        state.ttdNip = "19820820 201101 2 002";
-        tampilkanToast("Beralih ke format: An. Kabid Penagihan dan Penghapusan");
+    function formatTempatTujuanHtml(teks) {
+      const t = teks || 'Kecamatan Tabir Barat';
+      let fontSize = '11.5pt';
+      let letterSpacing = 'normal';
+      if (t.length > 26) {
+        fontSize = '9.5pt';
+        letterSpacing = '-0.3px';
+      } else if (t.length > 21) {
+        fontSize = '10.5pt';
+        letterSpacing = '-0.2px';
+      } else if (t.length > 17) {
+        fontSize = '11pt';
       }
-
-      document.getElementById('f_ttdAn').value = state.ttdAn;
-      document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
-      document.getElementById('f_ttdNama').value = state.ttdNama;
-      document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
-      document.getElementById('f_ttdNip').value = state.ttdNip;
-
-      perbaruiPratinjau();
+      return `<span style="font-size: ${fontSize}; letter-spacing: ${letterSpacing}; white-space: nowrap; display: inline-block; vertical-align: top; max-width: 100%; overflow: hidden; text-overflow: ellipsis;">${t}</span>`;
     }
 
     function inisialisasiForm() {
@@ -1178,7 +1205,6 @@
       renderFormInstruksi();
       perbaruiPratinjau();
 
-      // Muat data master pegawai langsung dari Firebase RTDB
       muatMasterPegawaiCloud();
     }
 
@@ -1281,7 +1307,7 @@
       if (!container) return;
       container.innerHTML = '';
 
-      state.pegawai.forEach((p, idx) => {
+      state.pegawai.forEach((p) => {
         const lembar = document.createElement('div');
         lembar.className = 'kertas-dokumen font-official text-black text-[12pt] leading-normal page-break';
 
@@ -1290,7 +1316,6 @@
           : '<span style="display:inline-block; width: 26px;"></span>';
 
         lembar.innerHTML = `
-          <!-- KOP SURAT SPD -->
           <div class="font-official pb-1 kop-garis-ganda">
             <div class="flex items-center gap-3">
               <div class="w-20 h-26 flex-shrink-0 flex items-center justify-center">
@@ -1299,13 +1324,11 @@
                      class="w-full h-full object-contain drop-shadow-sm"
                      onerror="this.onerror=null; this.src='https://placehold.co/100x120/93c5fd/1e3a8a?text=MERANGIN';">
               </div>
-
               <div class="flex-1 text-center pr-1">
                 <h3 class="font-bold tracking-tight uppercase leading-none whitespace-nowrap" style="font-size: 16pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
                 <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 15.5pt; letter-spacing: -0.3px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
                 <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 1px 0;">Jln. Jenderal Sudirman No. 5 Bangko - Merangin - Jambi</p>
                 <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 2px 0;">e-mail : bpprd.merangin@gmail.com</p>
-                
                 <div class="relative flex items-center justify-center" style="margin-top: 2px;">
                   <span class="font-bold tracking-wider uppercase leading-none" style="font-size: 13pt;">BANGKO</span>
                   <span class="absolute right-0 bottom-0 font-normal leading-none" style="font-size: 10pt;">Kode Pos : 37314</span>
@@ -1314,7 +1337,6 @@
             </div>
           </div>
 
-          <!-- NOMOR SPD -->
           <div class="flex justify-end my-1">
             <table style="width: 250px; border-collapse: collapse;" class="text-[11pt]">
               <tbody>
@@ -1337,12 +1359,10 @@
             </table>
           </div>
 
-          <!-- JUDUL SPD -->
           <div class="text-center my-2">
             <h1 class="text-[14pt] font-bold tracking-wider underline uppercase">SURAT PERJALANAN DINAS</h1>
           </div>
 
-          <!-- TABEL SPD DENGAN FONT 12pt -->
           <table class="spd-box-table mt-2 text-[12pt]">
             <tbody>
               <tr>
@@ -1461,7 +1481,6 @@
             </tbody>
           </table>
 
-          <!-- TANDA TANGAN SPD -->
           <div class="mt-6 flex justify-end">
             <div style="width: 310px;">
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt]">
@@ -1499,23 +1518,6 @@
       });
     }
 
-    function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Tabir Barat';
-      // Skala otomatis ukuran font dan letter spacing berdasarkan panjang nama kecamatan/tujuan
-      let fontSize = '11.5pt';
-      let letterSpacing = 'normal';
-      if (t.length > 26) {
-        fontSize = '9.5pt';
-        letterSpacing = '-0.3px';
-      } else if (t.length > 21) {
-        fontSize = '10.5pt';
-        letterSpacing = '-0.2px';
-      } else if (t.length > 17) {
-        fontSize = '11pt';
-      }
-      return `<span style="font-size: ${fontSize}; letter-spacing: ${letterSpacing}; white-space: nowrap; display: inline-block; vertical-align: top; max-width: 100%; overflow: hidden; text-overflow: ellipsis;">${t}</span>`;
-    }
-
     function renderLembarSpdBelakang() {
       const container = document.getElementById('lembar-spd-belakang-wrapper');
       if (!container) return;
@@ -1533,12 +1535,10 @@
         ? `<span style="display:inline-block; width: 26px;"></span>${state.ttdTanggal}` 
         : '<span style="display:inline-block; width: 26px;"></span>';
 
-      // Lembar Punggung SPD dengan margin sesuai Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm
       const lembar = document.createElement('div');
       lembar.className = 'kertas-dokumen kertas-spd-punggung font-official text-black text-[12pt] leading-snug';
 
       lembar.innerHTML = `
-        <!-- TABEL PUNGGUNG SPD (VISUM SATU HALAMAN PENUH F4 DENGAN FONT 12pt) -->
         <table class="spd-box-table w-full text-[12pt]" style="height: 28.5cm;">
           <colgroup>
             <col style="width: 50%;">
@@ -1577,7 +1577,6 @@
                     </tr>
                   </table>
 
-                  <!-- Tanda Tangan PPTK -->
                   <div class="text-center mt-2 mb-1">
                     <p class="font-normal leading-tight text-[12pt]">${pptkData.jabatan || 'Kasubbid Pendataan dan Pendaftaran'}</p>
                     <p class="font-normal leading-tight text-[12pt]">${pptkData.subJabatan || 'Selaku Pelaksana Teknis Kegiatan'}</p>
@@ -1658,7 +1657,7 @@
               </td>
             </tr>
 
-            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN (LOCKED KE SITI AMINAH) -->
+            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN -->
             <tr style="height: 7.5cm;">
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
@@ -1683,7 +1682,6 @@
                     </tr>
                   </table>
 
-                  <!-- Pengguna Anggaran Tetap Hj. SITI AMINAH, MM -->
                   <div class="text-center mb-1">
                     <p class="font-bold text-[12.5pt] leading-tight uppercase">Pengguna Anggaran</p>
                     <div style="height: 55px;"></div>
