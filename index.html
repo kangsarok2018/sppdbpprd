@@ -445,18 +445,28 @@
               <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
                 <span>👥 Database Master Pegawai BPPRD</span>
               </h2>
-              <p class="text-[11px] text-slate-500">Pegawai di sini otomatis menjadi pilihan dropdown di Form Surat Tugas.</p>
+              <div class="flex items-center gap-2 mt-1">
+                <span id="cloud-status-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span>Menghubungkan ke Cloud...</span>
+                </span>
+              </div>
             </div>
-            <button onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
-              <span>+ Tambah Pegawai</span>
-            </button>
+            <div class="flex items-center gap-1.5">
+              <button onclick="sinkronkanKeCloud()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
+                ☁️ Sinkron
+              </button>
+              <button onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+                <span>+ Tambah</span>
+              </button>
+            </div>
           </div>
 
           <!-- Daftar Pegawai Tersimpan -->
           <div id="list-master-pegawai" class="space-y-2.5 max-h-[550px] overflow-y-auto pr-1"></div>
 
           <div class="mt-3 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
-            <span class="text-slate-500 text-[11px]">Tersimpan otomatis di browser</span>
+            <span class="text-slate-500 text-[11px]" id="db-source-info">Memuat data...</span>
             <button onclick="resetMasterPegawaiDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
               Kembalikan Pegawai Bawaan
             </button>
@@ -618,7 +628,10 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // Database Master Pegawai BPPRD Merangin
+    // Endpoint Firebase Realtime Database milik BPPRD
+    const FIREBASE_RTDB_ENDPOINT = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app/pegawai.json";
+
+    // Database Master Pegawai BPPRD Merangin (Bawaan)
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -652,110 +665,80 @@
       }
     ];
 
-    function muatMasterPegawai() {
-      const tersimpan = localStorage.getItem('bpprd_master_pegawai');
-      if (tersimpan) {
-        try {
-          return JSON.parse(tersimpan);
-        } catch(e) {
-          return masterPegawaiDefault;
-        }
+    let masterPegawai = [...masterPegawaiDefault];
+
+    function perbaruiStatusBadge(status, pesan) {
+      const badge = document.getElementById('cloud-status-badge');
+      const info = document.getElementById('db-source-info');
+      if (!badge) return;
+
+      if (status === 'online') {
+        badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Cloud Terhubung (Online)</span>';
+        if (info) info.textContent = "Tersimpan online di Firebase Cloud";
+      } else if (status === 'syncing') {
+        badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200";
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-spin"></span><span>Sinkronisasi ke Cloud...</span>';
+      } else if (status === 'offline') {
+        badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>⚠️ ${pesan || 'Offline (Atur Rules Firebase)'}</span>`;
+        if (info) info.textContent = "Beralih ke memori lokal browser";
       }
-      return masterPegawaiDefault;
     }
 
-    function simpanMasterPegawai(list) {
-      localStorage.setItem('bpprd_master_pegawai', JSON.stringify(list));
-    }
+    async function muatMasterPegawaiCloud() {
+      perbaruiStatusBadge('syncing');
+      try {
+        const resp = await fetch(FIREBASE_RTDB_ENDPOINT);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
 
-    let masterPegawai = muatMasterPegawai();
-
-    const dataDefault = {
-      nomorPrefix: "094",
-      nomorUrut: "",
-      nomorKode: "ST/ P3-BPPRD",
-      nomorTahun: "2025",
-      dasar: "Dokumen Pelaksanaan Anggaran Nomor : DPA/A.1/5.02.0.00.0.00.04.0000/001/2025 Tahun Anggaran 2025",
-      pegawai: [
-        {
-          nama: "MUHAMMAD FUAD, S.Si",
-          nip: "-",
-          pangkat: "-",
-          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
-        },
-        {
-          nama: "DIAN MUNAWAROH, S.Pd, AUD",
-          nip: "-",
-          pangkat: "-",
-          jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
+        if (Array.isArray(data) && data.length > 0) {
+          // Bersihkan item kosong/null jika ada index kosong
+          masterPegawai = data.filter(p => p && p.nama);
+          perbaruiStatusBadge('online');
+        } else if (data && typeof data === 'object') {
+          masterPegawai = Object.values(data).filter(p => p && p.nama);
+          perbaruiStatusBadge('online');
+        } else {
+          // Jika database di Firebase masih kosong, gunakan bawaan lalu unggah otomatis
+          await simpanMasterPegawaiCloud(masterPegawaiDefault);
+          perbaruiStatusBadge('online');
         }
-      ],
-      instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
-        "Tugas tersebut dilaksanakan tanggal 12 Februari 2025 selama 1 (Satu) hari kerja.",
-        "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
-        "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas tersebut."
-      ],
-      spd: {
-        lembarKe: "",
-        kodeNo: "",
-        nomor: "",
-        pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
-        alatAngkut: "Kendaraan Roda Dua",
-        tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Tabir Barat",
-        lamaHari: "1 ( Satu)   hari",
-        tglBerangkat: "12 Februari 2025",
-        tglKembali: "12 Februari 2025",
-        instansiBeban: "BPPRD Kab. Merangin",
-        mataAnggaran: ""
-      },
-      pptk: {
-        nama: "SYORAYA, S.Pd",
-        nip: "19740124 199604 2 001",
-        pangkat: "Penata TK.I (III/D)",
-        jabatan: "Kasubbid Pendataan dan Pendaftaran",
-        subJabatan: "Selaku Pelaksana Teknis Kegiatan"
-      },
-      ttdTempat: "Bangko",
-      ttdTanggal: "Februari 2025",
-      ttdAn: "",
-      ttdJabatan: "Pengguna Anggaran",
-      ttdNama: "Hj. SITI AMINAH, MM",
-      ttdPangkat: "Pembina Utama Muda (IV/C)",
-      ttdNip: "19690805 200012 2 002"
-    };
+      } catch (err) {
+        console.warn("Gagal terhubung ke Firebase RTDB:", err);
+        perbaruiStatusBadge('offline', 'Izin Ditolak / Cek Rules RTDB');
+      }
 
-    let state = JSON.parse(JSON.stringify(dataDefault));
+      renderListMasterPegawai();
+      renderFormPegawai();
+    }
 
-    function gantiTabForm(tab) {
-      const btnSt = document.getElementById('tab-form-st');
-      const btnSpd = document.getElementById('tab-form-spd');
-      const btnMaster = document.getElementById('tab-form-master');
-      const groupSt = document.getElementById('form-st-group');
-      const groupSpd = document.getElementById('form-spd-group');
-      const groupMaster = document.getElementById('form-master-group');
+    async function simpanMasterPegawaiCloud(list) {
+      perbaruiStatusBadge('syncing');
+      try {
+        const resp = await fetch(FIREBASE_RTDB_ENDPOINT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(list)
+        });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        perbaruiStatusBadge('online');
+        return true;
+      } catch (err) {
+        console.error("Gagal menyimpan ke Firebase RTDB:", err);
+        perbaruiStatusBadge('offline', 'Gagal Simpan ke Cloud');
+        return false;
+      }
+    }
 
-      btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
-      btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
-      btnMaster.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1';
-
-      groupSt.classList.add('hidden');
-      groupSpd.classList.add('hidden');
-      groupMaster.classList.add('hidden');
-
-      if (tab === 'st') {
-        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        groupSt.classList.remove('hidden');
-      } else if (tab === 'spd') {
-        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        groupSpd.classList.remove('hidden');
-      } else if (tab === 'master') {
-        btnMaster.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center justify-center gap-1';
-        groupMaster.classList.remove('hidden');
-        renderListMasterPegawai();
+    async function sinkronkanKeCloud() {
+      tampilkanToast("Mengunggah data pegawai ke Firebase Cloud...");
+      const ok = await simpanMasterPegawaiCloud(masterPegawai);
+      if (ok) {
+        tampilkanToast("Data pegawai berhasil disinkronkan ke Cloud!");
+      } else {
+        tampilkanToast("Gagal unggah: Pastikan Rules Firebase diatur ke read/write: true");
       }
     }
 
@@ -867,53 +850,53 @@
       const container = document.getElementById('list-master-pegawai');
       if (!container) return;
       container.innerHTML = '';
-
-      masterPegawai.forEach((m, idx) => {
-        const item = document.createElement('div');
-        item.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-start justify-between gap-2';
-        item.innerHTML = `
-          <div class="flex-1 text-xs">
-            <div class="font-bold text-slate-900">${m.nama}</div>
-            <div class="text-[11px] text-slate-600 mt-0.5">NIP: ${m.nip || '-'} | Pangkat: ${m.pangkat || '-'}</div>
-            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">${m.jabatan || '-'}</div>
-          </div>
-          <div class="flex items-center gap-1">
-            <button onclick="hapusMasterPegawai(${idx})" title="Hapus dari master" class="text-rose-600 hover:text-rose-800 p-1 rounded hover:bg-rose-50 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-            </button>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function tambahMasterPegawaiModal() {
+    async function tambahMasterPegawaiModal() {
       const nama = prompt("Nama Lengkap & Gelar Pegawai:");
       if (!nama || !nama.trim()) return;
       const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
       const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
       const jabatan = prompt("Jabatan Lengkap:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
 
-      masterPegawai.push({
+      const pegawaiBaru = {
         nama: nama.trim(),
         nip: nip.trim(),
         pangkat: pangkat.trim(),
         jabatan: jabatan.trim()
-      });
+      };
 
-      simpanMasterPegawai(masterPegawai);
+      masterPegawai.push(pegawaiBaru);
       renderListMasterPegawai();
       renderFormPegawai();
-      tampilkanToast(`Pegawai ${nama} ditambahkan ke Master`);
+      tampilkanToast(`Menyimpan ${nama} ke Cloud...`);
+
+      const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
+      if (berhasil) {
+        tampilkanToast(`Pegawai ${nama} tersimpan online di Firebase!`);
+      }
     }
 
-    function hapusMasterPegawai(idx) {
+    async function hapusMasterPegawai(idx) {
       if (confirm(`Hapus ${masterPegawai[idx].nama} dari Database Master?`)) {
+        const namaDihapus = masterPegawai[idx].nama;
         masterPegawai.splice(idx, 1);
-        simpanMasterPegawai(masterPegawai);
         renderListMasterPegawai();
         renderFormPegawai();
-        tampilkanToast("Pegawai dihapus dari master");
+        tampilkanToast(`Menghapus ${namaDihapus} dari Cloud...`);
+
+        const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
+        if (berhasil) {
+          tampilkanToast("Data pegawai diperbarui di Cloud");
+        }
+      }
+    }
+
+    async function resetMasterPegawaiDefault() {
+      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin dan perbarui Cloud?")) {
+        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
+        renderListMasterPegawai();
+        renderFormPegawai();
+        await simpanMasterPegawaiCloud(masterPegawai);
+        tampilkanToast("Master pegawai dikembalikan ke default & disinkronkan ke Cloud");
       }
     }
 
@@ -1194,6 +1177,9 @@
       renderFormPegawai();
       renderFormInstruksi();
       perbaruiPratinjau();
+
+      // Muat data master pegawai langsung dari Firebase RTDB
+      muatMasterPegawaiCloud();
     }
 
     function perbaruiPratinjau() {
