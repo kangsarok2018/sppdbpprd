@@ -477,8 +477,8 @@
 
                   <!-- Teks Kop Surat -->
                   <div class="flex-1 text-center pr-1">
-                    <h3 class="font-bold tracking-tight uppercase leading-none" style="font-size: 14pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
-                    <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 14.5pt; letter-spacing: -0.2px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
+                    <h3 class="font-bold tracking-tight uppercase leading-none whitespace-nowrap" style="font-size: 16pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
+                    <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 15.5pt; letter-spacing: -0.3px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
                     <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 1px 0;">Jln. Jenderal Sudirman No. 5 Bangko - Merangin - Jambi</p>
                     <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 2px 0;">e-mail : bpprd.merangin@gmail.com</p>
                     
@@ -491,7 +491,7 @@
               </div>
 
               <!-- JUDUL DAN NOMOR SURAT -->
-              <div class="text-center my-3">
+              <div class="text-center mt-5 mb-3">
                 <h1 class="text-[14pt] font-bold tracking-wider underline uppercase">SURAT TUGAS</h1>
                 <p class="text-[12pt] font-normal mt-0.5">
                   Nomor : <span class="t-nomorPrefix">094</span> / 
@@ -1052,8 +1052,8 @@
               </div>
 
               <div class="flex-1 text-center pr-1">
-                <h3 class="font-bold tracking-tight uppercase leading-none" style="font-size: 14pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
-                <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 14.5pt; letter-spacing: -0.2px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
+                <h3 class="font-bold tracking-tight uppercase leading-none whitespace-nowrap" style="font-size: 16pt; margin: 0 0 2px 0;">PEMERINTAH KABUPATEN MERANGIN</h3>
+                <h2 class="font-bold uppercase leading-none whitespace-nowrap" style="font-size: 15.5pt; letter-spacing: -0.3px; margin: 0 0 3px 0;">BADAN PENGELOLA PAJAK DAN RETRIBUSI DAERAH</h2>
                 <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 1px 0;">Jln. Jenderal Sudirman No. 5 Bangko - Merangin - Jambi</p>
                 <p class="font-normal leading-tight" style="font-size: 10.5pt; margin: 0 0 2px 0;">e-mail : bpprd.merangin@gmail.com</p>
                 
@@ -1204,7 +1204,7 @@
                     <tr>
                       <td style="border: none; padding: 0;">Tanggal</td>
                       <td style="border: none; padding: 0; text-align: center;">:</td>
-                      <td style="border: none; padding: 0;">${state.ttdTanggal || '-'}</td>
+                      <td style="border: none; padding: 0;">${tglSpdFormatted}</td>
                     </tr>
                   </table>
                 </td>
@@ -1263,8 +1263,9 @@
         subJabatan: "Selaku Pelaksana Teknis Kegiatan"
       };
 
-      const thnText = state.nomorTahun || '2026';
-      const tglManualHtml = `<span style="display:inline-block; width: 40px;"></span> ${thnText}`;
+      const tglPunggungFormatted = state.ttdTanggal 
+        ? `<span style="display:inline-block; width: 26px;"></span>${state.ttdTanggal}` 
+        : '<span style="display:inline-block; width: 26px;"></span>';
 
       // Lembar Punggung SPD dengan margin sesuai Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm
       const lembar = document.createElement('div');
@@ -1294,7 +1295,7 @@
                       <td style="border: none; padding: 2px 0;"></td>
                       <td style="border: none; padding: 2px 0;">Pada Tanggal</td>
                       <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                      <td style="border: none; padding: 2px 0;">${tglManualHtml}</td>
+                      <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
                     </tr>
                     <tr>
                       <td style="border: none; padding: 2px 0;"></td>
@@ -1333,7 +1334,7 @@
                         <td style="border: none; padding: 2px 0;"></td>
                         <td style="border: none; padding: 2px 0;">Pada Tanggal</td>
                         <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                        <td style="border: none; padding: 2px 0;">${tglManualHtml}</td>
+                        <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
                       </tr>
                     </table>
                     <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
@@ -1359,7 +1360,7 @@
                       <tr>
                         <td style="border: none; padding: 2px 0;">Pada Tanggal</td>
                         <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                        <td style="border: none; padding: 2px 0;">${tglManualHtml}</td>
+                        <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
                       </tr>
                     </table>
                     <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
@@ -1389,7 +1390,7 @@
                       <td style="border: none; padding: 2px 0;"></td>
                       <td style="border: none; padding: 2px 0;">Pada Tanggal</td>
                       <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                      <td style="border: none; padding: 2px 0;">${tglManualHtml}</td>
+                      <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
                     </tr>
                   </table>
 
