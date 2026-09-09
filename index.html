@@ -88,6 +88,11 @@
       margin: 0 auto 28px auto;
     }
 
+    /* Khusus Lembar Punggung SPD agar pas satu halaman penuh F4 */
+    .kertas-spd-punggung {
+      min-height: 29cm;
+    }
+
     .page-break {
       page-break-after: always;
       break-after: page;
@@ -127,6 +132,13 @@
         margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
+      }
+
+      .kertas-spd-punggung {
+        height: 29cm !important;
+        min-height: 29cm !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
       }
       
       @page {
@@ -1236,152 +1248,164 @@
       const thnText = state.nomorTahun || '2026';
       const tglManualHtml = `<span style="display:inline-block; width: 40px;"></span> ${thnText}`;
 
-      // Render cukup 1 lembar saja
+      // Render 1 lembar saja dengan tinggi penuh standar kertas F4
       const lembar = document.createElement('div');
-      lembar.className = 'kertas-dokumen font-official text-black text-[12px] leading-snug';
+      lembar.className = 'kertas-dokumen kertas-spd-punggung font-official text-black text-[12px] leading-snug';
 
       lembar.innerHTML = `
-        <!-- TABEL PUNGGUNG SPD (VISUM) -->
-        <table class="spd-box-table w-full">
+        <!-- TABEL PUNGGUNG SPD (VISUM SATU HALAMAN PENUH F4) -->
+        <table class="spd-box-table w-full" style="height: 28.8cm;">
           <colgroup>
             <col style="width: 50%;">
             <col style="width: 50%;">
           </colgroup>
           <tbody>
             <!-- ROW 1: I. BERANGKAT DARI (KANAN) -->
-            <tr>
+            <tr style="height: 7.2cm;">
               <td style="border: 1px solid #000; padding: 6px;"></td>
-              <td style="border: 1px solid #000; padding: 6px 10px;">
-                <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[11.5px]">
-                  <tr>
-                    <td style="width: 18px; vertical-align: top; border: none; padding: 1px 0;">I.</td>
-                    <td style="width: 82px; vertical-align: top; border: none; padding: 1px 0;">Berangkat dari</td>
-                    <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
-                    <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
-                  </tr>
-                  <tr>
-                    <td style="border: none; padding: 1px 0;"></td>
-                    <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
-                    <td style="text-align: center; border: none; padding: 1px 0;">:</td>
-                    <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
-                  </tr>
-                  <tr>
-                    <td style="border: none; padding: 1px 0;"></td>
-                    <td style="border: none; padding: 1px 0;">Ke</td>
-                    <td style="text-align: center; border: none; padding: 1px 0;">:</td>
-                    <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
-                  </tr>
-                </table>
+              <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                  <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[12px]">
+                    <tr>
+                      <td style="width: 18px; vertical-align: top; border: none; padding: 1px 0;">I.</td>
+                      <td style="width: 82px; vertical-align: top; border: none; padding: 1px 0;">Berangkat dari</td>
+                      <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
+                      <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
+                    </tr>
+                    <tr>
+                      <td style="border: none; padding: 1px 0;"></td>
+                      <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
+                      <td style="text-align: center; border: none; padding: 1px 0;">:</td>
+                      <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
+                    </tr>
+                    <tr>
+                      <td style="border: none; padding: 1px 0;"></td>
+                      <td style="border: none; padding: 1px 0;">Ke</td>
+                      <td style="text-align: center; border: none; padding: 1px 0;">:</td>
+                      <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
+                    </tr>
+                  </table>
 
-                <!-- Tanda Tangan PPTK -->
-                <div class="text-center mt-6">
-                  <p class="font-normal leading-tight text-[12px]">${pptkData.jabatan || 'Kasubbid Pendataan dan Pendaftaran'}</p>
-                  <p class="font-normal leading-tight text-[12px]">${pptkData.subJabatan || 'Selaku Pelaksana Teknis Kegiatan'}</p>
-                  <div style="height: 52px;"></div>
-                  <p class="font-bold underline text-[12.5px] leading-tight">${pptkData.nama || 'SYORAYA, S.Pd'}</p>
-                  <p class="text-[11.5px] font-bold leading-tight">${pptkData.pangkat || 'Penata TK.I (III/D)'}</p>
-                  <p class="text-[11.5px] leading-tight">NIP. ${pptkData.nip || '19740124 199604 2 001'}</p>
+                  <!-- Tanda Tangan PPTK -->
+                  <div class="text-center mt-2 mb-1">
+                    <p class="font-normal leading-tight text-[12.5px]">${pptkData.jabatan || 'Kasubbid Pendataan dan Pendaftaran'}</p>
+                    <p class="font-normal leading-tight text-[12.5px]">${pptkData.subJabatan || 'Selaku Pelaksana Teknis Kegiatan'}</p>
+                    <div style="height: 60px;"></div>
+                    <p class="font-bold underline text-[13px] leading-tight">${pptkData.nama || 'SYORAYA, S.Pd'}</p>
+                    <p class="text-[12px] font-bold leading-tight">${pptkData.pangkat || 'Penata TK.I (III/D)'}</p>
+                    <p class="text-[12px] leading-tight">NIP. ${pptkData.nip || '19740124 199604 2 001'}</p>
+                  </div>
                 </div>
               </td>
             </tr>
 
             <!-- ROW 2: II. TIBA DI & BERANGKAT DARI (TUJUAN) -->
-            <tr>
-              <td style="border: 1px solid #000; padding: 6px 10px; vertical-align: top;">
-                <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[11.5px]">
-                  <tr>
-                    <td style="width: 18px; vertical-align: top; border: none; padding: 1px 0;">II.</td>
-                    <td style="width: 78px; vertical-align: top; border: none; padding: 1px 0;">Tiba di</td>
-                    <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
-                    <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
-                  </tr>
-                  <tr>
-                    <td style="border: none; padding: 1px 0;"></td>
-                    <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
-                    <td style="text-align: center; border: none; padding: 1px 0;">:</td>
-                    <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
-                  </tr>
-                </table>
+            <tr style="height: 7.6cm;">
+              <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[12px]">
+                      <tr>
+                        <td style="width: 18px; vertical-align: top; border: none; padding: 1px 0;">II.</td>
+                        <td style="width: 78px; vertical-align: top; border: none; padding: 1px 0;">Tiba di</td>
+                        <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
+                        <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
+                      </tr>
+                      <tr>
+                        <td style="border: none; padding: 1px 0;"></td>
+                        <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
+                        <td style="text-align: center; border: none; padding: 1px 0;">:</td>
+                        <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
+                      </tr>
+                    </table>
+                    <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
+                  </div>
 
-                <div class="mt-8 text-center">
-                  <div style="border-bottom: 1px dashed #475569; width: 80%; margin: 0 auto;"></div>
-                  <div style="height: 48px;"></div>
-                  <p class="text-[12px] leading-tight">( ____________________________________ )</p>
-                  <p class="text-[11.5px] leading-tight mt-0.5 text-left pl-8">Nip.</p>
+                  <div class="text-center mb-1">
+                    <div style="height: 52px;"></div>
+                    <p class="text-[12px] leading-tight">( ____________________________________ )</p>
+                    <p class="text-[11.5px] leading-tight mt-1 text-left pl-6">Nip.</p>
+                  </div>
                 </div>
               </td>
 
-              <td style="border: 1px solid #000; padding: 6px 10px; vertical-align: top;">
-                <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[11.5px]">
-                  <tr>
-                    <td style="width: 96px; vertical-align: top; border: none; padding: 1px 0;">Berangkat dari</td>
-                    <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
-                    <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
-                  </tr>
-                  <tr>
-                    <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
-                    <td style="text-align: center; border: none; padding: 1px 0;">:</td>
-                    <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
-                  </tr>
-                </table>
+              <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[12px]">
+                      <tr>
+                        <td style="width: 96px; vertical-align: top; border: none; padding: 1px 0;">Berangkat dari</td>
+                        <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
+                        <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatTujuan || 'Kecamatan Tabir Barat'}</td>
+                      </tr>
+                      <tr>
+                        <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
+                        <td style="text-align: center; border: none; padding: 1px 0;">:</td>
+                        <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
+                      </tr>
+                    </table>
+                    <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
+                  </div>
 
-                <div class="mt-8 text-center">
-                  <div style="border-bottom: 1px dashed #475569; width: 80%; margin: 0 auto;"></div>
-                  <div style="height: 48px;"></div>
-                  <p class="text-[12px] leading-tight">( ____________________________________ )</p>
-                  <p class="text-[11.5px] leading-tight mt-0.5 text-left pl-8">Nip.</p>
+                  <div class="text-center mb-1">
+                    <div style="height: 52px;"></div>
+                    <p class="text-[12px] leading-tight">( ____________________________________ )</p>
+                    <p class="text-[11.5px] leading-tight mt-1 text-left pl-6">Nip.</p>
+                  </div>
                 </div>
               </td>
             </tr>
 
             <!-- ROW 3: III. TIBA DI KEMBALI & PENGGUNA ANGGARAN (LOCKED KE SITI AMINAH) -->
-            <tr>
-              <td style="border: 1px solid #000; padding: 6px 10px; vertical-align: top;">
-                <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[11.5px]">
-                  <tr>
-                    <td style="width: 20px; vertical-align: top; border: none; padding: 1px 0;">III.</td>
-                    <td style="width: 90px; vertical-align: top; border: none; padding: 1px 0;">Tiba di kembali</td>
-                    <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
-                    <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
-                  </tr>
-                  <tr>
-                    <td style="border: none; padding: 1px 0;"></td>
-                    <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
-                    <td style="text-align: center; border: none; padding: 1px 0;">:</td>
-                    <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
-                  </tr>
-                </table>
+            <tr style="height: 7.6cm;">
+              <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                  <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[12px]">
+                    <tr>
+                      <td style="width: 22px; vertical-align: top; border: none; padding: 1px 0;">III.</td>
+                      <td style="width: 92px; vertical-align: top; border: none; padding: 1px 0;">Tiba di kembali</td>
+                      <td style="width: 14px; text-align: center; vertical-align: top; border: none; padding: 1px 0;">:</td>
+                      <td style="vertical-align: top; border: none; padding: 1px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
+                    </tr>
+                    <tr>
+                      <td style="border: none; padding: 1px 0;"></td>
+                      <td style="border: none; padding: 1px 0;">Pada Tanggal</td>
+                      <td style="text-align: center; border: none; padding: 1px 0;">:</td>
+                      <td style="border: none; padding: 1px 0;">${tglManualHtml}</td>
+                    </tr>
+                  </table>
 
-                <!-- Pengguna Anggaran Tetap Hj. SITI AMINAH, MM Sesuai Instruksi -->
-                <div class="text-center mt-6">
-                  <p class="font-bold text-[12.5px] leading-tight uppercase">Pengguna Anggaran</p>
-                  <div style="height: 52px;"></div>
-                  <p class="font-bold underline text-[12.5px] leading-tight">Hj. SITI AMINAH, MM</p>
-                  <p class="text-[11.5px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
-                  <p class="text-[11.5px] leading-tight">NIP. 19690805 200012 2 002</p>
+                  <!-- Pengguna Anggaran Tetap Hj. SITI AMINAH, MM Sesuai Instruksi -->
+                  <div class="text-center mb-1">
+                    <p class="font-bold text-[13px] leading-tight uppercase">Pengguna Anggaran</p>
+                    <div style="height: 60px;"></div>
+                    <p class="font-bold underline text-[13px] leading-tight">Hj. SITI AMINAH, MM</p>
+                    <p class="text-[12px] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
+                    <p class="text-[12px] leading-tight">NIP. 19690805 200012 2 002</p>
+                  </div>
                 </div>
               </td>
 
-              <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                <p class="text-[11.5px] text-justify leading-relaxed">
+              <td style="border: 1px solid #000; padding: 12px 14px; vertical-align: top;">
+                <p class="text-[12px] text-justify leading-relaxed">
                   Telah diperiksa, dengan keterangan bahwa perjalanan tersebut di atas benar dilakukan atas perintahnya dan semata-mata untuk kepentingan jabatan dalam waktu sesingkat-singkatnya.
                 </p>
               </td>
             </tr>
 
             <!-- ROW 4: IV. CATATAN LAIN -->
-            <tr>
-              <td style="border: 1px solid #000; padding: 4px 10px; font-weight: bold; font-size: 11px;">
+            <tr style="height: 2cm;">
+              <td style="border: 1px solid #000; padding: 6px 12px; font-weight: bold; font-size: 11.5px; vertical-align: top;">
                 IV. CATATAN LAIN
               </td>
-              <td style="border: 1px solid #000; padding: 4px 10px;"></td>
+              <td style="border: 1px solid #000; padding: 6px 12px; vertical-align: top;"></td>
             </tr>
 
             <!-- ROW 5: V. PERHATIAN -->
-            <tr>
-              <td colspan="2" style="border: 1px solid #000; padding: 6px 10px;">
-                <p class="font-bold text-[11px] mb-1">V. PERHATIAN</p>
-                <p class="text-[10.5px] text-justify leading-relaxed">
+            <tr style="height: 4.4cm;">
+              <td colspan="2" style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
+                <p class="font-bold text-[11.5px] mb-1">V. PERHATIAN</p>
+                <p class="text-[11px] text-justify leading-relaxed">
                   Pejabat yang berwenang menerbitkan SPPD, Pegawai yang melakukan perjalanan dinas, para pejabat yang mengsahkan tanggal berangkat/tiba serta Bendaharawan bertanggungjawab berdasarkan Peraturan-Peraturan Keuangan Negara, apabila negara mendapat rugi akibat kesalahan, kelalaian dan kealpaannya
                 </p>
               </td>
