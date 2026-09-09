@@ -585,6 +585,188 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
+    function gantiTabForm(tab) {
+      const btnSt = document.getElementById('tab-form-st');
+      const btnSpd = document.getElementById('tab-form-spd');
+      const groupSt = document.getElementById('form-st-group');
+      const groupSpd = document.getElementById('form-spd-group');
+
+      if (tab === 'st') {
+        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
+        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
+        groupSt.classList.remove('hidden');
+        groupSpd.classList.add('hidden');
+      } else {
+        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
+        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
+        groupSpd.classList.remove('hidden');
+        groupSt.classList.add('hidden');
+      }
+    }
+
+    function gantiTabPratinjau(tab) {
+      const btnSt = document.getElementById('tab-pratinjau-st');
+      const btnSpd = document.getElementById('tab-pratinjau-spd');
+      const docSt = document.getElementById('lembar-surat-tugas');
+      const docSpd = document.getElementById('lembar-spd-wrapper');
+
+      if (tab === 'st') {
+        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
+        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
+        docSt.classList.remove('hidden');
+        docSpd.classList.add('hidden');
+      } else {
+        btnSpd.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5';
+        btnSt.className = 'px-3 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5';
+        docSpd.classList.remove('hidden');
+        docSt.classList.add('hidden');
+      }
+    }
+
+    function ubahData(key, value) {
+      state[key] = value;
+      perbaruiPratinjau();
+    }
+
+    function ubahDataSpd(key, value) {
+      state.spd[key] = value;
+      renderLembarSpd();
+    }
+
+    function ubahPegawai(idx, key, value) {
+      if (state.pegawai[idx]) {
+        state.pegawai[idx][key] = value;
+        perbaruiPratinjau();
+      }
+    }
+
+    function ubahInstruksi(idx, value) {
+      state.instruksi[idx] = value;
+      if (idx === 0) {
+        state.spd.maksud = value;
+        const fSpdMaksud = document.getElementById('f_spdMaksud');
+        if (fSpdMaksud) fSpdMaksud.value = value;
+      }
+      perbaruiPratinjau();
+    }
+
+    function renderFormPegawai() {
+      const container = document.getElementById('form-pegawai-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      state.pegawai.forEach((p, idx) => {
+        const card = document.createElement('div');
+        card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
+        card.innerHTML = `
+          <div class="flex justify-between items-center pb-1 border-b border-slate-200">
+            <span class="text-[11px] font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">Pegawai ${idx + 1}</span>
+            ${state.pegawai.length > 1 ? `
+              <button type="button" onclick="hapusPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold transition">
+                Hapus
+              </button>
+            ` : ''}
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama & Gelar</label>
+            <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahPegawai(${idx}, 'nama', this.value)">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">NIP</label>
+              <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahPegawai(${idx}, 'nip', this.value)">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Pangkat / Golongan</label>
+              <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahPegawai(${idx}, 'pangkat', this.value)">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jabatan</label>
+            <textarea rows="2" class="form-input text-xs" oninput="ubahPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderFormInstruksi() {
+      const container = document.getElementById('form-instruksi-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      state.instruksi.forEach((inst, idx) => {
+        const isLocked = (idx === 2 || idx === 3);
+        const row = document.createElement('div');
+        row.className = 'space-y-1';
+        row.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+              <span>Poin ${idx + 1}</span>
+              ${idx === 0 ? '<span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-300">Sinkron ke SPD</span>' : ''}
+              ${isLocked ? '<span class="text-[9px] bg-slate-200 text-slate-700 font-semibold px-1.5 py-0.5 rounded">Terkunci (Baku)</span>' : ''}
+            </span>
+            ${!isLocked && state.instruksi.length > 2 && idx >= 4 ? `
+              <button type="button" onclick="hapusInstruksi(${idx})" class="text-rose-600 hover:text-rose-800 text-[10px] font-semibold">Hapus</button>
+            ` : ''}
+          </div>
+          <textarea rows="${isLocked ? '2' : '3'}" 
+            class="form-input text-xs ${isLocked ? 'bg-slate-100 text-slate-600 cursor-not-allowed border-slate-200' : ''}" 
+            ${isLocked ? 'readonly' : ''} 
+            oninput="ubahInstruksi(${idx}, this.value)">${inst || ''}</textarea>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function tambahPegawai() {
+      state.pegawai.push({
+        nama: "",
+        nip: "-",
+        pangkat: "-",
+        jabatan: ""
+      });
+      renderFormPegawai();
+      perbaruiPratinjau();
+      tampilkanToast("Pegawai baru ditambahkan");
+    }
+
+    function hapusPegawai(idx) {
+      if (state.pegawai.length > 1) {
+        state.pegawai.splice(idx, 1);
+        renderFormPegawai();
+        perbaruiPratinjau();
+        tampilkanToast("Pegawai dihapus");
+      }
+    }
+
+    function tambahInstruksi() {
+      state.instruksi.push("");
+      renderFormInstruksi();
+      perbaruiPratinjau();
+    }
+
+    function hapusInstruksi(idx) {
+      if (idx !== 2 && idx !== 3 && state.instruksi.length > 1) {
+        state.instruksi.splice(idx, 1);
+        renderFormInstruksi();
+        perbaruiPratinjau();
+      }
+    }
+
+    function tampilkanToast(pesan) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      if (!toast || !toastText) return;
+      toastText.textContent = pesan;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3000);
+    }
+
     function formatTtdJabatanHtml() {
       if (state.ttdAn && state.ttdAn.trim() !== '') {
         return `
@@ -679,6 +861,11 @@
       document.querySelectorAll('.t-ttdNama').forEach(el => el.textContent = state.ttdNama || '-');
       document.querySelectorAll('.t-ttdPangkat').forEach(el => el.textContent = state.ttdPangkat || '-');
       document.querySelectorAll('.t-ttdNip').forEach(el => el.textContent = state.ttdNip || '-');
+
+      const labelTotalSpd = document.getElementById('label-spd-total');
+      if (labelTotalSpd) {
+        labelTotalSpd.textContent = `${state.pegawai.length} Lembar`;
+      }
 
       let pegawaiHtml = '';
       state.pegawai.forEach((p, idx) => {
