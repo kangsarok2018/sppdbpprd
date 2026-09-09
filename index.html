@@ -767,10 +767,10 @@
 
       document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
       
-      // Memberikan ruang spasi kosong sesudah titik dua untuk penulisan tanggal manual
+      // Memberikan ruang spasi proporsional (sekitar 2 digit tanggal) sebelum bulan & tahun
       const tglFormatted = state.ttdTanggal 
-        ? `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${state.ttdTanggal}` 
-        : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        ? `<span style="display:inline-block; width: 26px;"></span>${state.ttdTanggal}` 
+        : '<span style="display:inline-block; width: 26px;"></span>';
       document.querySelectorAll('.t-ttdTanggal').forEach(el => el.innerHTML = tglFormatted);
       
       document.querySelectorAll('.t-ttdAtasNama').forEach(el => el.textContent = state.ttdAtasNama || '');
@@ -849,8 +849,8 @@
         lembar.className = 'kertas-dokumen font-official text-black text-[12px] leading-snug page-break';
 
         const tglSpdFormatted = state.ttdTanggal 
-          ? `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${state.ttdTanggal}` 
-          : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+          ? `<span style="display:inline-block; width: 26px;"></span>${state.ttdTanggal}` 
+          : '<span style="display:inline-block; width: 26px;"></span>';
 
         lembar.innerHTML = `
           <!-- KOP SURAT SPD -->
