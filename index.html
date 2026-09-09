@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Font Trebuchet MS & Fallback -->
+  <!-- Google Font Inter untuk Antarmuka Form -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,12 +25,12 @@
       color: #0f172a;
     }
 
-    /* Font Resmi Keseluruhan Naskah Dinas: Trebuchet MS */
+    /* Font Resmi Dokumen Kedinasan: Trebuchet MS */
     .font-official {
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
     }
 
-    /* Garis Ganda Kop Surat Kedinasan */
+    /* Garis Ganda Standar Kop Surat Dinas */
     .kop-garis-ganda {
       border-bottom: 3px solid #000000;
       position: relative;
@@ -46,7 +46,7 @@
       border-bottom: 1px solid #000000;
     }
 
-    /* Tabel SPD Kotak Bergaris */
+    /* Tabel SPD Kotak Bergaris Penuh */
     .spd-box-table {
       width: 100%;
       border-collapse: collapse;
@@ -55,7 +55,7 @@
     .spd-box-table th, 
     .spd-box-table td {
       border: 1px solid #000000;
-      padding: 3px 6px;
+      padding: 3.5px 6px;
       vertical-align: top;
       font-size: 11px;
       line-height: 1.25;
@@ -77,7 +77,7 @@
       box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
     }
 
-    /* Ukuran dan Page Setup Kertas Mengikuti Margin Excel (Top: 0.6cm, Bottom: 1.9cm, Left: 1cm, Right: 1cm) */
+    /* Ukuran Kertas Mengikuti Setup Margin Excel: Top 0.6cm, Bottom 1.9cm, Left 1cm, Right 1cm */
     .kertas-dokumen {
       background: #ffffff;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.12);
@@ -254,7 +254,7 @@
         <div id="form-spd-group" class="space-y-4 hidden">
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
-              <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">★</span>
+              <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">&#9733;</span>
               Rincian Perjalanan Dinas (SPD)
             </h2>
             <div class="space-y-3 text-xs">
@@ -345,13 +345,12 @@
               <input type="text" id="f_ttdTempat" class="form-input" oninput="ubahData('ttdTempat', this.value)">
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Pada Tanggal</label>
-              <input type="text" id="f_ttdTanggal" class="form-input" oninput="ubahData('ttdTanggal', this.value)">
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
+              <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Atas Nama / Jabatan Penandatangan</label>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
               <input type="text" id="f_ttdAtasNama" class="form-input font-semibold mb-1.5" placeholder="Pengguna Anggaran" oninput="ubahData('ttdAtasNama', this.value)">
-              <input type="text" id="f_ttdJabatan" class="form-input font-medium hidden" oninput="ubahData('ttdJabatan', this.value)">
             </div>
             <div class="col-span-2">
               <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
@@ -387,7 +386,7 @@
             </div>
             <div class="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Trebuchet MS Font & Margin Excel Setup</span>
+              <span>Trebuchet MS & Margin Excel Setup</span>
             </div>
           </div>
 
@@ -433,7 +432,7 @@
                 </p>
               </div>
 
-              <!-- TABEL KONTEN -->
+              <!-- TABEL KONTEN SURAT TUGAS -->
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="mt-4 text-[13px]">
                 <colgroup>
                   <col style="width: 75px;">
@@ -459,7 +458,7 @@
                 </tbody>
               </table>
 
-              <!-- TANDA TANGAN -->
+              <!-- TANDA TANGAN SURAT TUGAS -->
               <div class="mt-8 flex justify-end">
                 <div style="width: 290px;">
                   <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[13px]">
@@ -477,7 +476,7 @@
                       <tr style="border-bottom: 1px solid #000000;">
                         <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                         <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
-                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;"></td>
                       </tr>
                     </tbody>
                   </table>
@@ -496,7 +495,7 @@
 
             <!-- ================= DOKUMEN 2: SURAT PERJALANAN DINAS (SPD) ================= -->
             <div id="lembar-spd-wrapper" class="space-y-6 hidden">
-              <!-- Render otomatis per pegawai -->
+              <!-- Render otomatis per pegawai via JavaScript -->
             </div>
 
           </div>
@@ -511,6 +510,7 @@
     <span id="toast-text">Notifikasi</span>
   </div>
 
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
     const dataDefault = {
       nomorPrefix: "094",
@@ -555,9 +555,8 @@
         mataAnggaran: ""
       },
       ttdTempat: "Bangko",
-      ttdTanggal: "",
+      ttdTanggal: "Februari 2025",
       ttdAtasNama: "Pengguna Anggaran",
-      ttdJabatan: "",
       ttdNama: "Hj. SITI AMINAH, MM",
       ttdPangkat: "Pembina Utama Muda (IV/C)",
       ttdNip: "19690805 200012 2 002"
@@ -748,7 +747,6 @@
       document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
       document.getElementById('f_ttdAtasNama').value = state.ttdAtasNama || '';
-      document.getElementById('f_ttdJabatan').value = state.ttdJabatan || '';
       document.getElementById('f_ttdNama').value = state.ttdNama || '';
       document.getElementById('f_ttdPangkat').value = state.ttdPangkat || '';
       document.getElementById('f_ttdNip').value = state.ttdNip || '';
@@ -769,7 +767,10 @@
 
       document.querySelectorAll('.t-ttdTempat').forEach(el => el.textContent = state.ttdTempat || 'Bangko');
       
-      const tglFormatted = state.ttdTanggal ? state.ttdTanggal : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+      // Memberikan ruang spasi kosong sesudah titik dua untuk penulisan tanggal manual
+      const tglFormatted = state.ttdTanggal 
+        ? `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${state.ttdTanggal}` 
+        : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
       document.querySelectorAll('.t-ttdTanggal').forEach(el => el.innerHTML = tglFormatted);
       
       document.querySelectorAll('.t-ttdAtasNama').forEach(el => el.textContent = state.ttdAtasNama || '');
@@ -847,7 +848,9 @@
         const lembar = document.createElement('div');
         lembar.className = 'kertas-dokumen font-official text-black text-[12px] leading-snug page-break';
 
-        const tglSpdFormatted = state.ttdTanggal ? state.ttdTanggal : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        const tglSpdFormatted = state.ttdTanggal 
+          ? `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${state.ttdTanggal}` 
+          : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
         lembar.innerHTML = `
           <!-- KOP SURAT SPD -->
@@ -970,14 +973,14 @@
                 <td style="padding: 0;" colspan="2">
                   <table style="width: 100%; border-collapse: collapse; border: none;">
                     <tr>
-                      <td style="border: none; border-right: 1px solid #000000; width: 230px; padding: 3px 6px;">Pengikut : Nama</td>
-                      <td style="border: none; border-right: 1px solid #000000; width: 140px; text-align: center; padding: 3px 6px;">Tanggal Lahir</td>
-                      <td style="border: none; text-align: center; padding: 3px 6px;">Keterangan</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 230px; padding: 3.5px 6px;">Pengikut : Nama</td>
+                      <td style="border: none; border-right: 1px solid #000000; width: 140px; text-align: center; padding: 3.5px 6px;">Tanggal Lahir</td>
+                      <td style="border: none; text-align: center; padding: 3.5px 6px;">Keterangan</td>
                     </tr>
                     <tr style="border-top: 1px solid #000000;">
-                      <td style="border: none; border-right: 1px solid #000000; padding: 3px 6px;">-</td>
-                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 3px 6px;">-</td>
-                      <td style="border: none; text-align: center; padding: 3px 6px;">-</td>
+                      <td style="border: none; border-right: 1px solid #000000; padding: 3.5px 6px;">-</td>
+                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 3.5px 6px;">-</td>
+                      <td style="border: none; text-align: center; padding: 3.5px 6px;">-</td>
                     </tr>
                   </table>
                 </td>
@@ -1021,7 +1024,7 @@
             </tbody>
           </table>
 
-          <!-- TANDA TANGAN SPD -->
+          <!-- TANDA TANGAN SPD (PENGGUNA ANGGARAN DEFAULT) -->
           <div class="mt-6 flex justify-end">
             <div style="width: 290px;">
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[11.5px]">
