@@ -212,7 +212,10 @@
               Form Surat Tugas
             </button>
             <button id="tab-form-spd" onclick="gantiTabForm('spd')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100">
-              Form SPD Tambahan
+              Form SPD
+            </button>
+            <button id="tab-form-master" onclick="gantiTabForm('master')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1">
+              <span>👥 Master Pegawai</span>
             </button>
           </div>
         </div>
@@ -249,7 +252,7 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700 font-medium">SPD otomatis digenerasi per pegawai</span>
+                <span class="text-[10px] text-blue-700 font-medium">Bisa pilih via dropdown atau ketik manual</span>
               </div>
               <button onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
@@ -387,19 +390,17 @@
             Penandatangan & Pengesahan
           </h2>
 
-          <!-- Tombol Pintas Preset Pejabat -->
-          <div class="mb-3 bg-slate-50 p-2 rounded-lg border border-slate-200">
-            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilihan Cepat Pejabat Penandatangan:</span>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button type="button" onclick="pilihPresetPejabat('pa')" class="text-[11px] py-1.5 px-2 rounded bg-white hover:bg-blue-50 hover:text-blue-900 border border-slate-300 font-semibold text-slate-700 text-left transition flex items-center gap-1.5 shadow-sm">
-                <span>👑</span>
-                <span class="truncate">Pengguna Anggaran</span>
-              </button>
-              <button type="button" onclick="pilihPresetPejabat('kabid')" class="text-[11px] py-1.5 px-2 rounded bg-white hover:bg-blue-50 hover:text-blue-900 border border-slate-300 font-semibold text-slate-700 text-left transition flex items-center gap-1.5 shadow-sm">
-                <span>✍️</span>
-                <span class="truncate">An. Kabid Penagihan</span>
-              </button>
-            </div>
+          <!-- Dropdown Pilihan Pejabat Penandatangan -->
+          <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+            <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
+              <span>✍️ Pilih Pejabat Penandatangan:</span>
+            </label>
+            <select id="f_pilihPejabat" onchange="pilihPejabatDropdown(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
+              <option value="pa">👑 Pengguna Anggaran - Hj. SITI AMINAH, MM</option>
+              <option value="kabid">✍️ An. KEPALA BPPRD - Kabid Penagihan (NURAINI SETIAWATI, S. KOM)</option>
+              <option value="syoraya">✍️ An. KEPALA BPPRD - Kasubbid Pendataan & Pendaftaran (SYORAYA, S.Pd)</option>
+              <option value="manual">✏️ Lainnya / Ketik Manual</option>
+            </select>
           </div>
 
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -434,6 +435,33 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- FORM MASTER DATA PEGAWAI (TAB KHUSUS) -->
+      <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between border-b pb-2 mb-3">
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                <span>👥 Database Master Pegawai BPPRD</span>
+              </h2>
+              <p class="text-[11px] text-slate-500">Pegawai di sini otomatis menjadi pilihan dropdown di Form Surat Tugas.</p>
+            </div>
+            <button onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+              <span>+ Tambah Pegawai</span>
+            </button>
+          </div>
+
+          <!-- Daftar Pegawai Tersimpan -->
+          <div id="list-master-pegawai" class="space-y-2.5 max-h-[550px] overflow-y-auto pr-1"></div>
+
+          <div class="mt-3 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
+            <span class="text-slate-500 text-[11px]">Tersimpan otomatis di browser</span>
+            <button onclick="resetMasterPegawaiDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
+              Kembalikan Pegawai Bawaan
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- KOLOM KANAN: PRATINJAU DOKUMEN -->
@@ -590,6 +618,58 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
+    // Database Master Pegawai BPPRD Merangin
+    const masterPegawaiDefault = [
+      {
+        nama: "MUHAMMAD FUAD, S.Si",
+        nip: "-",
+        pangkat: "-",
+        jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
+      },
+      {
+        nama: "DIAN MUNAWAROH, S.Pd, AUD",
+        nip: "-",
+        pangkat: "-",
+        jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
+      },
+      {
+        nama: "SYORAYA, S.Pd",
+        nip: "19740124 199604 2 001",
+        pangkat: "Penata TK.I (III/D)",
+        jabatan: "Kasubbid Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
+      },
+      {
+        nama: "NURAINI SETIAWATI, S. KOM",
+        nip: "19820820 201101 2 002",
+        pangkat: "Penata TK.I (III/D)",
+        jabatan: "Kabid Penagihan dan Penghapusan BPPRD Kabupaten Merangin"
+      },
+      {
+        nama: "Hj. SITI AMINAH, MM",
+        nip: "19690805 200012 2 002",
+        pangkat: "Pembina Utama Muda (IV/C)",
+        jabatan: "Kepala Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin"
+      }
+    ];
+
+    function muatMasterPegawai() {
+      const tersimpan = localStorage.getItem('bpprd_master_pegawai');
+      if (tersimpan) {
+        try {
+          return JSON.parse(tersimpan);
+        } catch(e) {
+          return masterPegawaiDefault;
+        }
+      }
+      return masterPegawaiDefault;
+    }
+
+    function simpanMasterPegawai(list) {
+      localStorage.setItem('bpprd_master_pegawai', JSON.stringify(list));
+    }
+
+    let masterPegawai = muatMasterPegawai();
+
     const dataDefault = {
       nomorPrefix: "094",
       nomorUrut: "",
@@ -653,19 +733,197 @@
     function gantiTabForm(tab) {
       const btnSt = document.getElementById('tab-form-st');
       const btnSpd = document.getElementById('tab-form-spd');
+      const btnMaster = document.getElementById('tab-form-master');
       const groupSt = document.getElementById('form-st-group');
       const groupSpd = document.getElementById('form-spd-group');
+      const groupMaster = document.getElementById('form-master-group');
+
+      btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
+      btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
+      btnMaster.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1';
+
+      groupSt.classList.add('hidden');
+      groupSpd.classList.add('hidden');
+      groupMaster.classList.add('hidden');
 
       if (tab === 'st') {
         btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
         groupSt.classList.remove('hidden');
-        groupSpd.classList.add('hidden');
-      } else {
+      } else if (tab === 'spd') {
         btnSpd.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm';
-        btnSt.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100';
         groupSpd.classList.remove('hidden');
-        groupSt.classList.add('hidden');
+      } else if (tab === 'master') {
+        btnMaster.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center justify-center gap-1';
+        groupMaster.classList.remove('hidden');
+        renderListMasterPegawai();
+      }
+    }
+
+    function renderFormPegawai() {
+      const container = document.getElementById('form-pegawai-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      state.pegawai.forEach((p, idx) => {
+        const card = document.createElement('div');
+        card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
+
+        // Buat opsi dropdown pegawai dari database master
+        let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
+        masterPegawai.forEach((m, mIdx) => {
+          const terpilih = (m.nama.trim().toUpperCase() === (p.nama || '').trim().toUpperCase()) ? 'selected' : '';
+          opsiDropdown += `<option value="${mIdx}" ${terpilih}>${m.nama} (${m.pangkat || '-'})</option>`;
+        });
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center pb-1 border-b border-slate-200">
+            <span class="text-[11px] font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">Pegawai ${idx + 1}</span>
+            ${state.pegawai.length > 1 ? `
+              <button type="button" onclick="hapusPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold transition">
+                Hapus
+              </button>
+            ` : ''}
+          </div>
+
+          <!-- Pilihan Dropdown Pegawai -->
+          <div class="bg-blue-50/70 p-2 rounded-md border border-blue-200/80">
+            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi Data):</label>
+            <select class="form-input text-xs font-semibold bg-white cursor-pointer" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
+              ${opsiDropdown}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama & Gelar</label>
+            <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahPegawai(${idx}, 'nama', this.value)">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">NIP</label>
+              <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahPegawai(${idx}, 'nip', this.value)">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Pangkat / Golongan</label>
+              <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahPegawai(${idx}, 'pangkat', this.value)">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jabatan</label>
+            <textarea rows="2" class="form-input text-xs" oninput="ubahPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function pilihPegawaiDariDropdown(pegawaiIdx, masterIdx) {
+      if (masterIdx === "" || !masterPegawai[masterIdx]) return;
+      const target = masterPegawai[masterIdx];
+      state.pegawai[pegawaiIdx].nama = target.nama;
+      state.pegawai[pegawaiIdx].nip = target.nip;
+      state.pegawai[pegawaiIdx].pangkat = target.pangkat;
+      state.pegawai[pegawaiIdx].jabatan = target.jabatan;
+
+      renderFormPegawai();
+      perbaruiPratinjau();
+      tampilkanToast(`Data ${target.nama} berhasil dimasukkan`);
+    }
+
+    function pilihPejabatDropdown(val) {
+      if (val === 'pa') {
+        state.ttdAn = "";
+        state.ttdJabatan = "Pengguna Anggaran";
+        state.ttdNama = "Hj. SITI AMINAH, MM";
+        state.ttdPangkat = "Pembina Utama Muda (IV/C)";
+        state.ttdNip = "19690805 200012 2 002";
+        tampilkanToast("Beralih ke: Pengguna Anggaran");
+      } else if (val === 'kabid') {
+        state.ttdAn = "An. KEPALA BPPRD";
+        state.ttdJabatan = "Kabid Penagihan dan Penghapusan";
+        state.ttdNama = "NURAINI SETIAWATI, S. KOM";
+        state.ttdPangkat = "Penata TK.I (III/D)";
+        state.ttdNip = "19820820 201101 2 002";
+        tampilkanToast("Beralih ke: An. Kabid Penagihan");
+      } else if (val === 'syoraya') {
+        state.ttdAn = "An. KEPALA BPPRD";
+        state.ttdJabatan = "Kasubbid Pendataan dan Pendaftaran";
+        state.ttdNama = "SYORAYA, S.Pd";
+        state.ttdPangkat = "Penata TK.I (III/D)";
+        state.ttdNip = "19740124 199604 2 001";
+        tampilkanToast("Beralih ke: An. Kasubbid Pendataan");
+      }
+
+      document.getElementById('f_ttdAn').value = state.ttdAn;
+      document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
+      document.getElementById('f_ttdNama').value = state.ttdNama;
+      document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
+      document.getElementById('f_ttdNip').value = state.ttdNip;
+
+      perbaruiPratinjau();
+    }
+
+    // ================= PENGELOLAAN MASTER PEGAWAI =================
+    function renderListMasterPegawai() {
+      const container = document.getElementById('list-master-pegawai');
+      if (!container) return;
+      container.innerHTML = '';
+
+      masterPegawai.forEach((m, idx) => {
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-start justify-between gap-2';
+        item.innerHTML = `
+          <div class="flex-1 text-xs">
+            <div class="font-bold text-slate-900">${m.nama}</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">NIP: ${m.nip || '-'} | Pangkat: ${m.pangkat || '-'}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">${m.jabatan || '-'}</div>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="hapusMasterPegawai(${idx})" title="Hapus dari master" class="text-rose-600 hover:text-rose-800 p-1 rounded hover:bg-rose-50 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function tambahMasterPegawaiModal() {
+      const nama = prompt("Nama Lengkap & Gelar Pegawai:");
+      if (!nama || !nama.trim()) return;
+      const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
+      const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
+      const jabatan = prompt("Jabatan Lengkap:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
+
+      masterPegawai.push({
+        nama: nama.trim(),
+        nip: nip.trim(),
+        pangkat: pangkat.trim(),
+        jabatan: jabatan.trim()
+      });
+
+      simpanMasterPegawai(masterPegawai);
+      renderListMasterPegawai();
+      renderFormPegawai();
+      tampilkanToast(`Pegawai ${nama} ditambahkan ke Master`);
+    }
+
+    function hapusMasterPegawai(idx) {
+      if (confirm(`Hapus ${masterPegawai[idx].nama} dari Database Master?`)) {
+        masterPegawai.splice(idx, 1);
+        simpanMasterPegawai(masterPegawai);
+        renderListMasterPegawai();
+        renderFormPegawai();
+        tampilkanToast("Pegawai dihapus dari master");
+      }
+    }
+
+    function resetMasterPegawaiDefault() {
+      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin?")) {
+        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
+        simpanMasterPegawai(masterPegawai);
+        renderListMasterPegawai();
+        renderFormPegawai();
+        tampilkanToast("Master pegawai dikembalikan ke default");
       }
     }
 
