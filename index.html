@@ -25,7 +25,7 @@
       color: #0f172a;
     }
 
-    /* Font Resmi Dokumen: Trebuchet MS Ukuran Standar 12pt */
+    /* Font Resmi Dokumen Dinas: Trebuchet MS Standar 12pt */
     .font-official {
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
       font-size: 12pt;
@@ -79,7 +79,7 @@
       box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
     }
 
-    /* Format Cetak F4 ST & SPD Depan: Top 0.6cm, Bottom 1.9cm, Left 1cm, Right 1cm */
+    /* Ukuran Kertas F4 Surat Tugas & SPD Depan: Top 0.6cm, Bottom 1.9cm, Left 1cm, Right 1cm */
     .kertas-dokumen {
       background: #ffffff;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.12);
@@ -90,7 +90,7 @@
       margin: 0 auto 28px auto;
     }
 
-    /* Khusus Punggung SPD Sesuai Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm */
+    /* Khusus Lembar Punggung SPD Sesuai Excel: Top 2.5cm, Bottom 1.5cm, Left 0.5cm, Right 0.5cm */
     .kertas-spd-punggung {
       max-width: 820px;
       padding: 2.5cm 0.5cm 1.5cm 0.5cm !important;
@@ -155,7 +155,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- NAVBAR ATAS -->
+  <!-- ================= NAVBAR ATAS ================= -->
   <header class="bg-blue-900 text-white shadow-md no-print sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
@@ -193,14 +193,14 @@
     </div>
   </header>
 
-  <!-- KONTEN UTAMA -->
+  <!-- ================= KONTEN UTAMA ================= -->
   <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- KOLOM KIRI: FORM EDITOR -->
       <div class="lg:col-span-5 space-y-4 no-print">
 
-        <!-- TAB NAVIGASI FORM -->
+        <!-- TAB NAVIGASI FORM (STICKY) -->
         <div class="sticky top-[56px] z-30 bg-[#f1f5f9] py-1">
           <div class="flex border border-slate-200 bg-white rounded-xl p-1 gap-1 shadow-sm">
             <button id="tab-form-st" onclick="gantiTabForm('st')" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm">
@@ -288,7 +288,7 @@
                 <input type="text" id="f_spdTingkatBiaya" class="form-input" placeholder="Tingkat C / -" oninput="ubahDataSpd('tingkatBiaya', this.value)">
               </div>
 
-              <!-- 4. Maksud Perjalanan Dinas disembunyikan karena otomatis terisi dari Poin 1 ST -->
+              <!-- 4. Maksud Perjalanan Dinas otomatis dari Poin 1 ST -->
               <div class="hidden">
                 <textarea id="f_spdMaksud" rows="2" class="form-input bg-slate-50" oninput="ubahDataSpd('maksud', this.value)"></textarea>
               </div>
@@ -387,12 +387,15 @@
 
           <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
             <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
-              <span>✍️ Pilih Pejabat Penandatangan:</span>
+              <span>✍️ PILIH PEJABAT PENANDATANGAN:</span>
             </label>
-            <select id="f_pilihPejabat" onchange="pilihPejabatDropdown(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
-              <option value="pa">👑 Pengguna Anggaran - Hj. SITI AMINAH, MM</option>
-              <option value="kabid">✍️ An. KEPALA BPPRD - Kabid Penagihan (NURAINI SETIAWATI, S. KOM)</option>
-              <option value="syoraya">✍️ An. KEPALA BPPRD - Kasubbid Pendataan & Pendaftaran (SYORAYA, S.Pd)</option>
+            <!-- Dropdown dinamis langsung tersinkron ke Firebase -->
+            <select id="f_pilihPejabat" onchange="pilihPejabatOtomatis(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
+              <option value="">-- Pilih Pejabat Penandatangan --</option>
+              <option value="pa">👑 Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
+              <optgroup id="optgroup-pejabat-firebase" label="Pejabat / Pegawai dari Cloud Firebase">
+                <!-- Diisi otomatis oleh JavaScript -->
+              </optgroup>
               <option value="manual">✏️ Lainnya / Ketik Manual</option>
             </select>
           </div>
@@ -403,11 +406,11 @@
               <input type="text" id="f_ttdTempat" class="form-input" oninput="ubahData('ttdTempat', this.value)">
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun</label>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
               <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
             </div>
             <div class="col-span-2">
-              <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika PA)</label>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika Pengguna Anggaran)</label>
               <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD" oninput="ubahData('ttdAn', this.value)">
             </div>
             <div class="col-span-2">
@@ -431,7 +434,7 @@
 
       </div>
 
-      <!-- FORM MASTER DATA PEGAWAI -->
+      <!-- FORM MASTER DATA PEGAWAI (TAB KHUSUS) -->
       <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
           <div class="flex items-center justify-between border-b pb-2 mb-3">
@@ -472,7 +475,7 @@
       <div class="lg:col-span-7">
         <div class="relative">
 
-          <!-- TAB NAVIGASI PRATINJAU -->
+          <!-- TAB NAVIGASI PRATINJAU (STICKY) -->
           <div class="sticky top-[56px] z-30 bg-[#f1f5f9] py-1 no-print">
             <div class="bg-white p-2 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -610,11 +613,11 @@
     <span id="toast-text">Notifikasi</span>
   </div>
 
-  <!-- JAVASCRIPT -->
+  <!-- ================= JAVASCRIPT LENGKAP ================= -->
   <script>
     const FIREBASE_RTDB_ENDPOINT = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app/pegawai.json";
 
-    // Data Default Formulir
+    // Data Awal Formulir
     const dataDefault = {
       nomorPrefix: "094",
       nomorUrut: "",
@@ -674,7 +677,7 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
-    // Master Pegawai Bawaan
+    // Master Pegawai Bawaan (Fallback)
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -692,13 +695,13 @@
         nama: "SYORAYA, S.Pd",
         nip: "19740124 199604 2 001",
         pangkat: "Penata TK.I (III/D)",
-        jabatan: "Kasubbid Pendataan dan Pendaftaran BPPRD Kabupaten Merangin"
+        jabatan: "Kasubbid Pendataan dan Pendaftaran"
       },
       {
         nama: "NURAINI SETIAWATI, S. KOM",
         nip: "19820820 201101 2 002",
         pangkat: "Penata TK.I (III/D)",
-        jabatan: "Kabid Penagihan dan Penghapusan BPPRD Kabupaten Merangin"
+        jabatan: "Kabid Penagihan dan Penghapusan"
       },
       {
         nama: "Hj. SITI AMINAH, MM",
@@ -710,7 +713,7 @@
 
     let masterPegawai = [...masterPegawaiDefault];
 
-    // Logika Status Cloud Firebase
+    // Status Indikator Firebase
     function perbaruiStatusBadge(status, pesan) {
       const badge = document.getElementById('cloud-status-badge');
       const info = document.getElementById('db-source-info');
@@ -730,6 +733,7 @@
       }
     }
 
+    // Ambil Data Master dari Firebase Realtime Database
     async function muatMasterPegawaiCloud() {
       perbaruiStatusBadge('syncing');
       try {
@@ -754,8 +758,10 @@
 
       renderListMasterPegawai();
       renderFormPegawai();
+      renderDropdownPenandatangan();
     }
 
+    // Simpan Data Master ke Firebase
     async function simpanMasterPegawaiCloud(list) {
       perbaruiStatusBadge('syncing');
       try {
@@ -784,7 +790,7 @@
       }
     }
 
-    // Navigasi Tab Form
+    // Navigasi Tab Formulir
     function gantiTabForm(tab) {
       const btnSt = document.getElementById('tab-form-st');
       const btnSpd = document.getElementById('tab-form-spd');
@@ -841,7 +847,7 @@
       if (!nama || !nama.trim()) return;
       const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
       const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
-      const jabatan = prompt("Jabatan Lengkap:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
+      const jabatan = prompt("Jabatan Lengkap (misal: Kabid PBB dan BPHTB):", "Pengelola Pajak dan Retribusi Daerah") || "-";
 
       const pegawaiBaru = {
         nama: nama.trim(),
@@ -853,6 +859,7 @@
       masterPegawai.push(pegawaiBaru);
       renderListMasterPegawai();
       renderFormPegawai();
+      renderDropdownPenandatangan();
       tampilkanToast(`Menyimpan ${nama} ke Cloud...`);
 
       const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
@@ -867,6 +874,7 @@
         masterPegawai.splice(idx, 1);
         renderListMasterPegawai();
         renderFormPegawai();
+        renderDropdownPenandatangan();
         tampilkanToast(`Menghapus ${namaDihapus} dari Cloud...`);
 
         const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
@@ -881,6 +889,7 @@
         masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
         renderListMasterPegawai();
         renderFormPegawai();
+        renderDropdownPenandatangan();
         await simpanMasterPegawaiCloud(masterPegawai);
         tampilkanToast("Master pegawai dikembalikan ke default & disinkronkan ke Cloud");
       }
@@ -955,7 +964,26 @@
       tampilkanToast(`Data ${target.nama} berhasil dimasukkan`);
     }
 
-    function pilihPejabatDropdown(val) {
+    // ================= SINKRONISASI DROPDOWN PENANDATANGAN DARI FIREBASE =================
+    function renderDropdownPenandatangan() {
+      const optgroup = document.getElementById('optgroup-pejabat-firebase');
+      if (!optgroup) return;
+      optgroup.innerHTML = '';
+
+      masterPegawai.forEach((p, idx) => {
+        // Lewati Hj. Siti Aminah agar tidak dobel dengan opsi PA di atas
+        if (p.nama && p.nama.toUpperCase().includes('SITI AMINAH')) return;
+
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `✍️ An. KEPALA - ${p.nama} (${p.jabatan || '-'})`;
+        optgroup.appendChild(opt);
+      });
+    }
+
+    function pilihPejabatOtomatis(val) {
+      if (val === '') return;
+
       if (val === 'pa') {
         state.ttdAn = "";
         state.ttdJabatan = "Pengguna Anggaran";
@@ -963,20 +991,19 @@
         state.ttdPangkat = "Pembina Utama Muda (IV/C)";
         state.ttdNip = "19690805 200012 2 002";
         tampilkanToast("Beralih ke: Pengguna Anggaran");
-      } else if (val === 'kabid') {
-        state.ttdAn = "An. KEPALA BPPRD";
-        state.ttdJabatan = "Kabid Penagihan dan Penghapusan";
-        state.ttdNama = "NURAINI SETIAWATI, S. KOM";
-        state.ttdPangkat = "Penata TK.I (III/D)";
-        state.ttdNip = "19820820 201101 2 002";
-        tampilkanToast("Beralih ke: An. Kabid Penagihan");
-      } else if (val === 'syoraya') {
-        state.ttdAn = "An. KEPALA BPPRD";
-        state.ttdJabatan = "Kasubbid Pendataan dan Pendaftaran";
-        state.ttdNama = "SYORAYA, S.Pd";
-        state.ttdPangkat = "Penata TK.I (III/D)";
-        state.ttdNip = "19740124 199604 2 001";
-        tampilkanToast("Beralih ke: An. Kasubbid Pendataan");
+      } else if (val === 'manual') {
+        tampilkanToast("Silakan isi kolom penandatangan secara manual");
+        return;
+      } else {
+        const target = masterPegawai[val];
+        if (target) {
+          state.ttdAn = "An. KEPALA BPPRD";
+          state.ttdJabatan = target.jabatan || "";
+          state.ttdNama = target.nama || "";
+          state.ttdPangkat = target.pangkat || "";
+          state.ttdNip = target.nip || "";
+          tampilkanToast(`Penandatangan: ${target.nama}`);
+        }
       }
 
       document.getElementById('f_ttdAn').value = state.ttdAn;
@@ -1205,6 +1232,7 @@
       renderFormInstruksi();
       perbaruiPratinjau();
 
+      // Ambil data master dari Cloud dan isi dropdown
       muatMasterPegawaiCloud();
     }
 
@@ -1657,7 +1685,7 @@
               </td>
             </tr>
 
-            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN -->
+            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN (DIKUNCI SITI AMINAH) -->
             <tr style="height: 7.5cm;">
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
@@ -1677,7 +1705,7 @@
                     <tr>
                       <td style="border: none; padding: 2px 0;"></td>
                       <td style="border: none; padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
-                      <td style="text-align: center; border: none; padding: 2px 0;">:</td>
+                      <td>:</td>
                       <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
                     </tr>
                   </table>
@@ -1723,6 +1751,7 @@
       container.appendChild(lembar);
     }
 
+    // Penyimpanan Berkas Cadangan JSON
     function eksporJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const a = document.createElement('a');
