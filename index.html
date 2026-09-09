@@ -268,14 +268,9 @@
                 <input type="text" id="f_spdTingkatBiaya" class="form-input" placeholder="Tingkat C / -" oninput="ubahDataSpd('tingkatBiaya', this.value)">
               </div>
 
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <label class="block text-[11px] font-semibold text-slate-600">4. Maksud Perjalanan Dinas</label>
-                  <span class="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold border border-emerald-200">
-                    Otomatis dari Poin 1 ST
-                  </span>
-                </div>
-                <textarea id="f_spdMaksud" rows="2" class="form-input bg-slate-50" oninput="ubahDataSpd('maksud', this.value)" placeholder="Terisi otomatis dari Poin 1 Surat Tugas"></textarea>
+              <!-- 4. Maksud Perjalanan Dinas disembunyikan karena otomatis terisi dari Poin 1 ST -->
+              <div class="hidden">
+                <textarea id="f_spdMaksud" rows="2" class="form-input bg-slate-50" oninput="ubahDataSpd('maksud', this.value)"></textarea>
               </div>
 
               <div>
