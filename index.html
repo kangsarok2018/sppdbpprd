@@ -210,7 +210,7 @@
               Form SPD
             </button>
             <button id="tab-form-master" onclick="gantiTabForm('master')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1">
-              <span>👥 Master Pegawai</span>
+              <span>👥 Master Data</span>
             </button>
           </div>
         </div>
@@ -247,7 +247,7 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700 font-medium">Bisa pilih via dropdown atau ketik manual</span>
+                <span class="text-[10px] text-blue-700 font-medium">Bisa pilih via database pegawai atau ketik manual</span>
               </div>
               <button type="button" onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
@@ -389,12 +389,12 @@
             <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
               <span>✍️ PILIH PEJABAT PENANDATANGAN:</span>
             </label>
-            <!-- Dropdown dinamis langsung tersinkron ke Firebase -->
+            <!-- Dropdown Penandatangan: HANYA MENAMPILKAN PEJABAT -->
             <select id="f_pilihPejabat" onchange="pilihPejabatOtomatis(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
               <option value="">-- Pilih Pejabat Penandatangan --</option>
               <option value="pa">👑 Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
-              <optgroup id="optgroup-pejabat-firebase" label="Pejabat / Pegawai dari Cloud Firebase">
-                <!-- Diisi otomatis oleh JavaScript -->
+              <optgroup id="optgroup-pejabat-firebase" label="Daftar Pejabat Struktural BPPRD">
+                <!-- Otomatis diisi dari database pejabat -->
               </optgroup>
               <option value="manual">✏️ Lainnya / Ketik Manual</option>
             </select>
@@ -434,13 +434,13 @@
 
       </div>
 
-      <!-- FORM MASTER DATA PEGAWAI (TAB KHUSUS) -->
+      <!-- FORM MASTER DATA (TERPISAH: PEGAWAI & PEJABAT) -->
       <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
           <div class="flex items-center justify-between border-b pb-2 mb-3">
             <div>
               <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
-                <span>👥 Database Master Pegawai BPPRD</span>
+                <span>🗄️ Database Master Terpisah</span>
               </h2>
               <div class="flex items-center gap-2 mt-1">
                 <span id="cloud-status-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
@@ -450,22 +450,48 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button type="button" onclick="sinkronkanKeCloud()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
+              <button type="button" onclick="sinkronkanKeCloudSemua()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
                 ☁️ Sinkron
-              </button>
-              <button type="button" onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
-                <span>+ Tambah</span>
               </button>
             </div>
           </div>
 
-          <!-- Daftar Pegawai Tersimpan -->
-          <div id="list-master-pegawai" class="space-y-2.5 max-h-[550px] overflow-y-auto pr-1"></div>
+          <!-- Sub-Tab Pemilih Database -->
+          <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 mb-3 text-xs font-bold">
+            <button id="btn-sub-pegawai" onclick="gantiSubMaster('pegawai')" class="flex-1 py-1.5 rounded-md bg-blue-900 text-white shadow-sm transition">
+              👥 Data Pegawai
+            </button>
+            <button id="btn-sub-pejabat" onclick="gantiSubMaster('pejabat')" class="flex-1 py-1.5 rounded-md text-slate-600 hover:bg-slate-200 transition">
+              👔 Data Pejabat Penandatangan
+            </button>
+          </div>
+
+          <!-- Bagian Master Pegawai -->
+          <div id="sub-master-pegawai-sec">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-[11px] font-bold text-slate-700">Daftar Pegawai / Staf yang Ditugaskan:</span>
+              <button type="button" onclick="tambahMasterPegawaiModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg shadow-sm transition">
+                + Tambah Pegawai
+              </button>
+            </div>
+            <div id="list-master-pegawai" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+          </div>
+
+          <!-- Bagian Master Pejabat -->
+          <div id="sub-master-pejabat-sec" class="hidden">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-[11px] font-bold text-slate-700">Daftar Pejabat Penandatangan (Struktural):</span>
+              <button type="button" onclick="tambahMasterPejabatModal()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg shadow-sm transition">
+                + Tambah Pejabat
+              </button>
+            </div>
+            <div id="list-master-pejabat" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+          </div>
 
           <div class="mt-3 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
             <span class="text-slate-500 text-[11px]" id="db-source-info">Memuat data...</span>
-            <button type="button" onclick="resetMasterPegawaiDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
-              Kembalikan Pegawai Bawaan
+            <button type="button" onclick="resetDatabaseDefault()" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold">
+              Kembalikan Data Bawaan
             </button>
           </div>
         </div>
@@ -615,9 +641,12 @@
 
   <!-- ================= JAVASCRIPT LENGKAP ================= -->
   <script>
-    const FIREBASE_RTDB_ENDPOINT = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app/pegawai.json";
+    // Endpoint Firebase Terpisah: Pegawai & Pejabat
+    const FIREBASE_BASE = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const ENDPOINT_PEGAWAI = `${FIREBASE_BASE}/pegawai.json`;
+    const ENDPOINT_PEJABAT = `${FIREBASE_BASE}/pejabat.json`;
 
-    // Data Awal Formulir
+    // Data Awal Formulir Naskah Dinas
     const dataDefault = {
       nomorPrefix: "094",
       nomorUrut: "",
@@ -677,7 +706,7 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
-    // Master Pegawai Bawaan (Fallback)
+    // 1. DATABASE MASTER PEGAWAI (Staf Pelaksana Tugas)
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -690,30 +719,45 @@
         nip: "-",
         pangkat: "-",
         jabatan: "Pengelola Pendaftaran,Pendataan Pajak dan Retribusi Bidang Pendataan dan Pendaftaran BPPRD Kabupaten Merangin."
+      }
+    ];
+
+    // 2. DATABASE MASTER PEJABAT (Penandatangan Surat Tugas & SPD)
+    const masterPejabatDefault = [
+      {
+        kewenangan: "An. KEPALA BPPRD",
+        jabatan: "Sekretaris",
+        nama: "SEKRETARIS BPPRD",
+        pangkat: "Pembina (IV/a)",
+        nip: "19760101 200212 1 002"
       },
       {
-        nama: "SYORAYA, S.Pd",
-        nip: "19740124 199604 2 001",
-        pangkat: "Penata TK.I (III/D)",
-        jabatan: "Kasubbid Pendataan dan Pendaftaran"
-      },
-      {
+        kewenangan: "An. KEPALA BPPRD",
+        jabatan: "Kabid Penagihan dan Penghapusan",
         nama: "NURAINI SETIAWATI, S. KOM",
-        nip: "19820820 201101 2 002",
         pangkat: "Penata TK.I (III/D)",
-        jabatan: "Kabid Penagihan dan Penghapusan"
+        nip: "19820820 201101 2 002"
       },
       {
-        nama: "Hj. SITI AMINAH, MM",
-        nip: "19690805 200012 2 002",
-        pangkat: "Pembina Utama Muda (IV/C)",
-        jabatan: "Kepala Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin"
+        kewenangan: "An. KEPALA BPPRD",
+        jabatan: "Kabid PBB dan BPHTB",
+        nama: "KABID PBB DAN BPHTB",
+        pangkat: "Penata TK.I (III/D)",
+        nip: "19800512 200604 1 008"
+      },
+      {
+        kewenangan: "An. KEPALA BPPRD",
+        jabatan: "Kasubbid Pendataan dan Pendaftaran",
+        nama: "SYORAYA, S.Pd",
+        pangkat: "Penata TK.I (III/D)",
+        nip: "19740124 199604 2 001"
       }
     ];
 
     let masterPegawai = [...masterPegawaiDefault];
+    let masterPejabat = [...masterPejabatDefault];
 
-    // Status Indikator Firebase
+    // Indikator Status Cloud
     function perbaruiStatusBadge(status, pesan) {
       const badge = document.getElementById('cloud-status-badge');
       const info = document.getElementById('db-source-info');
@@ -722,7 +766,7 @@
       if (status === 'online') {
         badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Cloud Terhubung (Online)</span>';
-        if (info) info.textContent = "Tersimpan online di Firebase Cloud";
+        if (info) info.textContent = "Data Pegawai & Pejabat tersimpan di Firebase";
       } else if (status === 'syncing') {
         badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200";
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-spin"></span><span>Sinkronisasi ke Cloud...</span>';
@@ -733,64 +777,87 @@
       }
     }
 
-    // Ambil Data Master dari Firebase Realtime Database
-    async function muatMasterPegawaiCloud() {
+    // ================= MUAT DATA DARI FIREBASE =================
+    async function muatSemuaMasterCloud() {
       perbaruiStatusBadge('syncing');
       try {
-        const resp = await fetch(FIREBASE_RTDB_ENDPOINT);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
-
-        if (Array.isArray(data) && data.length > 0) {
-          masterPegawai = data.filter(p => p && p.nama);
-          perbaruiStatusBadge('online');
-        } else if (data && typeof data === 'object') {
-          masterPegawai = Object.values(data).filter(p => p && p.nama);
-          perbaruiStatusBadge('online');
-        } else {
-          await simpanMasterPegawaiCloud(masterPegawaiDefault);
-          perbaruiStatusBadge('online');
+        // 1. Muat Pegawai
+        const resPegawai = await fetch(ENDPOINT_PEGAWAI);
+        if (resPegawai.ok) {
+          const dataP = await resPegawai.json();
+          if (Array.isArray(dataP) && dataP.length > 0) {
+            masterPegawai = dataP.filter(p => p && p.nama);
+          } else if (dataP && typeof dataP === 'object') {
+            masterPegawai = Object.values(dataP).filter(p => p && p.nama);
+          } else {
+            await simpanMasterPegawaiCloud(masterPegawaiDefault);
+          }
         }
+
+        // 2. Muat Pejabat
+        const resPejabat = await fetch(ENDPOINT_PEJABAT);
+        if (resPejabat.ok) {
+          const dataJ = await resPejabat.json();
+          if (Array.isArray(dataJ) && dataJ.length > 0) {
+            masterPejabat = dataJ.filter(p => p && p.nama);
+          } else if (dataJ && typeof dataJ === 'object') {
+            masterPejabat = Object.values(dataJ).filter(p => p && p.nama);
+          } else {
+            await simpanMasterPejabatCloud(masterPejabatDefault);
+          }
+        }
+
+        perbaruiStatusBadge('online');
       } catch (err) {
         console.warn("Gagal terhubung ke Firebase RTDB:", err);
         perbaruiStatusBadge('offline', 'Izin Ditolak / Cek Rules RTDB');
       }
 
       renderListMasterPegawai();
+      renderListMasterPejabat();
       renderFormPegawai();
-      renderDropdownPenandatangan();
+      renderDropdownPejabatPenandatangan();
     }
 
-    // Simpan Data Master ke Firebase
     async function simpanMasterPegawaiCloud(list) {
-      perbaruiStatusBadge('syncing');
       try {
-        const resp = await fetch(FIREBASE_RTDB_ENDPOINT, {
+        const resp = await fetch(ENDPOINT_PEGAWAI, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(list)
         });
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        perbaruiStatusBadge('online');
-        return true;
+        return resp.ok;
       } catch (err) {
-        console.error("Gagal menyimpan ke Firebase RTDB:", err);
-        perbaruiStatusBadge('offline', 'Gagal Simpan ke Cloud');
         return false;
       }
     }
 
-    async function sinkronkanKeCloud() {
-      tampilkanToast("Mengunggah data pegawai ke Firebase Cloud...");
-      const ok = await simpanMasterPegawaiCloud(masterPegawai);
-      if (ok) {
-        tampilkanToast("Data pegawai berhasil disinkronkan ke Cloud!");
-      } else {
-        tampilkanToast("Gagal unggah: Pastikan Rules Firebase diatur ke read/write: true");
+    async function simpanMasterPejabatCloud(list) {
+      try {
+        const resp = await fetch(ENDPOINT_PEJABAT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(list)
+        });
+        return resp.ok;
+      } catch (err) {
+        return false;
       }
     }
 
-    // Navigasi Tab Formulir
+    async function sinkronkanKeCloudSemua() {
+      tampilkanToast("Mengunggah data pegawai & pejabat ke Firebase Cloud...");
+      const okP = await simpanMasterPegawaiCloud(masterPegawai);
+      const okJ = await simpanMasterPejabatCloud(masterPejabat);
+      if (okP && okJ) {
+        tampilkanToast("Semua database berhasil disinkronkan ke Cloud!");
+        perbaruiStatusBadge('online');
+      } else {
+        tampilkanToast("Gagal unggah: Periksa koneksi atau rules Firebase");
+      }
+    }
+
+    // Navigasi Tab Formulir Utama
     function gantiTabForm(tab) {
       const btnSt = document.getElementById('tab-form-st');
       const btnSpd = document.getElementById('tab-form-spd');
@@ -819,11 +886,36 @@
       }
     }
 
-    // Render Master Pegawai di Tab Khusus
+    // Navigasi Sub-Tab Master (Pegawai vs Pejabat)
+    function gantiSubMaster(sub) {
+      const btnP = document.getElementById('btn-sub-pegawai');
+      const btnJ = document.getElementById('btn-sub-pejabat');
+      const secP = document.getElementById('sub-master-pegawai-sec');
+      const secJ = document.getElementById('sub-master-pejabat-sec');
+
+      if (sub === 'pegawai') {
+        btnP.className = "flex-1 py-1.5 rounded-md bg-blue-900 text-white shadow-sm transition";
+        btnJ.className = "flex-1 py-1.5 rounded-md text-slate-600 hover:bg-slate-200 transition";
+        secP.classList.remove('hidden');
+        secJ.classList.add('hidden');
+      } else {
+        btnJ.className = "flex-1 py-1.5 rounded-md bg-blue-900 text-white shadow-sm transition";
+        btnP.className = "flex-1 py-1.5 rounded-md text-slate-600 hover:bg-slate-200 transition";
+        secJ.classList.remove('hidden');
+        secP.classList.add('hidden');
+      }
+    }
+
+    // ================= PENGELOLAAN MASTER PEGAWAI =================
     function renderListMasterPegawai() {
       const container = document.getElementById('list-master-pegawai');
       if (!container) return;
       container.innerHTML = '';
+
+      if (masterPegawai.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 italic p-2">Belum ada data pegawai.</p>';
+        return;
+      }
 
       masterPegawai.forEach((m, idx) => {
         const item = document.createElement('div');
@@ -847,7 +939,7 @@
       if (!nama || !nama.trim()) return;
       const nip = prompt("NIP Pegawai (Ketik '-' jika non-PNS):", "-") || "-";
       const pangkat = prompt("Pangkat / Golongan (Ketik '-' jika non-PNS):", "-") || "-";
-      const jabatan = prompt("Jabatan Lengkap (misal: Kabid PBB dan BPHTB):", "Pengelola Pajak dan Retribusi Daerah") || "-";
+      const jabatan = prompt("Jabatan Pegawai:", "Pengelola Pajak dan Retribusi Daerah BPPRD Kabupaten Merangin") || "-";
 
       const pegawaiBaru = {
         nama: nama.trim(),
@@ -859,43 +951,95 @@
       masterPegawai.push(pegawaiBaru);
       renderListMasterPegawai();
       renderFormPegawai();
-      renderDropdownPenandatangan();
-      tampilkanToast(`Menyimpan ${nama} ke Cloud...`);
-
-      const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
-      if (berhasil) {
-        tampilkanToast(`Pegawai ${nama} tersimpan online di Firebase!`);
-      }
+      tampilkanToast(`Menyimpan pegawai ${nama} ke Cloud...`);
+      await simpanMasterPegawaiCloud(masterPegawai);
     }
 
     async function hapusMasterPegawai(idx) {
-      if (confirm(`Hapus ${masterPegawai[idx].nama} dari Database Master?`)) {
-        const namaDihapus = masterPegawai[idx].nama;
+      if (confirm(`Hapus pegawai ${masterPegawai[idx].nama}?`)) {
         masterPegawai.splice(idx, 1);
         renderListMasterPegawai();
         renderFormPegawai();
-        renderDropdownPenandatangan();
-        tampilkanToast(`Menghapus ${namaDihapus} dari Cloud...`);
-
-        const berhasil = await simpanMasterPegawaiCloud(masterPegawai);
-        if (berhasil) {
-          tampilkanToast("Data pegawai diperbarui di Cloud");
-        }
-      }
-    }
-
-    async function resetMasterPegawaiDefault() {
-      if (confirm("Kembalikan daftar pegawai ke bawaan BPPRD Merangin dan perbarui Cloud?")) {
-        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
-        renderListMasterPegawai();
-        renderFormPegawai();
-        renderDropdownPenandatangan();
         await simpanMasterPegawaiCloud(masterPegawai);
-        tampilkanToast("Master pegawai dikembalikan ke default & disinkronkan ke Cloud");
+        tampilkanToast("Data pegawai dihapus dari Cloud");
       }
     }
 
-    // Render Pegawai pada Form Surat Tugas
+    // ================= PENGELOLAAN MASTER PEJABAT =================
+    function renderListMasterPejabat() {
+      const container = document.getElementById('list-master-pejabat');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (masterPejabat.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 italic p-2">Belum ada data pejabat.</p>';
+        return;
+      }
+
+      masterPejabat.forEach((m, idx) => {
+        const item = document.createElement('div');
+        item.className = 'p-2.5 bg-blue-50/50 border border-blue-200 rounded-lg flex items-center justify-between text-xs hover:border-blue-300 transition';
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-blue-950">${m.nama}</div>
+            <div class="text-[11px] text-blue-800 font-semibold">${m.kewenangan || 'An. KEPALA BPPRD'} - ${m.jabatan}</div>
+            <div class="text-[11px] text-slate-500">${m.pangkat} | NIP. ${m.nip}</div>
+          </div>
+          <button type="button" onclick="hapusMasterPejabat(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1">
+            Hapus
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    async function tambahMasterPejabatModal() {
+      const nama = prompt("Nama Lengkap & Gelar Pejabat:");
+      if (!nama || !nama.trim()) return;
+      const kewenangan = prompt("Kewenangan / An. (contoh: An. KEPALA BPPRD):", "An. KEPALA BPPRD") || "An. KEPALA BPPRD";
+      const jabatan = prompt("Jabatan Struktural (contoh: Kabid PBB dan BPHTB):", "Kabid Penagihan dan Penghapusan") || "-";
+      const pangkat = prompt("Pangkat / Golongan:", "Penata TK.I (III/D)") || "-";
+      const nip = prompt("NIP Pejabat:", "-") || "-";
+
+      const pejabatBaru = {
+        nama: nama.trim(),
+        kewenangan: kewenangan.trim(),
+        jabatan: jabatan.trim(),
+        pangkat: pangkat.trim(),
+        nip: nip.trim()
+      };
+
+      masterPejabat.push(pejabatBaru);
+      renderListMasterPejabat();
+      renderDropdownPejabatPenandatangan();
+      tampilkanToast(`Menyimpan pejabat ${nama} ke Cloud...`);
+      await simpanMasterPejabatCloud(masterPejabat);
+    }
+
+    async function hapusMasterPejabat(idx) {
+      if (confirm(`Hapus pejabat ${masterPejabat[idx].nama}?`)) {
+        masterPejabat.splice(idx, 1);
+        renderListMasterPejabat();
+        renderDropdownPejabatPenandatangan();
+        await simpanMasterPejabatCloud(masterPejabat);
+        tampilkanToast("Data pejabat dihapus dari Cloud");
+      }
+    }
+
+    async function resetDatabaseDefault() {
+      if (confirm("Kembalikan seluruh data pegawai & pejabat ke format awal bawaan?")) {
+        masterPegawai = JSON.parse(JSON.stringify(masterPegawaiDefault));
+        masterPejabat = JSON.parse(JSON.stringify(masterPejabatDefault));
+        renderListMasterPegawai();
+        renderListMasterPejabat();
+        renderFormPegawai();
+        renderDropdownPejabatPenandatangan();
+        await sinkronkanKeCloudSemua();
+        tampilkanToast("Database dikembalikan ke bawaan & disinkronkan");
+      }
+    }
+
+    // ================= DROPDOWN PEGAWAI DI FORM ST =================
     function renderFormPegawai() {
       const container = document.getElementById('form-pegawai-list');
       if (!container) return;
@@ -905,6 +1049,7 @@
         const card = document.createElement('div');
         card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
 
+        // Pilihan Dropdown: HANYA DARI DATABASE PEGAWAI
         let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
           const terpilih = (m.nama.trim().toUpperCase() === (p.nama || '').trim().toUpperCase()) ? 'selected' : '';
@@ -922,7 +1067,7 @@
           </div>
 
           <div class="bg-blue-50/70 p-2 rounded-md border border-blue-200/80">
-            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi Data):</label>
+            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi):</label>
             <select class="form-input text-xs font-semibold bg-white cursor-pointer" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
               ${opsiDropdown}
             </select>
@@ -961,22 +1106,20 @@
 
       renderFormPegawai();
       perbaruiPratinjau();
-      tampilkanToast(`Data ${target.nama} berhasil dimasukkan`);
+      tampilkanToast(`Data pegawai ${target.nama} dimasukkan`);
     }
 
-    // ================= SINKRONISASI DROPDOWN PENANDATANGAN DARI FIREBASE =================
-    function renderDropdownPenandatangan() {
+    // ================= DROPDOWN PENANDATANGAN: HANYA MENAMPILKAN PEJABAT =================
+    function renderDropdownPejabatPenandatangan() {
       const optgroup = document.getElementById('optgroup-pejabat-firebase');
       if (!optgroup) return;
       optgroup.innerHTML = '';
 
-      masterPegawai.forEach((p, idx) => {
-        // Lewati Hj. Siti Aminah agar tidak dobel dengan opsi PA di atas
-        if (p.nama && p.nama.toUpperCase().includes('SITI AMINAH')) return;
-
+      // Loop HANYA pada masterPejabat (status pegawai tidak akan pernah masuk ke sini)
+      masterPejabat.forEach((pejabat, idx) => {
         const opt = document.createElement('option');
         opt.value = idx;
-        opt.textContent = `✍️ An. KEPALA - ${p.nama} (${p.jabatan || '-'})`;
+        opt.textContent = `✍️ ${pejabat.kewenangan || 'An. KEPALA'} - ${pejabat.jabatan} (${pejabat.nama})`;
         optgroup.appendChild(opt);
       });
     }
@@ -992,12 +1135,13 @@
         state.ttdNip = "19690805 200012 2 002";
         tampilkanToast("Beralih ke: Pengguna Anggaran");
       } else if (val === 'manual') {
-        tampilkanToast("Silakan isi kolom penandatangan secara manual");
+        tampilkanToast("Silakan ketik manual pejabat penandatangan");
         return;
       } else {
-        const target = masterPegawai[val];
+        // Mengambil data spesifik dari masterPejabat
+        const target = masterPejabat[val];
         if (target) {
-          state.ttdAn = "An. KEPALA BPPRD";
+          state.ttdAn = target.kewenangan || "An. KEPALA BPPRD";
           state.ttdJabatan = target.jabatan || "";
           state.ttdNama = target.nama || "";
           state.ttdPangkat = target.pangkat || "";
@@ -1015,6 +1159,7 @@
       perbaruiPratinjau();
     }
 
+    // ================= FUNGSI DOKUMEN & FORM LAINNYA =================
     function gantiTabPratinjau(tab) {
       const btnSt = document.getElementById('tab-pratinjau-st');
       const btnSpd = document.getElementById('tab-pratinjau-spd');
@@ -1232,8 +1377,8 @@
       renderFormInstruksi();
       perbaruiPratinjau();
 
-      // Ambil data master dari Cloud dan isi dropdown
-      muatMasterPegawaiCloud();
+      // Muat data terpisah (Pegawai & Pejabat) dari Firebase Cloud
+      muatSemuaMasterCloud();
     }
 
     function perbaruiPratinjau() {
@@ -1751,7 +1896,7 @@
       container.appendChild(lembar);
     }
 
-    // Penyimpanan Berkas Cadangan JSON
+    // Penyimpanan Cadangan JSON
     function eksporJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const a = document.createElement('a');
