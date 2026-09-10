@@ -250,7 +250,7 @@
             </div>
           </div>
 
-          <!-- SEKSI 2: PEGAWAI DITUGASKAN (DENGAN INPUT MANUAL LENGKAP) -->
+          <!-- SEKSI 2: PEGAWAI DITUGASKAN (RINGKAS: PILIH VIA DROPDOWN) -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div class="flex items-center justify-between border-b pb-2 mb-3">
               <div>
@@ -258,7 +258,7 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700 font-medium">Pilih dari database atau ketik manual langsung</span>
+                <span class="text-[10px] text-blue-700 font-medium">Pilih pegawai melalui daftar dropdown database</span>
               </div>
               <button type="button" onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
@@ -281,7 +281,7 @@
             <div id="form-instruksi-list" class="space-y-2"></div>
           </div>
 
-          <!-- SEKSI 4: PENANDATANGAN & PENGESAHAN (HANYA MUNCUL DI TAB SURAT TUGAS) -->
+          <!-- SEKSI 4: PENANDATANGAN & PENGESAHAN (RINGKAS: DROPDOWN & TANGGAL) -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
               <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">4</span>
@@ -298,7 +298,6 @@
                 <optgroup id="optgroup-pejabat-firebase" label="Daftar Pejabat Struktural BPPRD">
                   <!-- Otomatis diisi dari database pejabat -->
                 </optgroup>
-                <option value="manual">Lainnya / Ketik Manual</option>
               </select>
             </div>
 
@@ -311,26 +310,13 @@
                 <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
                 <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
               </div>
-              <div class="col-span-2">
-                <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika Pengguna Anggaran)</label>
-                <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD" oninput="ubahData('ttdAn', this.value)">
-              </div>
-              <div class="col-span-2">
-                <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
-                <input type="text" id="f_ttdJabatan" class="form-input font-semibold mb-1" placeholder="Contoh: Kabid Penagihan dan Penghapusan" oninput="ubahData('ttdJabatan', this.value)">
-              </div>
-              <div class="col-span-2">
-                <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
-                <input type="text" id="f_ttdNama" class="form-input font-bold" oninput="ubahData('ttdNama', this.value)">
-              </div>
-              <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-1">Pangkat / Golongan</label>
-                <input type="text" id="f_ttdPangkat" class="form-input" oninput="ubahData('ttdPangkat', this.value)">
-              </div>
-              <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-1">NIP Pejabat</label>
-                <input type="text" id="f_ttdNip" class="form-input" oninput="ubahData('ttdNip', this.value)">
-              </div>
+            </div>
+
+            <!-- Ringkasan Pejabat Terpilih (Read-Only) -->
+            <div id="pejabat-selected-info" class="mt-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700">
+              <div class="font-bold text-blue-950 text-[12px]" id="info-pejabat-nama">NURAINI SETIAWATI, S. KOM</div>
+              <div class="text-[11px] text-slate-600 font-medium" id="info-pejabat-jabatan">An. KEPALA BPPRD - Kabid Penagihan dan Penghapusan</div>
+              <div class="text-[10.5px] text-slate-500 mt-0.5">NIP: <span id="info-pejabat-nip">19820820 201101 2 002</span> | Gol: <span id="info-pejabat-pangkat">Penata TK.I (III/D)</span></div>
             </div>
           </div>
 
@@ -443,7 +429,7 @@
           </div>
         </div>
 
-        <!-- FORM MASTER DATA GROUP (BERSIH DARI POIN 4) -->
+        <!-- FORM MASTER DATA GROUP -->
         <div id="form-master-group" class="space-y-4 hidden">
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <div class="flex items-center justify-between border-b pb-2 mb-3">
@@ -1200,12 +1186,6 @@
         state.ttdNama = updatedPejabat.nama;
         state.ttdPangkat = updatedPejabat.pangkat;
         state.ttdNip = updatedPejabat.nip;
-
-        if (document.getElementById('f_ttdAn')) document.getElementById('f_ttdAn').value = state.ttdAn;
-        if (document.getElementById('f_ttdJabatan')) document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
-        if (document.getElementById('f_ttdNama')) document.getElementById('f_ttdNama').value = state.ttdNama;
-        if (document.getElementById('f_ttdPangkat')) document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
-        if (document.getElementById('f_ttdNip')) document.getElementById('f_ttdNip').value = state.ttdNip;
       }
 
       editPejabatIdx = null;
@@ -1271,9 +1251,9 @@
 
       state.pegawai.forEach((p, idx) => {
         const card = document.createElement('div');
-        card.className = 'p-3 bg-white border border-slate-200 rounded-xl space-y-2.5 shadow-sm';
+        card.className = 'p-3 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm';
 
-        let opsiDropdown = '<option value="">-- Pilih dari Master Pegawai (Otomatis Isi) --</option>';
+        let opsiDropdown = '<option value="">-- Pilih Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
           const pNameClean = (p.nama || '').trim().toUpperCase().split('(')[0].trim();
           const mNameClean = (m.nama || '').trim().toUpperCase().split('(')[0].trim();
@@ -1281,6 +1261,8 @@
           const isSelected = (pNameClean !== '' && (pNameClean === mNameClean || (p.nama || '').trim().toUpperCase() === (m.nama || '').trim().toUpperCase()));
           opsiDropdown += `<option value="${mIdx}" ${isSelected ? 'selected' : ''}>${m.nama} (${m.pangkat || '-'})</option>`;
         });
+
+        const hasData = p.nama && p.nama.trim() !== '';
 
         card.innerHTML = `
           <div class="flex justify-between items-center pb-1 border-b border-slate-100">
@@ -1293,30 +1275,19 @@
           </div>
 
           <div class="bg-blue-50/70 p-2 rounded-lg border border-blue-200/80">
-            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi):</label>
+            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai:</label>
             <select class="form-input text-xs font-bold bg-white cursor-pointer border-blue-300 focus:border-blue-600" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
               ${opsiDropdown}
             </select>
           </div>
 
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Nama & Gelar</label>
-            <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahPegawai(${idx}, 'nama', this.value)">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">NIP</label>
-              <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahPegawai(${idx}, 'nip', this.value)">
+          ${hasData ? `
+            <div class="bg-slate-50 p-2 rounded-lg border border-slate-200/80 text-[11px] text-slate-700 space-y-0.5">
+              <div class="font-bold text-blue-950">${p.nama}</div>
+              <div>NIP: <span class="font-medium">${p.nip || '-'}</span> | Gol: <span class="font-medium">${p.pangkat || '-'}</span></div>
+              <div class="text-[10.5px] text-slate-500 italic truncate">${p.jabatan || '-'}</div>
             </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Pangkat / Golongan</label>
-              <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahPegawai(${idx}, 'pangkat', this.value)">
-            </div>
-          </div>
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jabatan</label>
-            <textarea rows="2" class="form-input text-xs" oninput="ubahPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
-          </div>
+          ` : ''}
         `;
         container.appendChild(card);
       });
@@ -1363,9 +1334,6 @@
         state.ttdPangkat = "Pembina Utama Muda (IV/C)";
         state.ttdNip = "19690805 200012 2 002";
         tampilkanToast("Beralih ke: Pengguna Anggaran");
-      } else if (val === 'manual') {
-        tampilkanToast("Silakan ketik manual pejabat penandatangan");
-        return;
       } else {
         const target = masterPejabat[val];
         if (target) {
@@ -1378,13 +1346,23 @@
         }
       }
 
-      document.getElementById('f_ttdAn').value = state.ttdAn;
-      document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
-      document.getElementById('f_ttdNama').value = state.ttdNama;
-      document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
-      document.getElementById('f_ttdNip').value = state.ttdNip;
-
+      perbaruiInfoPejabatRingkasan();
       perbaruiPratinjau();
+    }
+
+    function perbaruiInfoPejabatRingkasan() {
+      const elNama = document.getElementById('info-pejabat-nama');
+      const elJabatan = document.getElementById('info-pejabat-jabatan');
+      const elNip = document.getElementById('info-pejabat-nip');
+      const elPangkat = document.getElementById('info-pejabat-pangkat');
+
+      if (elNama) elNama.textContent = state.ttdNama || '-';
+      if (elJabatan) {
+        const jabFull = (state.ttdAn && state.ttdAn.trim() !== '' ? state.ttdAn + ' - ' : '') + (state.ttdJabatan || 'Pengguna Anggaran');
+        elJabatan.textContent = jabFull;
+      }
+      if (elNip) elNip.textContent = state.ttdNip || '-';
+      if (elPangkat) elPangkat.textContent = state.ttdPangkat || '-';
     }
 
     function gantiTabPratinjau(tab) {
@@ -1440,13 +1418,6 @@
       if (!state.pptk) state.pptk = {};
       state.pptk[key] = value;
       renderLembarSpdBelakang();
-    }
-
-    function ubahPegawai(idx, key, value) {
-      if (state.pegawai[idx]) {
-        state.pegawai[idx][key] = value;
-        perbaruiPratinjau();
-      }
     }
 
     function ubahInstruksi(idx, value) {
@@ -1594,14 +1565,10 @@
 
       document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
-      document.getElementById('f_ttdAn').value = state.ttdAn || '';
-      document.getElementById('f_ttdJabatan').value = state.ttdJabatan || '';
-      document.getElementById('f_ttdNama').value = state.ttdNama || '';
-      document.getElementById('f_ttdPangkat').value = state.ttdPangkat || '';
-      document.getElementById('f_ttdNip').value = state.ttdNip || '';
 
       renderFormPegawai();
       renderFormInstruksi();
+      perbaruiInfoPejabatRingkasan();
       perbaruiPratinjau();
 
       muatSemuaMasterCloud();
@@ -2056,7 +2023,7 @@
               </td>
             </tr>
 
-            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN (DIKUNCI SITI AMINAH) -->
+            <!-- ROW 3: III. TIBA KEMBALI DI & PENGGUNA ANGGARAN -->
             <tr style="height: 7.5cm;">
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
