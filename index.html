@@ -640,6 +640,13 @@
     </div>
   </main>
 
+  <!-- FOOTER APLIKASI -->
+  <footer class="bg-white border-t border-slate-200 py-3 px-4 sm:px-6 mt-auto no-print">
+    <div class="max-w-7xl mx-auto flex justify-end text-xs text-slate-500">
+      <span>Dibuat oleh : <strong class="font-bold text-slate-800">MUHAMMAD FUAD</strong> • BPPRD Kabupaten Merangin</span>
+    </div>
+  </footer>
+
   <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-xl text-sm items-center gap-3 border border-slate-700 transition-all">
     <span class="text-emerald-400 font-bold">✓</span>
     <span id="toast-text">Notifikasi</span>
@@ -675,18 +682,18 @@
         { nama: "", nip: "", pangkat: "", jabatan: "" }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 1 (Satu) Hari.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        tingkatBiaya: "Tingkat B",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Bangko",
+        tempatTujuan: "Kecamatan Tabir Barat",
         lamaHari: "1 (Satu) Hari",
         tglBerangkat: "09 September 2026",
         tglKembali: "09 September 2026",
@@ -1639,7 +1646,7 @@
     }
 
     function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Bangko';
+      const t = teks || 'Kecamatan Tabir Barat';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
       if (t.length > 26) {
