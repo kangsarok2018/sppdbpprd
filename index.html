@@ -239,7 +239,7 @@
                   <input type="text" id="f_nomorPrefix" class="form-input text-center font-semibold text-xs" placeholder="094" oninput="ubahData('nomorPrefix', this.value)">
                   <input type="text" id="f_nomorUrut" class="form-input text-center text-xs" placeholder="No Urut" oninput="ubahData('nomorUrut', this.value)">
                   <input type="text" id="f_nomorKode" class="form-input text-center text-xs" placeholder="ST/ P3-BPPRD" oninput="ubahData('nomorKode', this.value)">
-                  <input type="text" id="f_nomorTahun" class="form-input text-center text-xs" placeholder="2026" oninput="ubahData('nomorTahun', this.value)">
+                  <input type="text" id="f_nomorTahun" class="form-input text-center text-xs" placeholder="2025" oninput="ubahData('nomorTahun', this.value)">
                 </div>
               </div>
 
@@ -308,7 +308,7 @@
               </div>
               <div>
                 <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
-                <input type="text" id="f_ttdTanggal" class="form-input" placeholder="September 2026" oninput="ubahData('ttdTanggal', this.value)">
+                <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
               </div>
             </div>
 
@@ -564,7 +564,7 @@
                 <p class="text-[12pt] font-normal mt-0.5">
                   Nomor : <span class="t-nomorPrefix">094</span> / 
                   <span class="t-nomorUrut inline-block px-3 font-medium">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> / 
-                  <span class="t-nomorKode">ST/ P3-BPPRD</span> / <span class="t-nomorTahun">2026</span>
+                  <span class="t-nomorKode">ST/ P3-BPPRD</span> / <span class="t-nomorTahun">2025</span>
                 </p>
               </div>
 
@@ -654,7 +654,7 @@
     const ENDPOINT_PEJABAT = `${FIREBASE_BASE}/pejabat.json`;
 
     const BULAN_INDO = [
-      "Januari", "September", "Maret", "April", "Mei", "Juni",
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
       "Juli", "Agustus", "September", "Oktober", "November", "Desember"
     ];
 
@@ -663,10 +663,10 @@
       nomorPrefix: "094",
       nomorUrut: "",
       nomorKode: "ST/ P3-BPPRD",
-      nomorTahun: "2026",
-      dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2026 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2026.",
+      nomorTahun: "2025",
+      dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2025 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2025.",
       ttdTempat: "Bangko",
-      ttdTanggal: "September 2026",
+      ttdTanggal: "Februari 2025",
       ttdAn: "",
       ttdJabatan: "Pengguna Anggaran",
       ttdNama: "Hj. SITI AMINAH, MM",
@@ -687,20 +687,21 @@
         }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
-        "Melaksanakan tugas ini dengan penuh tanggung jawab dan menyampaikan laporan selambat-lambatnya 7 (tujuh) hari setelah pelaksanaan tugas.",
-        "Kepada instansi atau pejabat terkait dimohon bantuan demi kelancaran pelaksanaan tugas yang dimaksud."
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 3 (Tiga) Hari.",
+        "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
+        "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        tingkatBiaya: "Tingkat B",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Bangko",
-        lamaHari: "1 (Satu) Hari",
-        tglBerangkat: "",
-        tglKembali: "",
+        tempatTujuan: "Kecamatan Tabir Barat",
+        lamaHari: "3 (Tiga) Hari",
+        tglBerangkat: "09 September 2026",
+        tglKembali: "11 September 2026",
         instansiBeban: "BPPRD Kab. Merangin",
         mataAnggaran: "5.1.02.04.01.0001",
         lembarKe: "",
@@ -774,6 +775,8 @@
       const txtLama = state.spd.lamaHari || '';
       const txtBerangkat = state.spd.tglBerangkat || '';
 
+      perbaruiPoin2Otomatis();
+
       if (!txtLama.trim() || !txtBerangkat.trim()) return;
 
       // Ekstrak angka pertama dari lama hari (misal "2 (Dua) Hari" -> 2)
@@ -803,6 +806,35 @@
           }
         }
       }
+
+      if (!dateObj || isNaN(dateObj.getTime())) return;
+
+      // Tanggal kembali = Tanggal Berangkat + (durasiHari - 1) hari
+      const dateKembali = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate() + (durasiHari - 1));
+
+      const dayFormatted = String(dateKembali.getDate()).padStart(2, '0');
+      const monthFormatted = BULAN_INDO[dateKembali.getMonth()];
+      const yearFormatted = dateKembali.getFullYear();
+
+      const strKembaliHasil = `${dayFormatted} ${monthFormatted} ${yearFormatted}`;
+
+      state.spd.tglKembali = strKembaliHasil;
+      const elKembali = document.getElementById('f_spdTglKembali');
+      if (elKembali) {
+        elKembali.value = strKembaliHasil;
+      }
+
+      renderLembarSpd();
+      renderLembarSpdBelakang();
+    }
+
+    // Fungsi otomatis memperbarui Poin 2 tugas berdasarkan Tgl Berangkat & Lama Hari
+    function perbaruiPoin2Otomatis() {
+      const tgl = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
+      const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
+      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tgl} selama ${lama}.`;
+      renderFormInstruksi();
+    }
 
       if (!dateObj || isNaN(dateObj.getTime())) return;
 
@@ -1541,13 +1573,10 @@
 
     function ubahDataSpd(key, value) {
       state.spd[key] = value;
+      if (key === 'tglBerangkat' || key === 'lamaHari') {
+        perbaruiPoin2Otomatis();
+      }
       renderLembarSpd();
-      renderLembarSpdBelakang();
-    }
-
-    function ubahPptk(key, value) {
-      if (!state.pptk) state.pptk = {};
-      state.pptk[key] = value;
       renderLembarSpdBelakang();
     }
 
@@ -1567,48 +1596,36 @@
       container.innerHTML = '';
 
       state.instruksi.forEach((inst, idx) => {
-        const isLocked = (idx === 1 || idx === 2);
+        const isLocked = (idx === 1 || idx === 2 || idx === 3);
         const row = document.createElement('div');
         row.className = 'space-y-1';
+        
+        let badgeHtml = '';
+        if (idx === 0) {
+          badgeHtml = '<span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-300">Sinkron ke SPD</span>';
+        } else if (idx === 1) {
+          badgeHtml = '<span class="text-[9px] bg-blue-100 text-blue-800 font-semibold px-1.5 py-0.5 rounded border border-blue-300">Otomatis dari SPD</span>';
+        } else {
+          badgeHtml = '<span class="text-[9px] bg-slate-200 text-slate-700 font-semibold px-1.5 py-0.5 rounded">Terkunci (Baku)</span>';
+        }
+
         row.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
               <span>Poin ${idx + 1}</span>
-              ${idx === 0 ? '<span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-300">Sinkron ke SPD</span>' : ''}
-              ${isLocked ? '<span class="text-[9px] bg-slate-200 text-slate-700 font-semibold px-1.5 py-0.5 rounded">Terkunci (Baku)</span>' : ''}
+              ${badgeHtml}
             </span>
-            ${!isLocked && state.instruksi.length > 2 && idx >= 3 ? `
+            ${idx >= 4 ? `
               <button type="button" onclick="hapusInstruksi(${idx})" class="text-rose-600 hover:text-rose-800 text-[10px] font-semibold">Hapus</button>
             ` : ''}
           </div>
           <textarea rows="${isLocked ? '2' : '3'}" 
-            class="form-input text-xs ${isLocked ? 'bg-slate-100 text-slate-600 cursor-not-allowed border-slate-200' : ''}" 
+            class="form-input text-xs ${isLocked ? 'bg-slate-100 text-slate-600 border-slate-200' : ''}" 
             ${isLocked ? 'readonly' : ''} 
             oninput="ubahInstruksi(${idx}, this.value)">${inst || ''}</textarea>
         `;
         container.appendChild(row);
       });
-    }
-
-    function tambahPegawai() {
-      state.pegawai.push({
-        nama: "",
-        nip: "-",
-        pangkat: "-",
-        jabatan: ""
-      });
-      renderFormPegawai();
-      perbaruiPratinjau();
-      tampilkanToast("Pegawai baru ditambahkan");
-    }
-
-    function hapusPegawai(idx) {
-      if (state.pegawai.length > 1) {
-        state.pegawai.splice(idx, 1);
-        renderFormPegawai();
-        perbaruiPratinjau();
-        tampilkanToast("Pegawai dihapus");
-      }
     }
 
     function tambahInstruksi() {
@@ -1618,7 +1635,7 @@
     }
 
     function hapusInstruksi(idx) {
-      if (idx !== 1 && idx !== 2 && state.instruksi.length > 1) {
+      if (idx >= 4 && state.instruksi.length > 4) {
         state.instruksi.splice(idx, 1);
         renderFormInstruksi();
         perbaruiPratinjau();
@@ -1650,7 +1667,7 @@
     }
 
     function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Bangko';
+      const t = teks || 'Kecamatan Tabir Barat';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
       if (t.length > 26) {
@@ -1691,7 +1708,7 @@
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
 
       renderFormPegawai();
-      renderFormInstruksi();
+      perbaruiPoin2Otomatis();
       renderDropdownPptk();
       perbaruiInfoPejabatRingkasan();
       perbaruiPratinjau();
@@ -1705,7 +1722,7 @@
       document.querySelectorAll('.t-nomorPrefix').forEach(el => el.textContent = state.nomorPrefix || '094');
       document.querySelectorAll('.t-nomorUrut').forEach(el => el.textContent = state.nomorUrut ? ` ${state.nomorUrut} ` : '        ');
       document.querySelectorAll('.t-nomorKode').forEach(el => el.textContent = state.nomorKode || 'ST/ P3-BPPRD');
-      document.querySelectorAll('.t-nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2026');
+      document.querySelectorAll('.t-nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2025');
 
       const elDasar = document.getElementById('t-dasar');
       if (elDasar) elDasar.textContent = state.dasar || '-';
@@ -1971,7 +1988,7 @@
                     <tr>
                       <td style="border: none; padding: 0;">Nomor</td>
                       <td style="border: none; padding: 0; text-align: center;">:</td>
-                      <td style="border: none; padding: 0; white-space: nowrap; font-size: 11pt; letter-spacing: -0.2px;">${state.nomorPrefix || '094'}/ ${state.nomorUrut || ''} /${state.nomorKode || 'ST/ P3-BPPRD'}/${state.nomorTahun || '2026'}</td>
+                      <td style="border: none; padding: 0; white-space: nowrap; font-size: 11pt; letter-spacing: -0.2px;">${state.nomorPrefix || '094'}/ ${state.nomorUrut || ''} /${state.nomorKode || 'ST/ P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
                     </tr>
                     <tr>
                       <td style="border: none; padding: 0;">Tanggal</td>
