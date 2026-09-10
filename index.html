@@ -314,9 +314,9 @@
 
             <!-- Ringkasan Pejabat Terpilih (Read-Only) -->
             <div id="pejabat-selected-info" class="mt-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700">
-              <div class="font-bold text-blue-950 text-[12px]" id="info-pejabat-nama">NURAINI SETIAWATI, S. KOM</div>
-              <div class="text-[11px] text-slate-600 font-medium" id="info-pejabat-jabatan">An. KEPALA BPPRD - Kabid Penagihan dan Penghapusan</div>
-              <div class="text-[10.5px] text-slate-500 mt-0.5">NIP: <span id="info-pejabat-nip">19820820 201101 2 002</span> | Gol: <span id="info-pejabat-pangkat">Penata TK.I (III/D)</span></div>
+              <div class="font-bold text-blue-950 text-[12px]" id="info-pejabat-nama">Hj. SITI AMINAH, MM</div>
+              <div class="text-[11px] text-slate-600 font-medium" id="info-pejabat-jabatan">Pengguna Anggaran</div>
+              <div class="text-[10.5px] text-slate-500 mt-0.5">NIP: <span id="info-pejabat-nip">19690805 200012 2 002</span> | Gol: <span id="info-pejabat-pangkat">Pembina Utama Muda (IV/C)</span></div>
             </div>
           </div>
 
@@ -660,11 +660,11 @@
       dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2025 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2025.",
       ttdTempat: "Bangko",
       ttdTanggal: "Februari 2025",
-      ttdAn: "An. KEPALA BPPRD",
-      ttdJabatan: "Kabid Penagihan dan Penghapusan",
-      ttdNama: "NURAINI SETIAWATI, S. KOM",
-      ttdPangkat: "Penata TK.I (III/D)",
-      ttdNip: "19820820 201101 2 002",
+      ttdAn: "",
+      ttdJabatan: "Pengguna Anggaran",
+      ttdNama: "Hj. SITI AMINAH, MM",
+      ttdPangkat: "Pembina Utama Muda (IV/C)",
+      ttdNip: "19690805 200012 2 002",
       pegawai: [
         {
           nama: "",
@@ -1413,15 +1413,13 @@
     }
 
     function pilihPejabatOtomatis(val) {
-      if (val === '') return;
-
-      if (val === 'pa') {
+      if (val === '' || val === 'pa') {
         state.ttdAn = "";
         state.ttdJabatan = "Pengguna Anggaran";
         state.ttdNama = "Hj. SITI AMINAH, MM";
         state.ttdPangkat = "Pembina Utama Muda (IV/C)";
         state.ttdNip = "19690805 200012 2 002";
-        tampilkanToast("Beralih ke: Pengguna Anggaran");
+        if (val === 'pa') tampilkanToast("Beralih ke: Pengguna Anggaran");
       } else {
         const target = masterPejabat[val];
         if (target) {
