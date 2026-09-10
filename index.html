@@ -63,6 +63,16 @@
       line-height: 1.3;
     }
 
+    /* Kelas Khusus Tabel Dalam / Tata Letak Tanpa Garis Kotak */
+    .no-border-table, 
+    .no-border-table tr, 
+    .no-border-table td, 
+    .no-border-table th {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
     .form-input {
       width: 100%;
       padding: 6px 9px;
@@ -210,7 +220,7 @@
               Form SPD
             </button>
             <button id="tab-form-master" onclick="gantiTabForm('master')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1">
-              <span>👥 Master Data</span>
+              <span>Master Data</span>
             </button>
           </div>
         </div>
@@ -247,7 +257,7 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700 font-medium">Bisa pilih via database pegawai atau ketik manual</span>
+                <span class="text-[10px] text-blue-700 font-medium">Pilih via database pegawai atau ketik manual</span>
               </div>
               <button type="button" onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
@@ -387,16 +397,16 @@
 
           <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
             <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
-              <span>✍️ PILIH PEJABAT PENANDATANGAN:</span>
+              <span>PILIH PEJABAT PENANDATANGAN:</span>
             </label>
             <!-- Dropdown Penandatangan: HANYA MENAMPILKAN PEJABAT -->
             <select id="f_pilihPejabat" onchange="pilihPejabatOtomatis(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
               <option value="">-- Pilih Pejabat Penandatangan --</option>
-              <option value="pa">👑 Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
+              <option value="pa">Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
               <optgroup id="optgroup-pejabat-firebase" label="Daftar Pejabat Struktural BPPRD">
                 <!-- Otomatis diisi dari database pejabat -->
               </optgroup>
-              <option value="manual">✏️ Lainnya / Ketik Manual</option>
+              <option value="manual">Lainnya / Ketik Manual</option>
             </select>
           </div>
 
@@ -440,7 +450,7 @@
           <div class="flex items-center justify-between border-b pb-2 mb-3">
             <div>
               <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
-                <span>🗄️ Database Master Terpisah</span>
+                <span>Database Master Terpisah</span>
               </h2>
               <div class="flex items-center gap-2 mt-1">
                 <span id="cloud-status-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
@@ -451,7 +461,7 @@
             </div>
             <div class="flex items-center gap-1.5">
               <button type="button" onclick="sinkronkanKeCloudSemua()" title="Unggah data saat ini ke cloud" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold px-2 py-1.5 rounded-lg transition">
-                ☁️ Sinkron
+                Sinkron
               </button>
             </div>
           </div>
@@ -459,10 +469,10 @@
           <!-- Sub-Tab Pemilih Database -->
           <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 mb-3 text-xs font-bold">
             <button id="btn-sub-pegawai" onclick="gantiSubMaster('pegawai')" class="flex-1 py-1.5 rounded-md bg-blue-900 text-white shadow-sm transition">
-              👥 Data Pegawai
+              Data Pegawai
             </button>
             <button id="btn-sub-pejabat" onclick="gantiSubMaster('pejabat')" class="flex-1 py-1.5 rounded-md text-slate-600 hover:bg-slate-200 transition">
-              👔 Data Pejabat Penandatangan
+              Data Pejabat Penandatangan
             </button>
           </div>
 
@@ -506,14 +516,14 @@
             <div class="bg-white p-2 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-1.5 flex-wrap">
                 <button id="tab-pratinjau-st" onclick="gantiTabPratinjau('st')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm flex items-center gap-1.5">
-                  <span>📄 1. Surat Tugas (ST)</span>
+                  <span>1. Surat Tugas (ST)</span>
                 </button>
                 <button id="tab-pratinjau-spd" onclick="gantiTabPratinjau('spd')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5">
-                  <span>🚗 2. SPD Depan</span>
+                  <span>2. SPD Depan</span>
                   <span id="label-spd-total" class="bg-blue-200 text-blue-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">2 Lbr</span>
                 </button>
                 <button id="tab-pratinjau-spd-belakang" onclick="gantiTabPratinjau('spd-belakang')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5">
-                  <span>📋 3. SPD Punggung</span>
+                  <span>3. SPD Punggung</span>
                   <span id="label-spd-belakang-total" class="bg-amber-200 text-amber-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">1 Lbr</span>
                 </button>
               </div>
@@ -561,7 +571,7 @@
               </div>
 
               <!-- TABEL KONTEN SURAT TUGAS -->
-              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="mt-3 text-[12pt]">
+              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="mt-3 text-[12pt] no-border-table">
                 <colgroup>
                   <col style="width: 75px;">
                   <col style="width: 20px;">
@@ -589,7 +599,7 @@
               <!-- TANDA TANGAN SURAT TUGAS -->
               <div class="mt-6 flex justify-end">
                 <div style="width: 310px;">
-                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt]">
+                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt] no-border-table">
                     <colgroup>
                       <col style="width: 120px;">
                       <col style="width: 15px;">
@@ -601,7 +611,7 @@
                         <td style="text-align: center; padding: 1px 0;">:</td>
                         <td class="t-ttdTempat" style="padding: 1px 0;">Bangko</td>
                       </tr>
-                      <tr style="border-bottom: 1px solid #000000;">
+                      <tr style="border-bottom: 1px solid #000000 !important;">
                         <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                         <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
                         <td class="t-ttdTanggal" style="padding: 1px 0 3px 0;"></td>
@@ -765,14 +775,14 @@
 
       if (status === 'online') {
         badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
-        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>🟢 Cloud Terhubung (Online)</span>';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Cloud Terhubung (Online)</span>';
         if (info) info.textContent = "Data Pegawai & Pejabat tersimpan di Firebase";
       } else if (status === 'syncing') {
         badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 border border-blue-200";
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-spin"></span><span>Sinkronisasi ke Cloud...</span>';
       } else if (status === 'offline') {
         badge.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200";
-        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>⚠️ ${pesan || 'Offline (Atur Rules Firebase)'}</span>`;
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>${pesan || 'Offline'}</span>`;
         if (info) info.textContent = "Beralih ke memori lokal browser";
       }
     }
@@ -810,7 +820,7 @@
         perbaruiStatusBadge('online');
       } catch (err) {
         console.warn("Gagal terhubung ke Firebase RTDB:", err);
-        perbaruiStatusBadge('offline', 'Izin Ditolak / Cek Rules RTDB');
+        perbaruiStatusBadge('offline', 'Offline');
       }
 
       renderListMasterPegawai();
@@ -1049,7 +1059,6 @@
         const card = document.createElement('div');
         card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
 
-        // Pilihan Dropdown: HANYA DARI DATABASE PEGAWAI
         let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
           const terpilih = (m.nama.trim().toUpperCase() === (p.nama || '').trim().toUpperCase()) ? 'selected' : '';
@@ -1109,17 +1118,16 @@
       tampilkanToast(`Data pegawai ${target.nama} dimasukkan`);
     }
 
-    // ================= DROPDOWN PENANDATANGAN: HANYA MENAMPILKAN PEJABAT =================
+    // ================= DROPDOWN PENANDATANGAN =================
     function renderDropdownPejabatPenandatangan() {
       const optgroup = document.getElementById('optgroup-pejabat-firebase');
       if (!optgroup) return;
       optgroup.innerHTML = '';
 
-      // Loop HANYA pada masterPejabat (status pegawai tidak akan pernah masuk ke sini)
       masterPejabat.forEach((pejabat, idx) => {
         const opt = document.createElement('option');
         opt.value = idx;
-        opt.textContent = `✍️ ${pejabat.kewenangan || 'An. KEPALA'} - ${pejabat.jabatan} (${pejabat.nama})`;
+        opt.textContent = `${pejabat.kewenangan || 'An. KEPALA'} - ${pejabat.jabatan} (${pejabat.nama})`;
         optgroup.appendChild(opt);
       });
     }
@@ -1138,7 +1146,6 @@
         tampilkanToast("Silakan ketik manual pejabat penandatangan");
         return;
       } else {
-        // Mengambil data spesifik dari masterPejabat
         const target = masterPejabat[val];
         if (target) {
           state.ttdAn = target.kewenangan || "An. KEPALA BPPRD";
@@ -1377,7 +1384,7 @@
       renderFormInstruksi();
       perbaruiPratinjau();
 
-      // Muat data terpisah (Pegawai & Pejabat) dari Firebase Cloud
+      // Muat data terpisah dari Firebase Cloud
       muatSemuaMasterCloud();
     }
 
@@ -1418,7 +1425,7 @@
         const mb = idx < state.pegawai.length - 1 ? 'margin-bottom: 8px;' : '';
         pegawaiHtml += `
           <div style="${mb}">
-            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="no-border-table">
               <colgroup>
                 <col style="width: 24px;">
                 <col style="width: 115px;">
@@ -1458,7 +1465,7 @@
       const elPegawai = document.getElementById('t-pegawai');
       if (elPegawai) elPegawai.innerHTML = pegawaiHtml;
 
-      let instruksiHtml = '<table style="width: 100%; border-collapse: collapse; table-layout: fixed;"><colgroup><col style="width: 24px;"><col style="width: auto;"></colgroup><tbody>';
+      let instruksiHtml = '<table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="no-border-table"><colgroup><col style="width: 24px;"><col style="width: auto;"></colgroup><tbody>';
       state.instruksi.forEach((inst, idx) => {
         instruksiHtml += `
           <tr>
@@ -1511,7 +1518,7 @@
           </div>
 
           <div class="flex justify-end my-1">
-            <table style="width: 250px; border-collapse: collapse;" class="text-[11pt]">
+            <table style="width: 250px; border-collapse: collapse;" class="text-[11pt] no-border-table">
               <tbody>
                 <tr>
                   <td style="width: 90px; padding: 1px 0;">Lembar ke</td>
@@ -1632,21 +1639,21 @@
                 <td style="text-align: center;">10.</td>
                 <td>Keterangan Lain</td>
                 <td>
-                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt]">
+                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt] no-border-table">
                     <colgroup>
                       <col style="width: 65px;">
                       <col style="width: 14px;">
                       <col style="width: auto;">
                     </colgroup>
                     <tr>
-                      <td style="border: none; padding: 0;">Nomor</td>
-                      <td style="border: none; padding: 0; text-align: center;">:</td>
-                      <td style="border: none; padding: 0;">${state.nomorPrefix || '094'}/ &nbsp; ${state.nomorUrut || ''} &nbsp; /${state.nomorKode || 'P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
+                      <td style="padding: 0;">Nomor</td>
+                      <td style="padding: 0; text-align: center;">:</td>
+                      <td style="padding: 0;">${state.nomorPrefix || '094'}/ &nbsp; ${state.nomorUrut || ''} &nbsp; /${state.nomorKode || 'P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
                     </tr>
                     <tr>
-                      <td style="border: none; padding: 0;">Tanggal</td>
-                      <td style="border: none; padding: 0; text-align: center;">:</td>
-                      <td style="border: none; padding: 0;">${tglSpdFormatted}</td>
+                      <td style="padding: 0;">Tanggal</td>
+                      <td style="padding: 0; text-align: center;">:</td>
+                      <td style="padding: 0;">${tglSpdFormatted}</td>
                     </tr>
                   </table>
                 </td>
@@ -1656,7 +1663,7 @@
 
           <div class="mt-6 flex justify-end">
             <div style="width: 310px;">
-              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt]">
+              <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt] no-border-table">
                 <colgroup>
                   <col style="width: 120px;">
                   <col style="width: 15px;">
@@ -1668,7 +1675,7 @@
                     <td style="text-align: center; padding: 1px 0;">:</td>
                     <td style="padding: 1px 0;">${state.ttdTempat || 'Bangko'}</td>
                   </tr>
-                  <tr style="border-bottom: 1px solid #000000;">
+                  <tr style="border-bottom: 1px solid #000000 !important;">
                     <td style="padding: 1px 0 3px 0;">Pada Tanggal</td>
                     <td style="text-align: center; padding: 1px 0 3px 0;">:</td>
                     <td style="padding: 1px 0 3px 0;">${tglSpdFormatted}</td>
@@ -1723,7 +1730,7 @@
               <td style="border: 1px solid #000; padding: 6px;"></td>
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-                  <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt]">
+                  <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt] no-border-table">
                     <colgroup>
                       <col style="width: 18px;">
                       <col style="width: 98px;">
@@ -1731,22 +1738,22 @@
                       <col style="width: auto;">
                     </colgroup>
                     <tr>
-                      <td style="vertical-align: top; border: none; padding: 2px 0;">I.</td>
-                      <td style="vertical-align: top; border: none; padding: 2px 0; white-space: nowrap;">Berangkat dari</td>
-                      <td style="text-align: center; vertical-align: top; border: none; padding: 2px 0;">:</td>
-                      <td style="vertical-align: top; border: none; padding: 2px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
+                      <td style="vertical-align: top; padding: 2px 0;">I.</td>
+                      <td style="vertical-align: top; padding: 2px 0; white-space: nowrap;">Berangkat dari</td>
+                      <td style="text-align: center; vertical-align: top; padding: 2px 0;">:</td>
+                      <td style="vertical-align: top; padding: 2px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
                     </tr>
                     <tr>
-                      <td style="border: none; padding: 2px 0;"></td>
-                      <td style="border: none; padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
-                      <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                      <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
+                      <td style="padding: 2px 0;"></td>
+                      <td style="padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
+                      <td style="text-align: center; padding: 2px 0;">:</td>
+                      <td style="padding: 2px 0;">${tglPunggungFormatted}</td>
                     </tr>
                     <tr>
-                      <td style="border: none; padding: 2px 0;"></td>
-                      <td style="border: none; padding: 2px 0;">Ke</td>
-                      <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                      <td style="vertical-align: top; border: none; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
+                      <td style="padding: 2px 0;"></td>
+                      <td style="padding: 2px 0;">Ke</td>
+                      <td style="text-align: center; padding: 2px 0;">:</td>
+                      <td style="vertical-align: top; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
                     </tr>
                   </table>
 
@@ -1767,7 +1774,7 @@
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
-                    <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt]">
+                    <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt] no-border-table">
                       <colgroup>
                         <col style="width: 22px;">
                         <col style="width: 95px;">
@@ -1775,16 +1782,16 @@
                         <col style="width: auto;">
                       </colgroup>
                       <tr>
-                        <td style="vertical-align: top; border: none; padding: 2px 0;">II.</td>
-                        <td style="vertical-align: top; border: none; padding: 2px 0; white-space: nowrap;">Tiba di</td>
-                        <td style="text-align: center; vertical-align: top; border: none; padding: 2px 0;">:</td>
-                        <td style="vertical-align: top; border: none; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
+                        <td style="vertical-align: top; padding: 2px 0;">II.</td>
+                        <td style="vertical-align: top; padding: 2px 0; white-space: nowrap;">Tiba di</td>
+                        <td style="text-align: center; vertical-align: top; padding: 2px 0;">:</td>
+                        <td style="vertical-align: top; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
                       </tr>
                       <tr>
-                        <td style="border: none; padding: 2px 0;"></td>
-                        <td style="border: none; padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
-                        <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                        <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
+                        <td style="padding: 2px 0;"></td>
+                        <td style="padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
+                        <td style="text-align: center; padding: 2px 0;">:</td>
+                        <td style="padding: 2px 0;">${tglPunggungFormatted}</td>
                       </tr>
                     </table>
                     <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
@@ -1801,21 +1808,21 @@
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
-                    <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt]">
+                    <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt] no-border-table">
                       <colgroup>
                         <col style="width: 102px;">
                         <col style="width: 14px;">
                         <col style="width: auto;">
                       </colgroup>
                       <tr>
-                        <td style="vertical-align: top; border: none; padding: 2px 0; white-space: nowrap;">Berangkat dari</td>
-                        <td style="text-align: center; vertical-align: top; border: none; padding: 2px 0;">:</td>
-                        <td style="vertical-align: top; border: none; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
+                        <td style="vertical-align: top; padding: 2px 0; white-space: nowrap;">Berangkat dari</td>
+                        <td style="text-align: center; vertical-align: top; padding: 2px 0;">:</td>
+                        <td style="vertical-align: top; padding: 2px 0;">${formatTempatTujuanHtml(state.spd.tempatTujuan)}</td>
                       </tr>
                       <tr>
-                        <td style="border: none; padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
-                        <td style="text-align: center; border: none; padding: 2px 0;">:</td>
-                        <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
+                        <td style="padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
+                        <td style="text-align: center; padding: 2px 0;">:</td>
+                        <td style="padding: 2px 0;">${tglPunggungFormatted}</td>
                       </tr>
                     </table>
                     <div style="border-bottom: 1px dashed #64748b; width: 85%; margin: 16px auto 0 auto;"></div>
@@ -1834,7 +1841,7 @@
             <tr style="height: 7.5cm;">
               <td style="border: 1px solid #000; padding: 8px 12px; vertical-align: top;">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-                  <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt]">
+                  <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt] no-border-table">
                     <colgroup>
                       <col style="width: 26px;">
                       <col style="width: 125px;">
@@ -1842,16 +1849,16 @@
                       <col style="width: auto;">
                     </colgroup>
                     <tr>
-                      <td style="vertical-align: top; border: none; padding: 2px 0;">III.</td>
-                      <td style="vertical-align: top; border: none; padding: 2px 0; white-space: nowrap;">Tiba Kembali di</td>
-                      <td style="text-align: center; vertical-align: top; border: none; padding: 2px 0;">:</td>
-                      <td style="vertical-align: top; border: none; padding: 2px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
+                      <td style="vertical-align: top; padding: 2px 0;">III.</td>
+                      <td style="vertical-align: top; padding: 2px 0; white-space: nowrap;">Tiba Kembali di</td>
+                      <td style="text-align: center; vertical-align: top; padding: 2px 0;">:</td>
+                      <td style="vertical-align: top; padding: 2px 0;">${state.spd.tempatBerangkat || 'Bangko'}</td>
                     </tr>
                     <tr>
-                      <td style="border: none; padding: 2px 0;"></td>
-                      <td style="border: none; padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
-                      <td>:</td>
-                      <td style="border: none; padding: 2px 0;">${tglPunggungFormatted}</td>
+                      <td style="padding: 2px 0;"></td>
+                      <td style="padding: 2px 0; white-space: nowrap;">Pada Tanggal</td>
+                      <td style="text-align: center; padding: 2px 0;">:</td>
+                      <td style="padding: 2px 0;">${tglPunggungFormatted}</td>
                     </tr>
                   </table>
 
