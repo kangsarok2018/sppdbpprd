@@ -346,7 +346,12 @@
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">5. Alat Angkutan yang Dipergunakan</label>
-                <input type="text" id="f_spdAlatAngkut" class="form-input" placeholder="Kendaraan Roda Dua" oninput="ubahDataSpd('alatAngkut', this.value)">
+                <select id="f_spdAlatAngkut" class="form-input cursor-pointer font-medium" onchange="ubahDataSpd('alatAngkut', this.value)">
+                  <option value="Kendaraan Roda Dua">Kendaraan Roda Dua</option>
+                  <option value="Kendaraan Roda Empat">Kendaraan Roda Empat</option>
+                  <option value="Kendaraan Umum">Kendaraan Umum</option>
+                  <option value="Mobil Dinas">Mobil Dinas</option>
+                </select>
               </div>
 
               <div class="grid grid-cols-2 gap-2">
@@ -1876,7 +1881,7 @@
                 <td>
                   <div>a. Lama Perjalanan Dinas</div>
                   <div>b. Tanggal Berangkat</div>
-                  <div style="font-size: 11pt; letter-spacing: -0.30px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
+                  <div style="font-size: 10.5pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
                 </td>
                 <td>
                   <div>a. ${state.spd.lamaHari || '-'}</div>
