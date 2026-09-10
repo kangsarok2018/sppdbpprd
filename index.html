@@ -253,7 +253,7 @@
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
                   Pegawai Ditugaskan
                 </h2>
-                <span class="text-[10px] text-blue-700 font-medium">Pilih via database pegawai atau ketik manual</span>
+                <span class="text-[10px] text-blue-700 font-medium">Pilih pegawai langsung dari database master</span>
               </div>
               <button type="button" onclick="tambahPegawai()" class="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold px-2.5 py-1 rounded-lg border border-blue-200 transition">
                 + Tambah
@@ -1276,19 +1276,19 @@
 
       state.pegawai.forEach((p, idx) => {
         const card = document.createElement('div');
-        card.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2';
+        card.className = 'p-3 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm';
 
         let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
           const pNameClean = (p.nama || '').trim().toUpperCase().split('(')[0].trim();
           const mNameClean = (m.nama || '').trim().toUpperCase().split('(')[0].trim();
           
-          const isSelected = (pNameClean !== '' && pNameClean === mNameClean);
+          const isSelected = (pNameClean !== '' && (pNameClean === mNameClean || (p.nama || '').trim().toUpperCase() === (m.nama || '').trim().toUpperCase()));
           opsiDropdown += `<option value="${mIdx}" ${isSelected ? 'selected' : ''}>${m.nama} (${m.pangkat || '-'})</option>`;
         });
 
         card.innerHTML = `
-          <div class="flex justify-between items-center pb-1 border-b border-slate-200">
+          <div class="flex justify-between items-center pb-1 border-b border-slate-100">
             <span class="text-[11px] font-bold text-blue-900 bg-blue-100 px-2 py-0.5 rounded">Pegawai ${idx + 1}</span>
             ${state.pegawai.length > 1 ? `
               <button type="button" onclick="hapusPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold transition">
@@ -1297,47 +1297,44 @@
             ` : ''}
           </div>
 
-          <div class="bg-blue-50/70 p-2 rounded-md border border-blue-200/80">
-            <label class="block text-[10px] font-bold text-blue-900 mb-1">Pilih dari Master Pegawai (Otomatis Isi):</label>
-            <select class="form-input text-xs font-semibold bg-white cursor-pointer" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 mb-1">Pilih Pegawai (Master Data):</label>
+            <select class="form-input text-xs font-bold bg-slate-50 cursor-pointer border-slate-300 focus:border-blue-600" onchange="pilihPegawaiDariDropdown(${idx}, this.value)">
               ${opsiDropdown}
             </select>
           </div>
 
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama & Gelar</label>
-            <input type="text" class="form-input text-xs font-bold" value="${p.nama || ''}" oninput="ubahPegawai(${idx}, 'nama', this.value)">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">NIP</label>
-              <input type="text" class="form-input text-xs" value="${p.nip || ''}" oninput="ubahPegawai(${idx}, 'nip', this.value)">
+          ${p.nama ? `
+            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200/80 text-[11px] text-slate-600 space-y-0.5">
+              <div class="font-bold text-slate-900 flex items-center justify-between">
+                <span>${p.nama}</span>
+                <span class="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-200 font-medium">Terpilih</span>
+              </div>
+              <div class="text-slate-500">NIP: <span class="font-semibold text-slate-700">${p.nip || '-'}</span> &bull; Gol: <span class="font-semibold text-slate-700">${p.pangkat || '-'}</span></div>
+              <div class="text-[10.5px] text-slate-500 line-clamp-2" title="${p.jabatan || ''}">Jabatan: <span class="text-slate-700">${p.jabatan || '-'}</span></div>
             </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Pangkat / Golongan</label>
-              <input type="text" class="form-input text-xs" value="${p.pangkat || ''}" oninput="ubahPegawai(${idx}, 'pangkat', this.value)">
-            </div>
-          </div>
-          <div>
-            <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jabatan</label>
-            <textarea rows="2" class="form-input text-xs" oninput="ubahPegawai(${idx}, 'jabatan', this.value)">${p.jabatan || ''}</textarea>
-          </div>
+          ` : ''}
         `;
         container.appendChild(card);
       });
     }
 
     function pilihPegawaiDariDropdown(pegawaiIdx, masterIdx) {
-      if (masterIdx === "" || !masterPegawai[masterIdx]) return;
-      const target = masterPegawai[masterIdx];
-      state.pegawai[pegawaiIdx].nama = target.nama;
-      state.pegawai[pegawaiIdx].nip = target.nip;
-      state.pegawai[pegawaiIdx].pangkat = target.pangkat;
-      state.pegawai[pegawaiIdx].jabatan = target.jabatan;
+      if (masterIdx === "" || !masterPegawai[masterIdx]) {
+        state.pegawai[pegawaiIdx] = { nama: "", nip: "-", pangkat: "-", jabatan: "" };
+      } else {
+        const target = masterPegawai[masterIdx];
+        state.pegawai[pegawaiIdx].nama = target.nama;
+        state.pegawai[pegawaiIdx].nip = target.nip;
+        state.pegawai[pegawaiIdx].pangkat = target.pangkat;
+        state.pegawai[pegawaiIdx].jabatan = target.jabatan;
+      }
 
       renderFormPegawai();
       perbaruiPratinjau();
-      tampilkanToast(`Data pegawai ${target.nama} dimasukkan`);
+      if (masterIdx !== "" && masterPegawai[masterIdx]) {
+        tampilkanToast(`Pegawai: ${masterPegawai[masterIdx].nama} dipilih`);
+      }
     }
 
     // ================= DROPDOWN PENANDATANGAN =================
