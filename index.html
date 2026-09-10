@@ -763,6 +763,7 @@
       const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
       state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tgl} selama ${lama}.`;
       renderFormInstruksi();
+      perbaruiPratinjau();
     }
 
     function hitungTanggalKembaliOtomatis() {
