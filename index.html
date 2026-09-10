@@ -1012,16 +1012,18 @@
           : "bg-emerald-400 text-blue-950 text-[10px] uppercase font-black px-2 py-0.5 rounded-full shadow-sm";
       }
 
-      // Pembatasan Master Data untuk Non-Admin
+      // Pembatasan Master Data & Tab Kelola User untuk Non-Admin
       const btnSinkron = document.getElementById('btn-sinkron-cloud');
       const btnTambahMPegawai = document.getElementById('btn-tambah-m-pegawai');
       const btnTambahMPejabat = document.getElementById('btn-tambah-m-pejabat');
       const btnResetDb = document.getElementById('btn-reset-db');
+      const tabModalUsers = document.getElementById('tab-modal-users');
 
       if (btnSinkron) btnSinkron.style.display = isAdmin ? 'inline-block' : 'none';
       if (btnTambahMPegawai) btnTambahMPegawai.style.display = isAdmin ? 'inline-block' : 'none';
       if (btnTambahMPejabat) btnTambahMPejabat.style.display = isAdmin ? 'inline-block' : 'none';
       if (btnResetDb) btnResetDb.style.display = isAdmin ? 'inline-block' : 'none';
+      if (tabModalUsers) tabModalUsers.style.display = isAdmin ? 'inline-flex' : 'none';
 
       renderListMasterPegawai();
       renderListMasterPejabat();
@@ -1295,6 +1297,12 @@
         }
       }
 
+      // Sembunyikan tab Kelola Akun Pengguna jika login sebagai Pegawai
+      const tabModalUsers = document.getElementById('tab-modal-users');
+      if (tabModalUsers) {
+        tabModalUsers.style.display = currentUser?.role === 'admin' ? 'inline-flex' : 'none';
+      }
+
       gantiTabModal('profil');
     }
 
@@ -1311,12 +1319,13 @@
 
       if (tab === 'profil') {
         btnProfil.className = "px-3 py-1.5 rounded-lg bg-blue-900 text-white shadow-sm";
-        btnUsers.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200 flex items-center gap-1";
+        if (btnUsers) btnUsers.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200 flex items-center gap-1";
         secProfil.classList.remove('hidden');
         secUsers.classList.add('hidden');
       } else {
         if (currentUser?.role !== 'admin') {
           tampilkanToast("Halaman kelola user hanya dapat diakses oleh Administrator!");
+          gantiTabModal('profil');
           return;
         }
         btnUsers.className = "px-3 py-1.5 rounded-lg bg-blue-900 text-white shadow-sm flex items-center gap-1";
