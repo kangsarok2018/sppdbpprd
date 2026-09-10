@@ -682,18 +682,18 @@
         { nama: "", nip: "", pangkat: "", jabatan: "" }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 1 (Satu) Hari.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        tingkatBiaya: "Tingkat B",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Bangko",
+        tempatTujuan: "Kecamatan Tabir Barat",
         lamaHari: "1 (Satu) Hari",
         tglBerangkat: "09 September 2026",
         tglKembali: "09 September 2026",
@@ -1575,32 +1575,34 @@
       container.innerHTML = '';
 
       state.instruksi.forEach((inst, idx) => {
-        const isLocked = (idx === 1 || idx === 2 || idx === 3);
+        // Sembunyikan Poin 2, 3, dan 4 (Otomatis & Baku) dari form agar lebih ringkas
+        if (idx === 1 || idx === 2 || idx === 3) return;
+
         const row = document.createElement('div');
         row.className = 'space-y-1';
         
         let badgeHtml = '';
+        let labelPoin = '';
         if (idx === 0) {
           badgeHtml = '<span class="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-300">Sinkron ke SPD</span>';
-        } else if (idx === 1) {
-          badgeHtml = '<span class="text-[9px] bg-blue-100 text-blue-800 font-semibold px-1.5 py-0.5 rounded border border-blue-300">Otomatis dari SPD</span>';
+          labelPoin = 'Maksud & Lokasi Tugas (Poin 1)';
         } else {
-          badgeHtml = '<span class="text-[9px] bg-slate-200 text-slate-700 font-semibold px-1.5 py-0.5 rounded">Terkunci (Baku)</span>';
+          badgeHtml = '<span class="text-[9px] bg-blue-100 text-blue-800 font-semibold px-1.5 py-0.5 rounded border border-blue-300">Poin Tambahan</span>';
+          labelPoin = `Poin Tambahan`;
         }
 
         row.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
-              <span>Poin ${idx + 1}</span>
+              <span>${labelPoin}</span>
               ${badgeHtml}
             </span>
             ${idx >= 4 ? `
               <button type="button" onclick="hapusInstruksi(${idx})" class="text-rose-600 hover:text-rose-800 text-[10px] font-semibold">Hapus</button>
             ` : ''}
           </div>
-          <textarea rows="${isLocked ? '2' : '3'}" 
-            class="form-input text-xs ${isLocked ? 'bg-slate-100 text-slate-600 border-slate-200' : ''}" 
-            ${isLocked ? 'readonly' : ''} 
+          <textarea rows="3" 
+            class="form-input text-xs" 
             oninput="ubahInstruksi(${idx}, this.value)">${inst || ''}</textarea>
         `;
         container.appendChild(row);
@@ -1646,7 +1648,7 @@
     }
 
     function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Bangko';
+      const t = teks || 'Kecamatan Tabir Barat';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
       if (t.length > 26) {
@@ -1875,7 +1877,7 @@
                 <td>
                   <div>a. Lama Perjalanan Dinas</div>
                   <div>b. Tanggal Berangkat</div>
-                  <div style="font-size: 11pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
+                  <div style="font-size: 10.5pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
                 </td>
                 <td>
                   <div>a. ${state.spd.lamaHari || '-'}</div>
