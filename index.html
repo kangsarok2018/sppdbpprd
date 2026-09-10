@@ -256,7 +256,7 @@
               <div>
                 <h2 class="text-xs font-bold text-slate-900 flex items-center gap-2 uppercase tracking-wide">
                   <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">2</span>
-                  Pegawai Ditugaskan
+                  PEGAWAI DITUGASKAN
                 </h2>
                 <span class="text-[10px] text-blue-700 font-medium">Pilih pegawai melalui daftar dropdown database</span>
               </div>
@@ -285,7 +285,7 @@
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
               <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">4</span>
-              Penandatangan & Pengesahan
+              PENANDATANGAN & PENGESAHAN
             </h2>
 
             <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
@@ -326,8 +326,7 @@
         <div id="form-spd-group" class="space-y-4 hidden">
           <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
             <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
-              <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">&#9733;</span>
-              Rincian Perjalanan Dinas (SPD)
+              <span>Rincian Perjalanan Dinas (SPD)</span>
             </h2>
             <div class="space-y-3 text-xs">
               <div>
@@ -509,7 +508,6 @@
       <div class="lg:col-span-7">
         <div class="relative">
 
-          <!-- TAB NAVIGASI PRATINJAU (STICKY) -->
           <div class="sticky top-[56px] z-30 bg-[#f1f5f9] py-1 no-print">
             <div class="bg-white p-2 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -673,18 +671,8 @@
       ttdPangkat: "Pembina Utama Muda (IV/C)",
       ttdNip: "19690805 200012 2 002",
       pegawai: [
-        {
-          nama: "",
-          nip: "",
-          pangkat: "",
-          jabatan: ""
-        },
-        {
-          nama: "",
-          nip: "",
-          pangkat: "",
-          jabatan: ""
-        }
+        { nama: "", nip: "", pangkat: "", jabatan: "" },
+        { nama: "", nip: "", pangkat: "", jabatan: "" }
       ],
       instruksi: [
         "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
@@ -719,7 +707,7 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
-    // 1. DATABASE MASTER PEGAWAI
+    // 1. DATABASE MASTER PEGAWAI BAWAAN
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -735,7 +723,7 @@
       }
     ];
 
-    // 2. DATABASE MASTER PEJABAT
+    // 2. DATABASE MASTER PEJABAT BAWAAN
     const masterPejabatDefault = [
       {
         kewenangan: "An. KEPALA BPPRD",
@@ -770,7 +758,13 @@
     let masterPegawai = [...masterPegawaiDefault];
     let masterPejabat = [...masterPejabatDefault];
 
-    // Fungsi Otomatis Hitung Tanggal Kembali dari Lama Hari & Tanggal Berangkat
+    function perbaruiPoin2Otomatis() {
+      const tgl = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
+      const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
+      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tgl} selama ${lama}.`;
+      renderFormInstruksi();
+    }
+
     function hitungTanggalKembaliOtomatis() {
       const txtLama = state.spd.lamaHari || '';
       const txtBerangkat = state.spd.tglBerangkat || '';
@@ -779,21 +773,17 @@
 
       if (!txtLama.trim() || !txtBerangkat.trim()) return;
 
-      // Ekstrak angka pertama dari lama hari (misal "2 (Dua) Hari" -> 2)
       const matchAngka = txtLama.match(/\d+/);
       if (!matchAngka) return;
       const durasiHari = parseInt(matchAngka[0], 10);
       if (isNaN(durasiHari) || durasiHari < 1) return;
 
-      // Coba parse tanggal berangkat
       let dateObj = null;
 
-      // Cek format standard ISO YYYY-MM-DD
       if (/^\d{4}-\d{2}-\d{2}$/.test(txtBerangkat.trim())) {
         const parts = txtBerangkat.trim().split('-');
         dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
       } else {
-        // Cek format Indonesia (e.g., "09 September 2026" atau "9 Sept 2026")
         const regexIndo = /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/;
         const matchIndo = txtBerangkat.trim().match(regexIndo);
         if (matchIndo) {
@@ -809,7 +799,6 @@
 
       if (!dateObj || isNaN(dateObj.getTime())) return;
 
-      // Tanggal kembali = Tanggal Berangkat + (durasiHari - 1) hari
       const dateKembali = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate() + (durasiHari - 1));
 
       const dayFormatted = String(dateKembali.getDate()).padStart(2, '0');
@@ -826,57 +815,6 @@
 
       renderLembarSpd();
       renderLembarSpdBelakang();
-    }
-
-    // Fungsi otomatis memperbarui Poin 2 tugas berdasarkan Tgl Berangkat & Lama Hari
-    function perbaruiPoin2Otomatis() {
-      const tgl = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
-      const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
-      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tgl} selama ${lama}.`;
-      renderFormInstruksi();
-    }
-
-      if (!dateObj || isNaN(dateObj.getTime())) return;
-
-      // Tanggal kembali = Tanggal Berangkat + (durasiHari - 1) hari
-      // Misal 2 hari: Berangkat 9 Sept -> Kembali 10 Sept (9 + 1)
-      const dateKembali = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate() + (durasiHari - 1));
-
-      const dayFormatted = String(dateKembali.getDate()).padStart(2, '0');
-      const monthFormatted = BULAN_INDO[dateKembali.getMonth()];
-      const yearFormatted = dateKembali.getFullYear();
-
-      const strKembaliHasil = `${dayFormatted} ${monthFormatted} ${yearFormatted}`;
-
-      state.spd.tglKembali = strKembaliHasil;
-      const elKembali = document.getElementById('f_spdTglKembali');
-      if (elKembali) {
-        elKembali.value = strKembaliHasil;
-      }
-
-      renderLembarSpd();
-      renderLembarSpdBelakang();
-    }
-
-    function pilihTanggalBerangkatOtomatis(valVal) {
-      if (!valVal) return;
-      const parts = valVal.split('-');
-      if (parts.length === 3) {
-        const thn = parseInt(parts[0], 10);
-        const blnIdx = parseInt(parts[1], 10) - 1;
-        const tgl = parseInt(parts[2], 10);
-
-        const dayFormatted = String(tgl).padStart(2, '0');
-        const strBerangkatHasil = `${dayFormatted} ${BULAN_INDO[blnIdx]} ${thn}`;
-
-        state.spd.tglBerangkat = strBerangkatHasil;
-        const elBrt = document.getElementById('f_spdTglBerangkat');
-        if (elBrt) elBrt.value = strBerangkatHasil;
-
-        hitungTanggalKembaliOtomatis();
-        renderLembarSpd();
-        renderLembarSpdBelakang();
-      }
     }
 
     function perbaruiStatusBadge(status, pesan) {
@@ -1420,6 +1358,20 @@
       });
     }
 
+    function tambahPegawai() {
+      state.pegawai.push({ nama: "", nip: "", pangkat: "", jabatan: "" });
+      renderFormPegawai();
+      perbaruiPratinjau();
+    }
+
+    function hapusPegawai(idx) {
+      if (state.pegawai.length > 1) {
+        state.pegawai.splice(idx, 1);
+        renderFormPegawai();
+        perbaruiPratinjau();
+      }
+    }
+
     function pilihPegawaiDariDropdown(pegawaiIdx, masterIdx) {
       if (masterIdx === "" || !masterPegawai[masterIdx]) {
         state.pegawai[pegawaiIdx] = { nama: "", nip: "-", pangkat: "-", jabatan: "" };
@@ -1680,42 +1632,6 @@
         fontSize = '11pt';
       }
       return `<span style="font-size: ${fontSize}; letter-spacing: ${letterSpacing}; white-space: nowrap; display: inline-block; vertical-align: top; max-width: 100%; overflow: hidden; text-overflow: ellipsis;">${t}</span>`;
-    }
-
-    function inisialisasiForm() {
-      document.getElementById('f_nomorPrefix').value = state.nomorPrefix || '';
-      document.getElementById('f_nomorUrut').value = state.nomorUrut || '';
-      document.getElementById('f_nomorKode').value = state.nomorKode || '';
-      document.getElementById('f_nomorTahun').value = state.nomorTahun || '';
-      document.getElementById('f_dasar').value = state.dasar || '';
-
-      document.getElementById('f_spdPejabatPemberi').value = state.spd.pejabatPemberi || '';
-      document.getElementById('f_spdTingkatBiaya').value = state.spd.tingkatBiaya || '';
-      document.getElementById('f_spdMaksud').value = state.spd.maksud || '';
-      document.getElementById('f_spdAlatAngkut').value = state.spd.alatAngkut || '';
-      document.getElementById('f_spdTempatBerangkat').value = state.spd.tempatBerangkat || '';
-      document.getElementById('f_spdTempatTujuan').value = state.spd.tempatTujuan || '';
-      document.getElementById('f_spdLamaHari').value = state.spd.lamaHari || '';
-      document.getElementById('f_spdTglBerangkat').value = state.spd.tglBerangkat || '';
-      document.getElementById('f_spdTglKembali').value = state.spd.tglKembali || '';
-      document.getElementById('f_spdInstansiBeban').value = state.spd.instansiBeban || '';
-      document.getElementById('f_spdMataAnggaran').value = state.spd.mataAnggaran || '';
-      document.getElementById('f_spdLembarKe').value = state.spd.lembarKe || '';
-      document.getElementById('f_spdKodeNo').value = state.spd.kodeNo || '';
-      document.getElementById('f_spdNomor').value = state.spd.nomor || '';
-
-      document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
-      document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
-
-      renderFormPegawai();
-      perbaruiPoin2Otomatis();
-      renderDropdownPptk();
-      perbaruiInfoPejabatRingkasan();
-      perbaruiPratinjau();
-
-      hitungTanggalKembaliOtomatis();
-
-      muatSemuaMasterCloud();
     }
 
     function perbaruiPratinjau() {
@@ -2272,6 +2188,41 @@
       state = JSON.parse(JSON.stringify(dataDefault));
       inisialisasiForm();
       tampilkanToast("Form dikembalikan ke format awal");
+    }
+
+    function inisialisasiForm() {
+      document.getElementById('f_nomorPrefix').value = state.nomorPrefix || '';
+      document.getElementById('f_nomorUrut').value = state.nomorUrut || '';
+      document.getElementById('f_nomorKode').value = state.nomorKode || '';
+      document.getElementById('f_nomorTahun').value = state.nomorTahun || '';
+      document.getElementById('f_dasar').value = state.dasar || '';
+
+      document.getElementById('f_spdPejabatPemberi').value = state.spd.pejabatPemberi || '';
+      document.getElementById('f_spdTingkatBiaya').value = state.spd.tingkatBiaya || '';
+      document.getElementById('f_spdMaksud').value = state.spd.maksud || '';
+      document.getElementById('f_spdAlatAngkut').value = state.spd.alatAngkut || '';
+      document.getElementById('f_spdTempatBerangkat').value = state.spd.tempatBerangkat || '';
+      document.getElementById('f_spdTempatTujuan').value = state.spd.tempatTujuan || '';
+      document.getElementById('f_spdLamaHari').value = state.spd.lamaHari || '';
+      document.getElementById('f_spdTglBerangkat').value = state.spd.tglBerangkat || '';
+      document.getElementById('f_spdTglKembali').value = state.spd.tglKembali || '';
+      document.getElementById('f_spdInstansiBeban').value = state.spd.instansiBeban || '';
+      document.getElementById('f_spdMataAnggaran').value = state.spd.mataAnggaran || '';
+      document.getElementById('f_spdLembarKe').value = state.spd.lembarKe || '';
+      document.getElementById('f_spdKodeNo').value = state.spd.kodeNo || '';
+      document.getElementById('f_spdNomor').value = state.spd.nomor || '';
+
+      document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
+      document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
+
+      renderFormPegawai();
+      renderFormInstruksi();
+      renderDropdownPptk();
+      perbaruiInfoPejabatRingkasan();
+      perbaruiPratinjau();
+
+      hitungTanggalKembaliOtomatis();
+      muatSemuaMasterCloud();
     }
 
     if (document.readyState === 'loading') {
