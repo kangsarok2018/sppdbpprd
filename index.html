@@ -1720,20 +1720,20 @@
 
     function formatTempatTujuanHtml(teks) {
       const t = teks || 'Kecamatan Bangko';
-      let fontSize = '11.5pt';
+      let fontSize = '12pt';
       let letterSpacing = 'normal';
       let lineHeight = '1.2';
 
       if (t.length > 32) {
-        fontSize = '8.5pt';
+        fontSize = '9pt';
         letterSpacing = '-0.4px';
         lineHeight = '1.05';
       } else if (t.length > 24) {
-        fontSize = '9pt';
+        fontSize = '10pt';
         letterSpacing = '-0.3px';
         lineHeight = '1.1';
       } else if (t.length > 18) {
-        fontSize = '10pt';
+        fontSize = '11pt';
         letterSpacing = '-0.2px';
         lineHeight = '1.15';
       }
