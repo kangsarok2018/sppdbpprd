@@ -239,7 +239,7 @@
                   <input type="text" id="f_nomorPrefix" class="form-input text-center font-semibold text-xs" placeholder="094" oninput="ubahData('nomorPrefix', this.value)">
                   <input type="text" id="f_nomorUrut" class="form-input text-center text-xs" placeholder="No Urut" oninput="ubahData('nomorUrut', this.value)">
                   <input type="text" id="f_nomorKode" class="form-input text-center text-xs" placeholder="ST/ P3-BPPRD" oninput="ubahData('nomorKode', this.value)">
-                  <input type="text" id="f_nomorTahun" class="form-input text-center text-xs" placeholder="2025" oninput="ubahData('nomorTahun', this.value)">
+                  <input type="text" id="f_nomorTahun" class="form-input text-center text-xs" placeholder="2026" oninput="ubahData('nomorTahun', this.value)">
                 </div>
               </div>
 
@@ -308,7 +308,7 @@
               </div>
               <div>
                 <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
-                <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
+                <input type="text" id="f_ttdTanggal" class="form-input" placeholder="September 2026" oninput="ubahData('ttdTanggal', this.value)">
               </div>
             </div>
 
@@ -564,7 +564,7 @@
                 <p class="text-[12pt] font-normal mt-0.5">
                   Nomor : <span class="t-nomorPrefix">094</span> / 
                   <span class="t-nomorUrut inline-block px-3 font-medium">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> / 
-                  <span class="t-nomorKode">ST/ P3-BPPRD</span> / <span class="t-nomorTahun">2025</span>
+                  <span class="t-nomorKode">ST/ P3-BPPRD</span> / <span class="t-nomorTahun">2026</span>
                 </p>
               </div>
 
@@ -654,7 +654,7 @@
     const ENDPOINT_PEJABAT = `${FIREBASE_BASE}/pejabat.json`;
 
     const BULAN_INDO = [
-      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Januari", "September", "Maret", "April", "Mei", "Juni",
       "Juli", "Agustus", "September", "Oktober", "November", "Desember"
     ];
 
@@ -663,10 +663,10 @@
       nomorPrefix: "094",
       nomorUrut: "",
       nomorKode: "ST/ P3-BPPRD",
-      nomorTahun: "2025",
-      dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2025 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2025.",
+      nomorTahun: "2026",
+      dasar: "Surat Keputusan Bupati Merangin Nomor: 900 / 012 / BPPRD / 2026 tentang Dokumen Pelaksanaan Anggaran (DPA) Badan Pengelola Pajak dan Retribusi Daerah Kabupaten Merangin Tahun Anggaran 2026.",
       ttdTempat: "Bangko",
-      ttdTanggal: "Februari 2025",
+      ttdTanggal: "September 2026",
       ttdAn: "",
       ttdJabatan: "Pengguna Anggaran",
       ttdNama: "Hj. SITI AMINAH, MM",
@@ -687,18 +687,18 @@
         }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
         "Melaksanakan tugas ini dengan penuh tanggung jawab dan menyampaikan laporan selambat-lambatnya 7 (tujuh) hari setelah pelaksanaan tugas.",
         "Kepada instansi atau pejabat terkait dimohon bantuan demi kelancaran pelaksanaan tugas yang dimaksud."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "Tingkat B",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        tingkatBiaya: "",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
         tempatTujuan: "Kecamatan Tabir Barat",
-        lamaHari: "3 (Tiga) Hari",
+        lamaHari: "1 (Satu) Hari",
         tglBerangkat: "",
         tglKembali: "",
         instansiBeban: "BPPRD Kab. Merangin",
@@ -1705,7 +1705,7 @@
       document.querySelectorAll('.t-nomorPrefix').forEach(el => el.textContent = state.nomorPrefix || '094');
       document.querySelectorAll('.t-nomorUrut').forEach(el => el.textContent = state.nomorUrut ? ` ${state.nomorUrut} ` : '        ');
       document.querySelectorAll('.t-nomorKode').forEach(el => el.textContent = state.nomorKode || 'ST/ P3-BPPRD');
-      document.querySelectorAll('.t-nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2025');
+      document.querySelectorAll('.t-nomorTahun').forEach(el => el.textContent = state.nomorTahun || '2026');
 
       const elDasar = document.getElementById('t-dasar');
       if (elDasar) elDasar.textContent = state.dasar || '-';
@@ -1971,7 +1971,7 @@
                     <tr>
                       <td style="border: none; padding: 0;">Nomor</td>
                       <td style="border: none; padding: 0; text-align: center;">:</td>
-                      <td style="border: none; padding: 0; white-space: nowrap; font-size: 11pt; letter-spacing: -0.2px;">${state.nomorPrefix || '094'}/ ${state.nomorUrut || ''} /${state.nomorKode || 'ST/ P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
+                      <td style="border: none; padding: 0; white-space: nowrap; font-size: 11pt; letter-spacing: -0.2px;">${state.nomorPrefix || '094'}/ ${state.nomorUrut || ''} /${state.nomorKode || 'ST/ P3-BPPRD'}/${state.nomorTahun || '2026'}</td>
                     </tr>
                     <tr>
                       <td style="border: none; padding: 0;">Tanggal</td>
