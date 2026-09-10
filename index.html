@@ -688,18 +688,18 @@
         { nama: "", nip: "", pangkat: "", jabatan: "" }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
         "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 1 (Satu) Hari.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "Tingkat B",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
+        tingkatBiaya: "",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Tabir Barat",
+        tempatTujuan: "Kecamatan Bangko",
         lamaHari: "1 (Satu) Hari",
         tglBerangkat: "09 September 2026",
         tglKembali: "09 September 2026",
@@ -1719,7 +1719,7 @@
     }
 
     function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Tabir Barat';
+      const t = teks || 'Kecamatan Bangko';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
       let lineHeight = '1.2';
@@ -1954,7 +1954,7 @@
                 <td>
                   <div>a. Lama Perjalanan Dinas</div>
                   <div>b. Tanggal Berangkat</div>
-                  <div style="font-size: 10.5pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
+                  <div style="font-size: 11pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
                 </td>
                 <td>
                   <div>a. ${state.spd.lamaHari || '-'}</div>
