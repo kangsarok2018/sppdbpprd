@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Surat Tugas & SPD - BPPRD Merangin</title>
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Font Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -63,7 +61,7 @@
       line-height: 1.3;
     }
 
-    /* Kelas Khusus Tabel Dalam / Tata Letak Tanpa Garis Kotak */
+    /* Tabel Dalam / Tata Letak Tanpa Garis Kotak */
     .no-border-table, 
     .no-border-table tr, 
     .no-border-table td, 
@@ -165,7 +163,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- ================= NAVBAR ATAS ================= -->
   <header class="bg-blue-900 text-white shadow-md no-print sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
@@ -207,7 +204,6 @@
   <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- KOLOM KIRI: FORM EDITOR -->
       <div class="lg:col-span-5 space-y-4 no-print">
 
         <!-- TAB NAVIGASI FORM (STICKY) -->
@@ -444,7 +440,6 @@
 
       </div>
 
-      <!-- FORM MASTER DATA (TERPISAH: PEGAWAI & PEJABAT) -->
       <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
           <div class="flex items-center justify-between border-b pb-2 mb-3">
@@ -507,7 +502,6 @@
         </div>
       </div>
 
-      <!-- KOLOM KANAN: PRATINJAU DOKUMEN -->
       <div class="lg:col-span-7">
         <div class="relative">
 
@@ -649,7 +643,6 @@
     <span id="toast-text">Notifikasi</span>
   </div>
 
-  <!-- ================= JAVASCRIPT LENGKAP ================= -->
   <script>
     // Endpoint Firebase Terpisah: Pegawai & Pejabat
     const FIREBASE_BASE = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app";
@@ -817,6 +810,19 @@
           }
         }
 
+        // Sinkronkan data di form jika ada kecocokan nama dengan master terbaru
+        state.pegawai.forEach(p => {
+          if (!p.nama) return;
+          const cleanName = p.nama.trim().toUpperCase().split('(')[0].trim();
+          const found = masterPegawai.find(m => m.nama && (m.nama.trim().toUpperCase() === p.nama.trim().toUpperCase() || m.nama.trim().toUpperCase().startsWith(cleanName)));
+          if (found) {
+            p.nama = found.nama;
+            p.nip = found.nip;
+            p.pangkat = found.pangkat;
+            p.jabatan = found.jabatan;
+          }
+        });
+
         perbaruiStatusBadge('online');
       } catch (err) {
         console.warn("Gagal terhubung ke Firebase RTDB:", err);
@@ -827,6 +833,7 @@
       renderListMasterPejabat();
       renderFormPegawai();
       renderDropdownPejabatPenandatangan();
+      perbaruiPratinjau();
     }
 
     async function simpanMasterPegawaiCloud(list) {
@@ -1009,17 +1016,39 @@
         return;
       }
 
-      masterPegawai[idx] = {
+      const oldPegawai = masterPegawai[idx];
+      const oldNama = oldPegawai ? oldPegawai.nama : "";
+
+      const updatedPegawai = {
         nama: namaEl.value.trim(),
         nip: nipEl ? nipEl.value.trim() : "-",
         pangkat: pangkatEl ? pangkatEl.value.trim() : "-",
         jabatan: jabatanEl ? jabatanEl.value.trim() : "-"
       };
 
+      masterPegawai[idx] = updatedPegawai;
+
+      // Otomatis sinkronkan ke form aktif jika pegawai ini sedang terpasang di Form ST
+      state.pegawai.forEach((p) => {
+        if (!p.nama) return;
+        const pClean = p.nama.trim().toUpperCase().split('(')[0].trim();
+        const oldClean = oldNama.trim().toUpperCase().split('(')[0].trim();
+        const updatedClean = updatedPegawai.nama.trim().toUpperCase().split('(')[0].trim();
+
+        if (pClean === oldClean || pClean === updatedClean || p.nama.trim().toUpperCase() === oldNama.trim().toUpperCase()) {
+          p.nama = updatedPegawai.nama;
+          p.nip = updatedPegawai.nip;
+          p.pangkat = updatedPegawai.pangkat;
+          p.jabatan = updatedPegawai.jabatan;
+        }
+      });
+
       editPegawaiIdx = null;
       renderListMasterPegawai();
       renderFormPegawai();
-      tampilkanToast(`Menyimpan perubahan data ${masterPegawai[idx].nama}...`);
+      perbaruiPratinjau();
+
+      tampilkanToast(`Menyimpan perubahan data ${updatedPegawai.nama}...`);
       await simpanMasterPegawaiCloud(masterPegawai);
       tampilkanToast("Data pegawai berhasil diperbarui!");
     }
@@ -1155,7 +1184,10 @@
         return;
       }
 
-      masterPejabat[idx] = {
+      const oldPejabat = masterPejabat[idx];
+      const oldNama = oldPejabat ? oldPejabat.nama : "";
+
+      const updatedPejabat = {
         kewenangan: kewenanganEl ? kewenanganEl.value.trim() : "An. KEPALA BPPRD",
         jabatan: jabatanEl ? jabatanEl.value.trim() : "-",
         nama: namaEl.value.trim(),
@@ -1163,10 +1195,29 @@
         nip: nipEl ? nipEl.value.trim() : "-"
       };
 
+      masterPejabat[idx] = updatedPejabat;
+
+      // Otomatis sinkronkan penandatangan jika pejabat ini sedang terpilih di form
+      if (state.ttdNama && (state.ttdNama.trim().toUpperCase() === oldNama.trim().toUpperCase() || state.ttdNama.trim().toUpperCase() === updatedPejabat.nama.trim().toUpperCase())) {
+        state.ttdAn = updatedPejabat.kewenangan;
+        state.ttdJabatan = updatedPejabat.jabatan;
+        state.ttdNama = updatedPejabat.nama;
+        state.ttdPangkat = updatedPejabat.pangkat;
+        state.ttdNip = updatedPejabat.nip;
+
+        if (document.getElementById('f_ttdAn')) document.getElementById('f_ttdAn').value = state.ttdAn;
+        if (document.getElementById('f_ttdJabatan')) document.getElementById('f_ttdJabatan').value = state.ttdJabatan;
+        if (document.getElementById('f_ttdNama')) document.getElementById('f_ttdNama').value = state.ttdNama;
+        if (document.getElementById('f_ttdPangkat')) document.getElementById('f_ttdPangkat').value = state.ttdPangkat;
+        if (document.getElementById('f_ttdNip')) document.getElementById('f_ttdNip').value = state.ttdNip;
+      }
+
       editPejabatIdx = null;
       renderListMasterPejabat();
       renderDropdownPejabatPenandatangan();
-      tampilkanToast(`Menyimpan perubahan pejabat ${masterPejabat[idx].nama}...`);
+      perbaruiPratinjau();
+
+      tampilkanToast(`Menyimpan perubahan pejabat ${updatedPejabat.nama}...`);
       await simpanMasterPejabatCloud(masterPejabat);
       tampilkanToast("Data pejabat berhasil diperbarui!");
     }
@@ -1229,8 +1280,11 @@
 
         let opsiDropdown = '<option value="">-- Pilih dari Database Pegawai --</option>';
         masterPegawai.forEach((m, mIdx) => {
-          const terpilih = (m.nama.trim().toUpperCase() === (p.nama || '').trim().toUpperCase()) ? 'selected' : '';
-          opsiDropdown += `<option value="${mIdx}" ${terpilih}>${m.nama} (${m.pangkat || '-'})</option>`;
+          const pNameClean = (p.nama || '').trim().toUpperCase().split('(')[0].trim();
+          const mNameClean = (m.nama || '').trim().toUpperCase().split('(')[0].trim();
+          
+          const isSelected = (pNameClean !== '' && pNameClean === mNameClean);
+          opsiDropdown += `<option value="${mIdx}" ${isSelected ? 'selected' : ''}>${m.nama} (${m.pangkat || '-'})</option>`;
         });
 
         card.innerHTML = `
