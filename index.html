@@ -917,6 +917,8 @@
     }
 
     // ================= PENGELOLAAN MASTER PEGAWAI =================
+    let editPegawaiIdx = null;
+
     function renderListMasterPegawai() {
       const container = document.getElementById('list-master-pegawai');
       if (!container) return;
@@ -929,19 +931,97 @@
 
       masterPegawai.forEach((m, idx) => {
         const item = document.createElement('div');
-        item.className = 'p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs hover:border-slate-300 transition';
-        item.innerHTML = `
-          <div>
-            <div class="font-bold text-slate-900">${m.nama}</div>
-            <div class="text-[11px] text-slate-500">${m.pangkat} | NIP. ${m.nip}</div>
-            <div class="text-[11px] text-slate-600 mt-0.5">${m.jabatan}</div>
-          </div>
-          <button type="button" onclick="hapusMasterPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1">
-            Hapus
-          </button>
-        `;
+        
+        if (editPegawaiIdx === idx) {
+          item.className = 'p-3 bg-blue-50 border border-blue-300 rounded-lg space-y-2 text-xs shadow-sm';
+          item.innerHTML = `
+            <div class="font-bold text-blue-900 border-b border-blue-200 pb-1 mb-1 flex justify-between items-center">
+              <span>Edit Data Pegawai</span>
+              <span class="text-[10px] text-blue-600 font-normal">#${idx + 1}</span>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Nama & Gelar</label>
+              <input type="text" id="edit_p_nama_${idx}" class="form-input text-xs font-bold" value="${m.nama || ''}">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">NIP</label>
+                <input type="text" id="edit_p_nip_${idx}" class="form-input text-xs" value="${m.nip || ''}">
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Pangkat / Golongan</label>
+                <input type="text" id="edit_p_pangkat_${idx}" class="form-input text-xs" value="${m.pangkat || ''}">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jabatan</label>
+              <textarea id="edit_p_jabatan_${idx}" rows="2" class="form-input text-xs">${m.jabatan || ''}</textarea>
+            </div>
+            <div class="flex justify-end gap-1.5 pt-1">
+              <button type="button" onclick="batalEditMasterPegawai()" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded text-[11px]">
+                Batal
+              </button>
+              <button type="button" onclick="simpanEditMasterPegawai(${idx})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded text-[11px]">
+                Simpan
+              </button>
+            </div>
+          `;
+        } else {
+          item.className = 'p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs hover:border-slate-300 transition';
+          item.innerHTML = `
+            <div class="flex-1 pr-2">
+              <div class="font-bold text-slate-900">${m.nama}</div>
+              <div class="text-[11px] text-slate-500">${m.pangkat || '-'} | NIP. ${m.nip || '-'}</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">${m.jabatan || '-'}</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="editMasterPegawai(${idx})" class="text-blue-600 hover:text-blue-800 text-[11px] font-semibold px-2 py-1 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition">
+                Edit
+              </button>
+              <button type="button" onclick="hapusMasterPegawai(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1 bg-rose-50 hover:bg-rose-100 rounded border border-rose-200 transition">
+                Hapus
+              </button>
+            </div>
+          `;
+        }
         container.appendChild(item);
       });
+    }
+
+    function editMasterPegawai(idx) {
+      editPegawaiIdx = idx;
+      renderListMasterPegawai();
+    }
+
+    function batalEditMasterPegawai() {
+      editPegawaiIdx = null;
+      renderListMasterPegawai();
+    }
+
+    async function simpanEditMasterPegawai(idx) {
+      const namaEl = document.getElementById(`edit_p_nama_${idx}`);
+      const nipEl = document.getElementById(`edit_p_nip_${idx}`);
+      const pangkatEl = document.getElementById(`edit_p_pangkat_${idx}`);
+      const jabatanEl = document.getElementById(`edit_p_jabatan_${idx}`);
+
+      if (!namaEl || !namaEl.value.trim()) {
+        tampilkanToast("Nama pegawai tidak boleh kosong");
+        return;
+      }
+
+      masterPegawai[idx] = {
+        nama: namaEl.value.trim(),
+        nip: nipEl ? nipEl.value.trim() : "-",
+        pangkat: pangkatEl ? pangkatEl.value.trim() : "-",
+        jabatan: jabatanEl ? jabatanEl.value.trim() : "-"
+      };
+
+      editPegawaiIdx = null;
+      renderListMasterPegawai();
+      renderFormPegawai();
+      tampilkanToast(`Menyimpan perubahan data ${masterPegawai[idx].nama}...`);
+      await simpanMasterPegawaiCloud(masterPegawai);
+      tampilkanToast("Data pegawai berhasil diperbarui!");
     }
 
     async function tambahMasterPegawaiModal() {
@@ -976,6 +1056,8 @@
     }
 
     // ================= PENGELOLAAN MASTER PEJABAT =================
+    let editPejabatIdx = null;
+
     function renderListMasterPejabat() {
       const container = document.getElementById('list-master-pejabat');
       if (!container) return;
@@ -988,19 +1070,105 @@
 
       masterPejabat.forEach((m, idx) => {
         const item = document.createElement('div');
-        item.className = 'p-2.5 bg-blue-50/50 border border-blue-200 rounded-lg flex items-center justify-between text-xs hover:border-blue-300 transition';
-        item.innerHTML = `
-          <div>
-            <div class="font-bold text-blue-950">${m.nama}</div>
-            <div class="text-[11px] text-blue-800 font-semibold">${m.kewenangan || 'An. KEPALA BPPRD'} - ${m.jabatan}</div>
-            <div class="text-[11px] text-slate-500">${m.pangkat} | NIP. ${m.nip}</div>
-          </div>
-          <button type="button" onclick="hapusMasterPejabat(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1">
-            Hapus
-          </button>
-        `;
+        
+        if (editPejabatIdx === idx) {
+          item.className = 'p-3 bg-blue-50 border border-blue-300 rounded-lg space-y-2 text-xs shadow-sm';
+          item.innerHTML = `
+            <div class="font-bold text-blue-900 border-b border-blue-200 pb-1 mb-1 flex justify-between items-center">
+              <span>Edit Data Pejabat</span>
+              <span class="text-[10px] text-blue-600 font-normal">#${idx + 1}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Kewenangan / An.</label>
+                <input type="text" id="edit_j_kewenangan_${idx}" class="form-input text-xs font-bold" value="${m.kewenangan || 'An. KEPALA BPPRD'}">
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jabatan Struktural</label>
+                <input type="text" id="edit_j_jabatan_${idx}" class="form-input text-xs font-semibold" value="${m.jabatan || ''}">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Nama & Gelar Pejabat</label>
+              <input type="text" id="edit_j_nama_${idx}" class="form-input text-xs font-bold" value="${m.nama || ''}">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">NIP</label>
+                <input type="text" id="edit_j_nip_${idx}" class="form-input text-xs" value="${m.nip || ''}">
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Pangkat / Golongan</label>
+                <input type="text" id="edit_j_pangkat_${idx}" class="form-input text-xs" value="${m.pangkat || ''}">
+              </div>
+            </div>
+            <div class="flex justify-end gap-1.5 pt-1">
+              <button type="button" onclick="batalEditMasterPejabat()" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded text-[11px]">
+                Batal
+              </button>
+              <button type="button" onclick="simpanEditMasterPejabat(${idx})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded text-[11px]">
+                Simpan
+              </button>
+            </div>
+          `;
+        } else {
+          item.className = 'p-2.5 bg-blue-50/50 border border-blue-200 rounded-lg flex items-center justify-between text-xs hover:border-blue-300 transition';
+          item.innerHTML = `
+            <div class="flex-1 pr-2">
+              <div class="font-bold text-blue-950">${m.nama}</div>
+              <div class="text-[11px] text-blue-800 font-semibold">${m.kewenangan || 'An. KEPALA BPPRD'} - ${m.jabatan}</div>
+              <div class="text-[11px] text-slate-500">${m.pangkat || '-'} | NIP. ${m.nip || '-'}</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="editMasterPejabat(${idx})" class="text-blue-600 hover:text-blue-800 text-[11px] font-semibold px-2 py-1 bg-white hover:bg-blue-100 rounded border border-blue-200 transition">
+                Edit
+              </button>
+              <button type="button" onclick="hapusMasterPejabat(${idx})" class="text-rose-600 hover:text-rose-800 text-[11px] font-semibold px-2 py-1 bg-rose-50 hover:bg-rose-100 rounded border border-rose-200 transition">
+                Hapus
+              </button>
+            </div>
+          `;
+        }
         container.appendChild(item);
       });
+    }
+
+    function editMasterPejabat(idx) {
+      editPejabatIdx = idx;
+      renderListMasterPejabat();
+    }
+
+    function batalEditMasterPejabat() {
+      editPejabatIdx = null;
+      renderListMasterPejabat();
+    }
+
+    async function simpanEditMasterPejabat(idx) {
+      const kewenanganEl = document.getElementById(`edit_j_kewenangan_${idx}`);
+      const jabatanEl = document.getElementById(`edit_j_jabatan_${idx}`);
+      const namaEl = document.getElementById(`edit_j_nama_${idx}`);
+      const nipEl = document.getElementById(`edit_j_nip_${idx}`);
+      const pangkatEl = document.getElementById(`edit_j_pangkat_${idx}`);
+
+      if (!namaEl || !namaEl.value.trim()) {
+        tampilkanToast("Nama pejabat tidak boleh kosong");
+        return;
+      }
+
+      masterPejabat[idx] = {
+        kewenangan: kewenanganEl ? kewenanganEl.value.trim() : "An. KEPALA BPPRD",
+        jabatan: jabatanEl ? jabatanEl.value.trim() : "-",
+        nama: namaEl.value.trim(),
+        pangkat: pangkatEl ? pangkatEl.value.trim() : "-",
+        nip: nipEl ? nipEl.value.trim() : "-"
+      };
+
+      editPejabatIdx = null;
+      renderListMasterPejabat();
+      renderDropdownPejabatPenandatangan();
+      tampilkanToast(`Menyimpan perubahan pejabat ${masterPejabat[idx].nama}...`);
+      await simpanMasterPejabatCloud(masterPejabat);
+      tampilkanToast("Data pejabat berhasil diperbarui!");
     }
 
     async function tambahMasterPejabatModal() {
