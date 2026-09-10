@@ -362,8 +362,11 @@
                   <input type="text" id="f_spdTempatBerangkat" class="form-input" oninput="ubahDataSpd('tempatBerangkat', this.value)">
                 </div>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-1">6.b. Tempat Tujuan</label>
-                  <input type="text" id="f_spdTempatTujuan" class="form-input" oninput="ubahDataSpd('tempatTujuan', this.value)">
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-1 flex items-center justify-between">
+                    <span>6.b. Tempat Tujuan</span>
+                    <span class="text-[9px] bg-blue-100 text-blue-800 font-bold px-1 rounded border border-blue-200">Sinkron ke ST</span>
+                  </label>
+                  <input type="text" id="f_spdTempatTujuan" class="form-input border-blue-300 focus:border-blue-600 font-semibold text-blue-950" placeholder="Kecamatan Pamenang Selatan" oninput="ubahDataSpd('tempatTujuan', this.value)">
                 </div>
               </div>
 
@@ -685,18 +688,18 @@
         { nama: "", nip: "", pangkat: "", jabatan: "" }
       ],
       instruksi: [
-        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 1 (Satu) Hari.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
       spd: {
         pejabatPemberi: "KEPALA BPPRD KAB.MERANGIN",
-        tingkatBiaya: "",
-        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Kecamatan Bangko Kabupaten Merangin.",
+        tingkatBiaya: "Tingkat B",
+        maksud: "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
         alatAngkut: "Kendaraan Roda Dua",
         tempatBerangkat: "Bangko",
-        tempatTujuan: "Kecamatan Bangko",
+        tempatTujuan: "Kecamatan Tabir Barat",
         lamaHari: "1 (Satu) Hari",
         tglBerangkat: "09 September 2026",
         tglKembali: "09 September 2026",
@@ -717,7 +720,7 @@
 
     let state = JSON.parse(JSON.stringify(dataDefault));
 
-    // 1. DATABASE MASTER PEGAWAI BAWAAN
+    // DATABASE MASTER PEGAWAI BAWAAN
     const masterPegawaiDefault = [
       {
         nama: "MUHAMMAD FUAD, S.Si",
@@ -733,7 +736,7 @@
       }
     ];
 
-    // 2. DATABASE MASTER PEJABAT BAWAAN
+    // DATABASE MASTER PEJABAT BAWAAN
     const masterPejabatDefault = [
       {
         kewenangan: "An. KEPALA BPPRD",
@@ -768,6 +771,63 @@
     let masterPegawai = [...masterPegawaiDefault];
     let masterPejabat = [...masterPejabatDefault];
 
+    // Synchronize Tempat Tujuan (6.b) to Poin Tugas 1 (Form ST) & Maksud SPD
+    function sinkronkanTempatTujuanKeInstruksi(newTujuan) {
+      if (!newTujuan || !newTujuan.trim()) return;
+
+      let currentInst = state.instruksi[0] || '';
+      const cleanTujuan = newTujuan.trim();
+
+      if (currentInst.includes(" di ")) {
+        const diIndex = currentInst.indexOf(" di ");
+        const prefix = currentInst.substring(0, diIndex + 4); // Misal: "Melaksanakan Kegiatan Pendataan Pajak Daerah di "
+        
+        // Periksa apakah teks berakhiran " Kabupaten Merangin."
+        if (currentInst.toLowerCase().includes("kabupaten merangin")) {
+          const kabIdx = currentInst.toLowerCase().lastIndexOf("kabupaten merangin");
+          state.instruksi[0] = prefix + cleanTujuan + " " + currentInst.substring(kabIdx);
+        } else {
+          state.instruksi[0] = prefix + cleanTujuan + ".";
+        }
+      } else if (!currentInst.trim()) {
+        state.instruksi[0] = `Melaksanakan Kegiatan Pendataan Pajak Daerah di ${cleanTujuan} Kabupaten Merangin.`;
+      } else {
+        state.instruksi[0] = `${currentInst.trim()} di ${cleanTujuan}.`;
+      }
+
+      state.spd.maksud = state.instruksi[0];
+
+      const fSpdMaksud = document.getElementById('f_spdMaksud');
+      if (fSpdMaksud) fSpdMaksud.value = state.spd.maksud;
+
+      renderFormInstruksi();
+    }
+
+    // Extract Tempat Tujuan from Poin Tugas 1 when user types in ST Form
+    function extraksiDanSinkronkanTujuan(teks) {
+      if (!teks) return;
+
+      let extracted = "";
+      
+      // Pattern 1: Match "Kecamatan [Nama]"
+      const matchKec = teks.match(/(Kecamatan\s+[A-Za-z\s]+?)(?=\s+Kabupaten|\s+Kab|\.|$)/i);
+      if (matchKec && matchKec[1]) {
+        extracted = matchKec[1].trim();
+      } else if (teks.includes(" di ")) {
+        // Pattern 2: Extract text after " di "
+        const parts = teks.split(/\s+di\s+/i);
+        if (parts.length > 1) {
+          extracted = parts[1].split(/(Kabupaten|Kab|\.)/i)[0].trim();
+        }
+      }
+
+      if (extracted) {
+        state.spd.tempatTujuan = extracted;
+        const fTujuan = document.getElementById('f_spdTempatTujuan');
+        if (fTujuan) fTujuan.value = extracted;
+      }
+    }
+
     function perbaruiPoin2Otomatis() {
       const tglBerangkat = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
       const tglKembali = state.spd.tglKembali && state.spd.tglKembali.trim() !== '' ? state.spd.tglKembali : '[Tanggal Kembali]';
@@ -776,7 +836,6 @@
       const matchAngka = lama.match(/\d+/);
       const durasi = matchAngka ? parseInt(matchAngka[0], 10) : null;
 
-      // Jika durasi 1 hari, format hanya tanggal berangkat saja tanpa s/d
       if (durasi === 1 || (state.spd.tglBerangkat && state.spd.tglKembali && state.spd.tglBerangkat.trim().toLowerCase() === state.spd.tglKembali.trim().toLowerCase())) {
         state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tglBerangkat} selama ${lama}.`;
       } else {
@@ -1555,11 +1614,17 @@
 
     function ubahDataSpd(key, value) {
       state.spd[key] = value;
+      
+      // Sinkronkan otomatis jika Tempat Tujuan (6.b) diubah oleh pengguna
+      if (key === 'tempatTujuan') {
+        sinkronkanTempatTujuanKeInstruksi(value);
+      }
+
       if (key === 'tglBerangkat' || key === 'lamaHari' || key === 'tglKembali') {
         perbaruiPoin2Otomatis();
       }
-      renderLembarSpd();
-      renderLembarSpdBelakang();
+      
+      perbaruiPratinjau();
     }
 
     function ubahInstruksi(idx, value) {
@@ -1568,6 +1633,9 @@
         state.spd.maksud = value;
         const fSpdMaksud = document.getElementById('f_spdMaksud');
         if (fSpdMaksud) fSpdMaksud.value = value;
+
+        // Ekstrak nama lokasi/Kecamatan ke Tempat Tujuan SPD (6.b) jika relevan
+        extraksiDanSinkronkanTujuan(value);
       }
       perbaruiPratinjau();
     }
@@ -1651,7 +1719,7 @@
     }
 
     function formatTempatTujuanHtml(teks) {
-      const t = teks || 'Kecamatan Bangko';
+      const t = teks || 'Kecamatan Tabir Barat';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
       if (t.length > 26) {
@@ -1880,7 +1948,7 @@
                 <td>
                   <div>a. Lama Perjalanan Dinas</div>
                   <div>b. Tanggal Berangkat</div>
-                  <div style="font-size: 11pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
+                  <div style="font-size: 10.5pt; letter-spacing: -0.25px; white-space: nowrap;">c. Tanggal harus kembali/tiba tempat baru</div>
                 </td>
                 <td>
                   <div>a. ${state.spd.lamaHari || '-'}</div>
