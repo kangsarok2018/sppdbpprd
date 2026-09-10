@@ -274,6 +274,60 @@
             </div>
             <div id="form-instruksi-list" class="space-y-2"></div>
           </div>
+
+          <!-- PENANDATANGAN & PENGESAHAN (DIKELOMPOKKAN HANYA DI FORM SURAT TUGAS) -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+            <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
+              <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">4</span>
+              Penandatangan & Pengesahan
+            </h2>
+
+            <div class="mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+              <label class="block text-[11px] font-bold text-blue-900 uppercase tracking-wider mb-1 flex items-center gap-1">
+                <span>PILIH PEJABAT PENANDATANGAN:</span>
+              </label>
+              <!-- Dropdown Penandatangan: HANYA MENAMPILKAN PEJABAT -->
+              <select id="f_pilihPejabat" onchange="pilihPejabatOtomatis(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
+                <option value="">-- Pilih Pejabat Penandatangan --</option>
+                <option value="pa">Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
+                <optgroup id="optgroup-pejabat-firebase" label="Daftar Pejabat Struktural BPPRD">
+                  <!-- Otomatis diisi dari database pejabat -->
+                </optgroup>
+                <option value="manual">Lainnya / Ketik Manual</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Dikeluarkan di</label>
+                <input type="text" id="f_ttdTempat" class="form-input" oninput="ubahData('ttdTempat', this.value)">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Bulan & Tahun (Tanggal Manual)</label>
+                <input type="text" id="f_ttdTanggal" class="form-input" placeholder="Februari 2025" oninput="ubahData('ttdTanggal', this.value)">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Kewenangan / An. (Kosongkan jika Pengguna Anggaran)</label>
+                <input type="text" id="f_ttdAn" class="form-input font-bold" placeholder="Contoh: An. KEPALA BPPRD" oninput="ubahData('ttdAn', this.value)">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Jabatan Penandatangan</label>
+                <input type="text" id="f_ttdJabatan" class="form-input font-semibold mb-1" placeholder="Contoh: Kabid Penagihan dan Penghapusan" oninput="ubahData('ttdJabatan', this.value)">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Nama Pejabat</label>
+                <input type="text" id="f_ttdNama" class="form-input font-bold" oninput="ubahData('ttdNama', this.value)">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">Pangkat / Golongan</label>
+                <input type="text" id="f_ttdPangkat" class="form-input" oninput="ubahData('ttdPangkat', this.value)">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-1">NIP Pejabat</label>
+                <input type="text" id="f_ttdNip" class="form-input" oninput="ubahData('ttdNip', this.value)">
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- FORM SPD TAMBAHAN -->
@@ -384,8 +438,8 @@
           </div>
         </div>
 
-        <!-- PENANDATANGAN -->
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <!-- FORM MASTER DATA -->
+        <div id="form-master-group" class="lg:col-span-5 space-y-4 no-print hidden">
           <h2 class="text-xs font-bold text-slate-900 border-b pb-2 mb-3 flex items-center gap-2 uppercase tracking-wide">
             <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs">4</span>
             Penandatangan & Pengesahan
