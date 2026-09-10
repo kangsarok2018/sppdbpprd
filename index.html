@@ -676,7 +676,7 @@
       ],
       instruksi: [
         "Melaksanakan Kegiatan Pendataan Pajak Daerah di Desa Muara Kibul Kecamatan Tabir Barat Kabupaten Merangin.",
-        "Tugas tersebut dilaksanakan tanggal 09 September 2026 selama 3 (Tiga) Hari.",
+        "Tugas tersebut dilaksanakan tanggal 09 September 2026 s/d 11 September 2026 selama 3 (Tiga) Hari.",
         "Surat Perintah Tugas ini diterbitkan untuk dilaksanakan dengan penuh Tanggung Jawab dan penerima tugas segera menyampaikan laporan paling lambat 7 (tujuh) Hari kerja setelah tugas dilaksanakan.",
         "Kepada instansi terkait, dimohon bantuan demi kelancaran pelaksanaan tugas."
       ],
@@ -759,9 +759,11 @@
     let masterPejabat = [...masterPejabatDefault];
 
     function perbaruiPoin2Otomatis() {
-      const tgl = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
+      const tglBerangkat = state.spd.tglBerangkat && state.spd.tglBerangkat.trim() !== '' ? state.spd.tglBerangkat : '[Tanggal Berangkat]';
+      const tglKembali = state.spd.tglKembali && state.spd.tglKembali.trim() !== '' ? state.spd.tglKembali : '[Tanggal Kembali]';
       const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
-      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tgl} selama ${lama}.`;
+      
+      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tglBerangkat} s/d ${tglKembali} selama ${lama}.`;
       renderFormInstruksi();
       perbaruiPratinjau();
     }
@@ -770,14 +772,21 @@
       const txtLama = state.spd.lamaHari || '';
       const txtBerangkat = state.spd.tglBerangkat || '';
 
-      perbaruiPoin2Otomatis();
-
-      if (!txtLama.trim() || !txtBerangkat.trim()) return;
+      if (!txtLama.trim() || !txtBerangkat.trim()) {
+        perbaruiPoin2Otomatis();
+        return;
+      }
 
       const matchAngka = txtLama.match(/\d+/);
-      if (!matchAngka) return;
+      if (!matchAngka) {
+        perbaruiPoin2Otomatis();
+        return;
+      }
       const durasiHari = parseInt(matchAngka[0], 10);
-      if (isNaN(durasiHari) || durasiHari < 1) return;
+      if (isNaN(durasiHari) || durasiHari < 1) {
+        perbaruiPoin2Otomatis();
+        return;
+      }
 
       let dateObj = null;
 
@@ -798,22 +807,23 @@
         }
       }
 
-      if (!dateObj || isNaN(dateObj.getTime())) return;
+      if (dateObj && !isNaN(dateObj.getTime())) {
+        const dateKembali = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate() + (durasiHari - 1));
 
-      const dateKembali = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate() + (durasiHari - 1));
+        const dayFormatted = String(dateKembali.getDate()).padStart(2, '0');
+        const monthFormatted = BULAN_INDO[dateKembali.getMonth()];
+        const yearFormatted = dateKembali.getFullYear();
 
-      const dayFormatted = String(dateKembali.getDate()).padStart(2, '0');
-      const monthFormatted = BULAN_INDO[dateKembali.getMonth()];
-      const yearFormatted = dateKembali.getFullYear();
+        const strKembaliHasil = `${dayFormatted} ${monthFormatted} ${yearFormatted}`;
 
-      const strKembaliHasil = `${dayFormatted} ${monthFormatted} ${yearFormatted}`;
-
-      state.spd.tglKembali = strKembaliHasil;
-      const elKembali = document.getElementById('f_spdTglKembali');
-      if (elKembali) {
-        elKembali.value = strKembaliHasil;
+        state.spd.tglKembali = strKembaliHasil;
+        const elKembali = document.getElementById('f_spdTglKembali');
+        if (elKembali) {
+          elKembali.value = strKembaliHasil;
+        }
       }
 
+      perbaruiPoin2Otomatis();
       renderLembarSpd();
       renderLembarSpdBelakang();
     }
@@ -1526,7 +1536,7 @@
 
     function ubahDataSpd(key, value) {
       state.spd[key] = value;
-      if (key === 'tglBerangkat' || key === 'lamaHari') {
+      if (key === 'tglBerangkat' || key === 'lamaHari' || key === 'tglKembali') {
         perbaruiPoin2Otomatis();
       }
       renderLembarSpd();
