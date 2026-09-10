@@ -1722,16 +1722,22 @@
       const t = teks || 'Kecamatan Tabir Barat';
       let fontSize = '11.5pt';
       let letterSpacing = 'normal';
-      if (t.length > 26) {
-        fontSize = '9.5pt';
+      let lineHeight = '1.2';
+
+      if (t.length > 32) {
+        fontSize = '8.5pt';
+        letterSpacing = '-0.4px';
+        lineHeight = '1.05';
+      } else if (t.length > 24) {
+        fontSize = '9pt';
         letterSpacing = '-0.3px';
-      } else if (t.length > 21) {
-        fontSize = '10.5pt';
+        lineHeight = '1.1';
+      } else if (t.length > 18) {
+        fontSize = '10pt';
         letterSpacing = '-0.2px';
-      } else if (t.length > 17) {
-        fontSize = '11pt';
+        lineHeight = '1.15';
       }
-      return `<span style="font-size: ${fontSize}; letter-spacing: ${letterSpacing}; white-space: nowrap; display: inline-block; vertical-align: top; max-width: 100%; overflow: hidden; text-overflow: ellipsis;">${t}</span>`;
+      return `<span style="font-size: ${fontSize}; letter-spacing: ${letterSpacing}; line-height: ${lineHeight}; white-space: normal; word-break: break-word; display: inline-block; vertical-align: top; max-width: 100%;">${t}</span>`;
     }
 
     function perbaruiPratinjau() {
