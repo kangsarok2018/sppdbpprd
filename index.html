@@ -416,21 +416,23 @@
                 <div class="space-y-2">
                   <div>
                     <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Nama PPTK</label>
-                    <input type="text" id="f_pptkNama" class="form-input text-xs font-bold" oninput="ubahPptk('nama', this.value)">
+                    <select id="f_pilihPptk" onchange="pilihPptkDariDropdown(this.value)" class="form-input text-xs font-bold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
+                      <option value="">-- Pilih PPTK dari Master Pejabat --</option>
+                    </select>
                   </div>
                   <div class="grid grid-cols-2 gap-2">
                     <div>
                       <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">NIP PPTK</label>
-                      <input type="text" id="f_pptkNip" class="form-input text-xs" oninput="ubahPptk('nip', this.value)">
+                      <input type="text" id="f_pptkNip" class="form-input text-xs bg-slate-100 text-slate-600 border-slate-200 cursor-not-allowed" readonly>
                     </div>
                     <div>
                       <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Pangkat / Golongan</label>
-                      <input type="text" id="f_pptkPangkat" class="form-input text-xs" oninput="ubahPptk('pangkat', this.value)">
+                      <input type="text" id="f_pptkPangkat" class="form-input text-xs bg-slate-100 text-slate-600 border-slate-200 cursor-not-allowed" readonly>
                     </div>
                   </div>
                   <div>
                     <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Jabatan PPTK</label>
-                    <input type="text" id="f_pptkJabatan" class="form-input text-xs" oninput="ubahPptk('jabatan', this.value)">
+                    <input type="text" id="f_pptkJabatan" class="form-input text-xs bg-slate-100 text-slate-600 border-slate-200 cursor-not-allowed" readonly>
                   </div>
                 </div>
               </div>
@@ -1415,6 +1417,44 @@
         opt.textContent = `${pejabat.kewenangan || 'An. KEPALA'} - ${pejabat.jabatan} (${pejabat.nama})`;
         optgroup.appendChild(opt);
       });
+
+      renderDropdownPptk();
+    }
+
+    function renderDropdownPptk() {
+      const selectPptk = document.getElementById('f_pilihPptk');
+      if (!selectPptk) return;
+      selectPptk.innerHTML = '<option value="">-- Pilih PPTK dari Master Pejabat --</option>';
+
+      masterPejabat.forEach((pejabat, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        const isSelected = (state.pptk && state.pptk.nama && state.pptk.nama.trim().toUpperCase() === pejabat.nama.trim().toUpperCase());
+        opt.textContent = `${pejabat.nama} (${pejabat.jabatan})`;
+        if (isSelected) opt.selected = true;
+        selectPptk.appendChild(opt);
+      });
+
+      if (document.getElementById('f_pptkNip')) document.getElementById('f_pptkNip').value = state.pptk ? (state.pptk.nip || '-') : '-';
+      if (document.getElementById('f_pptkPangkat')) document.getElementById('f_pptkPangkat').value = state.pptk ? (state.pptk.pangkat || '-') : '-';
+      if (document.getElementById('f_pptkJabatan')) document.getElementById('f_pptkJabatan').value = state.pptk ? (state.pptk.jabatan || '-') : '-';
+    }
+
+    function pilihPptkDariDropdown(val) {
+      if (val === "" || !masterPejabat[val]) return;
+      const target = masterPejabat[val];
+      if (!state.pptk) state.pptk = {};
+      state.pptk.nama = target.nama;
+      state.pptk.nip = target.nip;
+      state.pptk.pangkat = target.pangkat;
+      state.pptk.jabatan = target.jabatan;
+
+      if (document.getElementById('f_pptkNip')) document.getElementById('f_pptkNip').value = target.nip || '-';
+      if (document.getElementById('f_pptkPangkat')) document.getElementById('f_pptkPangkat').value = target.pangkat || '-';
+      if (document.getElementById('f_pptkJabatan')) document.getElementById('f_pptkJabatan').value = target.jabatan || '-';
+
+      renderLembarSpdBelakang();
+      tampilkanToast(`PPTK dipilih: ${target.nama}`);
     }
 
     function pilihPejabatOtomatis(val) {
@@ -1647,18 +1687,12 @@
       document.getElementById('f_spdKodeNo').value = state.spd.kodeNo || '';
       document.getElementById('f_spdNomor').value = state.spd.nomor || '';
 
-      if (state.pptk) {
-        if (document.getElementById('f_pptkNama')) document.getElementById('f_pptkNama').value = state.pptk.nama || '';
-        if (document.getElementById('f_pptkNip')) document.getElementById('f_pptkNip').value = state.pptk.nip || '';
-        if (document.getElementById('f_pptkPangkat')) document.getElementById('f_pptkPangkat').value = state.pptk.pangkat || '';
-        if (document.getElementById('f_pptkJabatan')) document.getElementById('f_pptkJabatan').value = state.pptk.jabatan || '';
-      }
-
       document.getElementById('f_ttdTempat').value = state.ttdTempat || '';
       document.getElementById('f_ttdTanggal').value = state.ttdTanggal || '';
 
       renderFormPegawai();
       renderFormInstruksi();
+      renderDropdownPptk();
       perbaruiInfoPejabatRingkasan();
       perbaruiPratinjau();
 
