@@ -1817,11 +1817,16 @@
             <h1 class="text-[14pt] font-bold tracking-wider underline uppercase">SURAT PERJALANAN DINAS</h1>
           </div>
 
-          <table class="spd-box-table mt-2 text-[12pt]">
+          <table class="spd-box-table mt-2 text-[12pt]" style="table-layout: fixed; width: 100%;">
+            <colgroup>
+              <col style="width: 32px;">
+              <col style="width: calc((100% - 32px) / 2);">
+              <col style="width: calc((100% - 32px) / 2);">
+            </colgroup>
             <tbody>
               <tr>
-                <td style="width: 30px; text-align: center;">1.</td>
-                <td style="width: 240px;">Pejabat Yang Memberi Perintah</td>
+                <td style="text-align: center;">1.</td>
+                <td>Pejabat Yang Memberi Perintah</td>
                 <td class="font-bold uppercase">${state.spd.pejabatPemberi || 'KEPALA BPPRD KAB.MERANGIN'}</td>
               </tr>
               <tr>
@@ -1882,10 +1887,15 @@
               <tr>
                 <td style="text-align: center;">8.</td>
                 <td style="padding: 0;" colspan="2">
-                  <table style="width: 100%; border-collapse: collapse; border: none;" class="text-[12pt]">
+                  <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;" class="text-[12pt]">
+                    <colgroup>
+                      <col style="width: 50%;">
+                      <col style="width: 25%;">
+                      <col style="width: 25%;">
+                    </colgroup>
                     <tr>
-                      <td style="border: none; border-right: 1px solid #000000; width: 240px; padding: 4px 7px;">Pengikut : Nama</td>
-                      <td style="border: none; border-right: 1px solid #000000; width: 150px; text-align: center; padding: 4px 7px;">Tanggal Lahir</td>
+                      <td style="border: none; border-right: 1px solid #000000; padding: 4px 7px;">Pengikut : Nama</td>
+                      <td style="border: none; border-right: 1px solid #000000; text-align: center; padding: 4px 7px;">Tanggal Lahir</td>
                       <td style="border: none; text-align: center; padding: 4px 7px;">Keterangan</td>
                     </tr>
                     <tr style="border-top: 1px solid #000000;">
@@ -1913,21 +1923,21 @@
                 <td style="text-align: center;">10.</td>
                 <td>Keterangan Lain</td>
                 <td>
-                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt] no-border-table">
+                  <table style="width: 100%; border-collapse: collapse; table-layout: fixed;" class="text-[12pt]">
                     <colgroup>
                       <col style="width: 65px;">
                       <col style="width: 14px;">
                       <col style="width: auto;">
                     </colgroup>
                     <tr>
-                      <td style="padding: 0;">Nomor</td>
-                      <td style="padding: 0; text-align: center;">:</td>
-                      <td style="padding: 0;">${state.nomorPrefix || '094'}/ &nbsp; ${state.nomorUrut || ''} &nbsp; /${state.nomorKode || 'P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
+                      <td style="border: none; padding: 0;">Nomor</td>
+                      <td style="border: none; padding: 0; text-align: center;">:</td>
+                      <td style="border: none; padding: 0;">${state.nomorPrefix || '094'}/ &nbsp; ${state.nomorUrut || ''} &nbsp; /${state.nomorKode || 'P3-BPPRD'}/${state.nomorTahun || '2025'}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 0;">Tanggal</td>
-                      <td style="padding: 0; text-align: center;">:</td>
-                      <td style="padding: 0;">${tglSpdFormatted}</td>
+                      <td style="border: none; padding: 0;">Tanggal</td>
+                      <td style="border: none; padding: 0; text-align: center;">:</td>
+                      <td style="border: none; padding: 0;">${tglSpdFormatted}</td>
                     </tr>
                   </table>
                 </td>
