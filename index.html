@@ -704,24 +704,23 @@
 
   <!-- MODAL KELOLA AKUN & HAK AKSES -->
   <div id="modal-kelola-akun" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="bg-blue-900 text-white p-4 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          <h3 class="font-bold text-sm">Pengaturan Akun & Hak Akses User</h3>
-        </div>
-        <button onclick="tutupModalKelolaAkun()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Header Modal -->
+      <div class="bg-white px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-base">Pengaturan Akun</h3>
+        <button onclick="tutupModalKelolaAkun()" class="text-slate-400 hover:text-slate-700 text-lg font-bold transition">✕</button>
       </div>
 
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex gap-2 text-xs font-bold">
-        <button id="tab-modal-profil" onclick="gantiTabModal('profil')" class="px-3 py-1.5 rounded-lg bg-blue-900 text-white shadow-sm">Profil Saya</button>
-        <button id="tab-modal-users" onclick="gantiTabModal('users')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200 flex items-center gap-1">
-          <span>Daftar Akun Pengguna</span>
-          <span id="badge-admin-only" class="text-[9px] bg-amber-200 text-amber-900 px-1 rounded font-bold">Admin Only</span>
+      <!-- Tab Navigasi Modal -->
+      <div class="px-5 bg-white border-b border-slate-200 flex gap-6 text-xs font-semibold">
+        <button id="tab-modal-profil" onclick="gantiTabModal('profil')" class="py-3 border-b-2 border-blue-600 text-blue-600 transition">Profil Saya</button>
+        <button id="tab-modal-users" onclick="gantiTabModal('users')" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5">
+          <span>Manajemen Pengguna</span>
         </button>
       </div>
 
-      <div class="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
+      <div class="p-5 overflow-y-auto space-y-4 flex-1 text-xs bg-slate-50/30">
         
         <!-- SUB TAB PROFIL SAYA -->
         <div id="modal-sec-profil" class="space-y-4">
@@ -781,14 +780,54 @@
 
         <!-- SUB TAB KELOLA AKUN USERS (ADMIN ONLY) -->
         <div id="modal-sec-users" class="space-y-4 hidden">
-          <div class="flex justify-between items-center border-b pb-2">
-            <span class="font-bold text-slate-800">Daftar Akun Pengguna Sistem:</span>
-            <button type="button" onclick="tambahAkunUserModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg shadow-sm transition">
-              + Tambah Akun Baru
-            </button>
-          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            
+            <!-- KOLOM KIRI: DAFTAR AKUN -->
+            <div class="md:col-span-5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <h4 class="font-bold text-slate-800 text-xs mb-3">Daftar Akun</h4>
+              <div id="modal-users-list" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                <!-- User cards rendered dynamically -->
+              </div>
+            </div>
 
-          <div id="modal-users-list" class="space-y-2 max-h-[300px] overflow-y-auto pr-1"></div>
+            <!-- KOLOM KANAN: FORM TAMBAH / EDIT AKUN -->
+            <div class="md:col-span-7 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+              <form id="form-user-account" onsubmit="simpanAkunUserSubmit(event)" class="space-y-3">
+                <div class="flex items-center justify-between border-b pb-2">
+                  <h4 id="form-user-title" class="font-bold text-blue-900 text-xs sm:text-sm">Tambah Akun Baru</h4>
+                  <button type="button" id="btn-cancel-user" onclick="resetFormUser()" class="hidden text-[11px] text-slate-500 hover:text-slate-800 font-semibold">Batal Edit</button>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">NIP (Nomor Induk Pegawai)</label>
+                  <input type="text" id="u_nip" required class="form-input text-xs" placeholder="cth: 198606042025211034">
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                  <input type="text" id="u_nama" required class="form-input text-xs" placeholder="Nama Lengkap Pegawai">
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Password</label>
+                  <input type="text" id="u_password" required class="form-input text-xs" placeholder="Set Password Sementara">
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Hak Akses (Role)</label>
+                  <select id="u_role" required class="form-input text-xs cursor-pointer bg-white font-medium">
+                    <option value="user">Pegawai (Staf Biasa)</option>
+                    <option value="admin">Administrator</option>
+                  </select>
+                </div>
+
+                <button type="submit" id="btn-save-user" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow transition mt-2">
+                  Simpan Akun
+                </button>
+              </form>
+            </div>
+
+          </div>
         </div>
 
       </div>
@@ -890,6 +929,7 @@
 
     let userAccounts = [...defaultUserAccounts];
     let currentUser = null;
+    let editingUserIndex = null;
 
     // 1. DATABASE MASTER PEGAWAI BAWAAN
     const masterPegawaiDefault = [
@@ -1318,8 +1358,8 @@
       const secUsers = document.getElementById('modal-sec-users');
 
       if (tab === 'profil') {
-        btnProfil.className = "px-3 py-1.5 rounded-lg bg-blue-900 text-white shadow-sm";
-        if (btnUsers) btnUsers.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200 flex items-center gap-1";
+        if (btnProfil) btnProfil.className = "py-3 border-b-2 border-blue-600 text-blue-600 font-bold transition";
+        if (btnUsers) btnUsers.className = "py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-semibold transition flex items-center gap-1.5";
         secProfil.classList.remove('hidden');
         secUsers.classList.add('hidden');
       } else {
@@ -1328,11 +1368,135 @@
           gantiTabModal('profil');
           return;
         }
-        btnUsers.className = "px-3 py-1.5 rounded-lg bg-blue-900 text-white shadow-sm flex items-center gap-1";
-        btnProfil.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-200";
+        if (btnUsers) btnUsers.className = "py-3 border-b-2 border-blue-600 text-blue-600 font-bold transition flex items-center gap-1.5";
+        if (btnProfil) btnProfil.className = "py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-semibold transition";
         secUsers.classList.remove('hidden');
         secProfil.classList.add('hidden');
+        resetFormUser();
         renderListUsersModal();
+      }
+    }
+
+    function resetFormUser() {
+      editingUserIndex = null;
+      const title = document.getElementById('form-user-title');
+      const btnCancel = document.getElementById('btn-cancel-user');
+      const form = document.getElementById('form-user-account');
+      if (title) title.textContent = "Tambah Akun Baru";
+      if (btnCancel) btnCancel.classList.add('hidden');
+      if (form) form.reset();
+      renderListUsersModal();
+    }
+
+    function renderListUsersModal() {
+      const container = document.getElementById('modal-users-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      userAccounts.forEach((u, idx) => {
+        const isEditing = editingUserIndex === idx;
+        const isSelf = u.nip === currentUser?.nip;
+
+        const card = document.createElement('div');
+        card.className = `p-3 bg-white border rounded-xl space-y-1 transition ${isEditing ? 'border-blue-500 ring-2 ring-blue-100 shadow-sm' : 'border-slate-200 hover:border-slate-300'}`;
+        
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-800 text-xs truncate">${u.nama}</div>
+              <div class="text-[11px] text-slate-500 truncate mt-0.5">
+                NIP: ${u.nip} |
+              </div>
+              <div class="text-[11px] font-bold ${u.role === 'admin' ? 'text-blue-600' : 'text-emerald-600'}">
+                ${u.role === 'admin' ? 'Admin' : 'Pegawai'}
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button type="button" onclick="editUserAccountModal(${idx})" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium px-2.5 py-1 rounded-lg border border-blue-200 transition">
+                Edit
+              </button>
+              ${!isSelf ? `
+                <button type="button" onclick="hapusUserAccountModal(${idx})" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium px-2.5 py-1 rounded-lg border border-rose-200 transition">
+                  Hapus
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function editUserAccountModal(idx) {
+      const target = userAccounts[idx];
+      if (!target) return;
+      editingUserIndex = idx;
+
+      document.getElementById('u_nip').value = target.nip || '';
+      document.getElementById('u_nama').value = target.nama || '';
+      document.getElementById('u_password').value = target.password || '';
+      document.getElementById('u_role').value = target.role || 'user';
+
+      document.getElementById('form-user-title').textContent = "Edit Akun";
+      document.getElementById('btn-cancel-user').classList.remove('hidden');
+      renderListUsersModal();
+    }
+
+    async function simpanAkunUserSubmit(e) {
+      e.preventDefault();
+      const nip = document.getElementById('u_nip').value.trim();
+      const nama = document.getElementById('u_nama').value.trim();
+      const password = document.getElementById('u_password').value.trim();
+      const role = document.getElementById('u_role').value;
+
+      if (!nip || !nama || !password) {
+        tampilkanToast("Semua bidang input wajib diisi!");
+        return;
+      }
+
+      if (editingUserIndex === null) {
+        // Tambah Akun Baru
+        const duplicate = userAccounts.find(u => u.nip === nip);
+        if (duplicate) {
+          tampilkanToast("NIP tersebut sudah terdaftar!");
+          return;
+        }
+        userAccounts.push({ nip, nama, password, role });
+        tampilkanToast(`Akun ${nama} berhasil ditambahkan!`);
+      } else {
+        // Update Akun
+        const oldNip = userAccounts[editingUserIndex].nip;
+        userAccounts[editingUserIndex] = { nip, nama, password, role };
+
+        if (oldNip === currentUser?.nip) {
+          currentUser = { ...currentUser, nip, nama, password, role };
+          sessionStorage.setItem('loginUserSession', JSON.stringify(currentUser));
+          terapkanHakAksesRole();
+        }
+        tampilkanToast(`Data akun ${nama} berhasil diperbarui!`);
+      }
+
+      resetFormUser();
+      await simpanUsersCloud(userAccounts);
+    }
+
+    async function hapusUserAccountModal(idx) {
+      const target = userAccounts[idx];
+      if (!target) return;
+      if (target.nip === currentUser?.nip) {
+        tampilkanToast("Anda tidak dapat menghapus akun Anda sendiri!");
+        return;
+      }
+      if (confirm(`Apakah Anda yakin ingin menghapus akun ${target.nama}?`)) {
+        userAccounts.splice(idx, 1);
+        if (editingUserIndex === idx) {
+          resetFormUser();
+        } else if (editingUserIndex > idx) {
+          editingUserIndex--;
+        }
+        renderListUsersModal();
+        await simpanUsersCloud(userAccounts);
+        tampilkanToast("Akun telah berhasil dihapus.");
       }
     }
 
