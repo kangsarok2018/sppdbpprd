@@ -763,7 +763,16 @@
       const tglKembali = state.spd.tglKembali && state.spd.tglKembali.trim() !== '' ? state.spd.tglKembali : '[Tanggal Kembali]';
       const lama = state.spd.lamaHari && state.spd.lamaHari.trim() !== '' ? state.spd.lamaHari : '[Lama Hari]';
       
-      state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tglBerangkat} s/d ${tglKembali} selama ${lama}.`;
+      const matchAngka = lama.match(/\d+/);
+      const durasi = matchAngka ? parseInt(matchAngka[0], 10) : null;
+
+      // Jika durasi 1 hari, format hanya tanggal berangkat saja tanpa s/d
+      if (durasi === 1 || (state.spd.tglBerangkat && state.spd.tglKembali && state.spd.tglBerangkat.trim().toLowerCase() === state.spd.tglKembali.trim().toLowerCase())) {
+        state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tglBerangkat} selama ${lama}.`;
+      } else {
+        state.instruksi[1] = `Tugas tersebut dilaksanakan tanggal ${tglBerangkat} s/d ${tglKembali} selama ${lama}.`;
+      }
+
       renderFormInstruksi();
       perbaruiPratinjau();
     }
