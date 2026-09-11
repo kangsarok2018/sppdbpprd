@@ -806,6 +806,7 @@
     const ENDPOINT_PEGAWAI = `${FIREBASE_BASE}/pegawai.json`;
     const ENDPOINT_PEJABAT = `${FIREBASE_BASE}/pejabat.json`;
     const ENDPOINT_USERS = `${FIREBASE_BASE}/users.json`;
+    const ENDPOINT_AKUN = `${FIREBASE_BASE}/akun.json`;
 
     const BULAN_INDO = [
       "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -922,15 +923,19 @@
 
     async function muatUsersCloud() {
       try {
-        const resp = await fetch(ENDPOINT_USERS);
-        if (resp.ok) {
-          const dataU = await resp.json();
-          if (dataU && typeof dataU === 'object' && Object.keys(dataU).length > 0) {
-            dbUsers = dataU;
-          } else {
-            await simpanUsersCloud(defaultUsers);
-            dbUsers = JSON.parse(JSON.stringify(defaultUsers));
-          }
+        let resp = await fetch(ENDPOINT_USERS);
+        let dataU = await resp.ok ? await resp.json() : null;
+        
+        if (!dataU || typeof dataU !== 'object' || Object.keys(dataU).length === 0) {
+          resp = await fetch(ENDPOINT_AKUN);
+          dataU = await resp.ok ? await resp.json() : null;
+        }
+
+        if (dataU && typeof dataU === 'object' && Object.keys(dataU).length > 0) {
+          dbUsers = dataU;
+        } else {
+          await simpanUsersCloud(defaultUsers);
+          dbUsers = JSON.parse(JSON.stringify(defaultUsers));
         }
       } catch (err) {
         console.warn("Gagal memuat users dari cloud, menggunakan default lokal", err);
@@ -939,12 +944,19 @@
 
     async function simpanUsersCloud(usersObj) {
       try {
-        const resp = await fetch(ENDPOINT_USERS, {
+        let resp = await fetch(ENDPOINT_USERS, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(usersObj)
         });
-        return resp.ok;
+        if (!resp.ok) {
+          await fetch(ENDPOINT_AKUN, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(usersObj)
+          });
+        }
+        return true;
       } catch (err) {
         return false;
       }
@@ -969,8 +981,8 @@
             overlay.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => overlay.classList.add('hidden'), 300);
             
-            document.getElementById('user-display-name').textContent = currentUser.name;
-            document.getElementById('user-display-role').textContent = currentUser.role;
+            document.getElementById('user-display-name').textContent = dbUsers[currentUser.username].name || currentUser.name;
+            document.getElementById('user-display-role').textContent = dbUsers[currentUser.username].role || currentUser.role;
             
             terapkanAturanRBAC();
         } else {
@@ -990,7 +1002,7 @@
         
         await muatUsersCloud();
 
-        if (dbUsers[user] && dbUsers[user].password === pass) {
+        if (dbUsers[user] && String(dbUsers[user].password) === String(pass)) {
             currentUser = { username: user, role: dbUsers[user].role, name: dbUsers[user].name };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             tampilkanToast(`Berhasil masuk sebagai ${currentUser.name}`);
