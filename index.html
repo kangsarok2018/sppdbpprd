@@ -911,7 +911,7 @@
     const defaultUsers = {
       '198606042025211034': { password: 'admin123', role: 'admin', name: 'Administrator BPPRD' },
       '199001012010011001': { password: 'pegawai123', role: 'pegawai', name: 'Staf Pegawai' },
-      '199001012010011002': { password: 'viewer123', role: 'viewer', name: 'Akun Demo (Hanya Lihat)' }
+      '199001012010011002': { password: 'viewer123', role: 'viewer', name: 'Akun Viewer (Hanya Lihat)' }
     };
 
     let masterPegawai = [...masterPegawaiDefault];
@@ -925,10 +925,11 @@
         const resp = await fetch(ENDPOINT_USERS);
         if (resp.ok) {
           const dataU = await resp.json();
-          if (dataU && typeof dataU === 'object') {
+          if (dataU && typeof dataU === 'object' && Object.keys(dataU).length > 0) {
             dbUsers = dataU;
           } else {
             await simpanUsersCloud(defaultUsers);
+            dbUsers = JSON.parse(JSON.stringify(defaultUsers));
           }
         }
       } catch (err) {
@@ -1028,7 +1029,7 @@
             }
         }
 
-        // HANYA AKUN VIEWER YANG DIBATASI (DIKUNCI)
+        // HANYA AKUN VIEWER YANG DIKUNCI (READ-ONLY)
         if (currentUser && currentUser.role === 'viewer') {
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
                 if (!el.closest('#modal-settings') && !el.closest('#login-overlay')) {
@@ -1040,7 +1041,7 @@
             const btnTambahInstruksi = document.getElementById('btn-tambah-instruksi');
             if (btnTambahInstruksi) btnTambahInstruksi.classList.add('hidden');
         } else {
-            // ADMIN DAN PEGAWAI TETAP BISA AKSES & EDIT FORM
+            // ADMIN DAN PEGAWAI BISA AKSES & EDIT FORM PENUH
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
                 if (el.id !== 'f_pptkNip' && el.id !== 'f_pptkPangkat' && el.id !== 'f_pptkJabatan' && el.id !== 'set-username' && el.id !== 'set-role') {
                     el.disabled = false;
@@ -2489,13 +2490,17 @@
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', async () => {
+          await muatUsersCloud();
           checkAuth();
           inisialisasiForm();
       });
     } else {
-      checkAuth();
-      inisialisasiForm();
+      (async () => {
+          await muatUsersCloud();
+          checkAuth();
+          inisialisasiForm();
+      })();
     }
   </script>
 </body>
