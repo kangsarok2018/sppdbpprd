@@ -802,6 +802,7 @@
     const FIREBASE_BASE = "https://database-master-pegawai-bpprd-default-rtdb.asia-southeast1.firebasedatabase.app";
     const ENDPOINT_PEGAWAI = `${FIREBASE_BASE}/pegawai.json`;
     const ENDPOINT_PEJABAT = `${FIREBASE_BASE}/pejabat.json`;
+    const ENDPOINT_USERS = `${FIREBASE_BASE}/users.json`;
 
     const BULAN_INDO = [
       "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -904,27 +905,45 @@
       }
     ];
 
+    const defaultUsers = {
+      '198606042025211034': { password: 'admin123', role: 'admin', name: 'Administrator BPPRD' },
+      '199001012010011001': { password: 'pegawai123', role: 'pegawai', name: 'Staf Pegawai' },
+      '199001012010011002': { password: 'viewer123', role: 'viewer', name: 'Akun Demo (Hanya Lihat)' }
+    };
+
     let masterPegawai = [...masterPegawaiDefault];
     let masterPejabat = [...masterPejabatDefault];
+    let dbUsers = JSON.parse(JSON.stringify(defaultUsers));
 
     let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-    if (currentUser && (currentUser.username === 'admin' || currentUser.username === 'pegawai')) {
-        currentUser = null;
-        localStorage.removeItem('currentUser');
+
+    async function muatUsersCloud() {
+      try {
+        const resp = await fetch(ENDPOINT_USERS);
+        if (resp.ok) {
+          const dataU = await resp.json();
+          if (dataU && typeof dataU === 'object') {
+            dbUsers = dataU;
+          } else {
+            await simpanUsersCloud(defaultUsers);
+          }
+        }
+      } catch (err) {
+        console.warn("Gagal memuat users dari cloud, menggunakan default lokal", err);
+      }
     }
 
-    let dbUsers = JSON.parse(localStorage.getItem('dbUsers'));
-    if (!dbUsers || dbUsers['admin'] || !dbUsers['199001012010011002']) {
-        dbUsers = {
-            '198606042025211034': { password: 'admin123', role: 'admin', name: 'Administrator BPPRD' },
-            '199001012010011001': { password: 'pegawai123', role: 'pegawai', name: 'Staf Pegawai' },
-            '199001012010011002': { password: 'viewer123', role: 'viewer', name: 'Akun Demo (Hanya Lihat)' }
-        };
-        localStorage.setItem('dbUsers', JSON.stringify(dbUsers));
-    }
-
-    function simpanDbUsers() {
-        localStorage.setItem('dbUsers', JSON.stringify(dbUsers));
+    async function simpanUsersCloud(usersObj) {
+      try {
+        const resp = await fetch(ENDPOINT_USERS, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(usersObj)
+        });
+        return resp.ok;
+      } catch (err) {
+        return false;
+      }
     }
 
     function togglePassword() {
@@ -939,9 +958,10 @@
         }
     }
 
-    function checkAuth() {
+    async function checkAuth() {
+        await muatUsersCloud();
         const overlay = document.getElementById('login-overlay');
-        if (currentUser) {
+        if (currentUser && dbUsers[currentUser.username]) {
             overlay.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => overlay.classList.add('hidden'), 300);
             
@@ -950,6 +970,8 @@
             
             terapkanAturanRBAC();
         } else {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
             document.getElementById('login-username').value = '';
             document.getElementById('login-password').value = '';
             overlay.classList.remove('hidden');
@@ -957,11 +979,13 @@
         }
     }
 
-    function prosesLogin(e) {
+    async function prosesLogin(e) {
         e.preventDefault();
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value;
         
+        await muatUsersCloud();
+
         if (dbUsers[user] && dbUsers[user].password === pass) {
             currentUser = { username: user, role: dbUsers[user].role, name: dbUsers[user].name };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -986,7 +1010,12 @@
         const tabMaster = document.getElementById('tab-form-master');
         const formMasterGrp = document.getElementById('form-master-group');
         
-        if (currentUser && (currentUser.role === 'pegawai' || currentUser.role === 'viewer')) {
+        if (currentUser && currentUser.role === 'admin') {
+            if (tabMaster) {
+                tabMaster.classList.remove('hidden');
+                tabMaster.classList.add('flex');
+            }
+        } else {
             if (tabMaster) {
                 tabMaster.classList.remove('flex');
                 tabMaster.classList.add('hidden');
@@ -994,14 +1023,8 @@
             if (formMasterGrp && !formMasterGrp.classList.contains('hidden')) {
                 gantiTabForm('st');
             }
-        } else {
-            if (tabMaster) {
-                tabMaster.classList.remove('hidden');
-                tabMaster.classList.add('flex');
-            }
         }
 
-        // Jika viewer, nonaktifkan elemen form edit
         if (currentUser && currentUser.role === 'viewer') {
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
                 if (!el.closest('#modal-settings') && !el.closest('#login-overlay')) {
@@ -1014,10 +1037,14 @@
             if (btnTambahInstruksi) btnTambahInstruksi.classList.add('hidden');
         } else {
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
-                if (!el.disabled && el.id !== 'f_pptkNip' && el.id !== 'f_pptkPangkat' && el.id !== 'f_pptkJabatan' && el.id !== 'set-username' && el.id !== 'set-role') {
+                if (el.id !== 'f_pptkNip' && el.id !== 'f_pptkPangkat' && el.id !== 'f_pptkJabatan' && el.id !== 'set-username' && el.id !== 'set-role') {
                     el.disabled = false;
                 }
             });
+            const btnTambahPegawai = document.getElementById('btn-tambah-pegawai');
+            if (btnTambahPegawai) btnTambahPegawai.classList.remove('hidden');
+            const btnTambahInstruksi = document.getElementById('btn-tambah-instruksi');
+            if (btnTambahInstruksi) btnTambahInstruksi.classList.remove('hidden');
         }
     }
 
@@ -1105,7 +1132,7 @@
         }
     }
 
-    function simpanPengaturanAkun() {
+    async function simpanPengaturanAkun() {
         const p1 = document.getElementById('set-new-password').value;
         const p2 = document.getElementById('set-confirm-password').value;
 
@@ -1118,11 +1145,16 @@
             return;
         }
 
+        await muatUsersCloud();
         if (dbUsers[currentUser.username]) {
             dbUsers[currentUser.username].password = p1;
-            simpanDbUsers();
-            tampilkanToast("Password berhasil diperbarui!");
-            tutupModalPengaturan();
+            const ok = await simpanUsersCloud(dbUsers);
+            if (ok) {
+                tampilkanToast("Password berhasil diperbarui di Cloud!");
+                tutupModalPengaturan();
+            } else {
+                tampilkanToast("Gagal memperbarui password ke Cloud.");
+            }
         } else {
             tampilkanToast("Gagal memperbarui akun.");
         }
@@ -1178,7 +1210,7 @@
         document.getElementById('btn-save-user').textContent = "Simpan Akun";
     }
 
-    function simpanPenggunaSistem() {
+    async function simpanPenggunaSistem() {
         const nip = document.getElementById('mng-username').value.trim();
         const nama = document.getElementById('mng-nama').value.trim();
         const pass = document.getElementById('mng-password').value.trim();
@@ -1188,6 +1220,8 @@
             tampilkanToast("Semua kolom harus diisi!");
             return;
         }
+
+        await muatUsersCloud();
 
         if (!editingUserNip && dbUsers[nip]) {
             tampilkanToast("NIP tersebut sudah terdaftar!");
@@ -1204,15 +1238,15 @@
             tampilkanToast("Akun baru berhasil ditambahkan!");
         }
 
-        simpanDbUsers();
+        await simpanUsersCloud(dbUsers);
         renderUserManagementList();
         batalEditPengguna();
     }
 
     function hapusPengguna(nip) {
-        bukaModalConfirm(`Hapus akun dengan NIP ${nip}?`, () => {
+        bukaModalConfirm(`Hapus akun dengan NIP ${nip}?`, async () => {
             delete dbUsers[nip];
-            simpanDbUsers();
+            await simpanUsersCloud(dbUsers);
             renderUserManagementList();
             tampilkanToast("Akun berhasil dihapus.");
         }, "Ya, Hapus", "bg-rose-600 hover:bg-rose-700");
@@ -1456,13 +1490,13 @@
       if (btnSt) btnSt.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100";
       if (btnSpd) btnSpd.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100";
       
-      if (currentUser && (currentUser.role === 'pegawai' || currentUser.role === 'viewer')) {
+      if (currentUser && currentUser.role === 'admin') {
         if (btnMaster) {
-          btnMaster.className = "hidden";
+          btnMaster.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 items-center justify-center gap-1 flex";
         }
       } else {
         if (btnMaster) {
-          btnMaster.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1";
+          btnMaster.className = "hidden";
         }
       }
 
@@ -1477,7 +1511,7 @@
         if (btnSpd) btnSpd.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-blue-900 text-white shadow-sm";
         if (grpSpd) grpSpd.classList.remove('hidden');
       } else if (tab === 'master') {
-        if (currentUser && (currentUser.role === 'pegawai' || currentUser.role === 'viewer')) {
+        if (!currentUser || currentUser.role !== 'admin') {
           gantiTabForm('st');
           return;
         }
