@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Surat Tugas & SPD - BPPRD Merangin</title>
 
+  <!-- Favicon inline untuk mencegah error 404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -1025,6 +1028,7 @@
             }
         }
 
+        // HANYA AKUN VIEWER YANG DIBATASI (DIKUNCI)
         if (currentUser && currentUser.role === 'viewer') {
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
                 if (!el.closest('#modal-settings') && !el.closest('#login-overlay')) {
@@ -1036,6 +1040,7 @@
             const btnTambahInstruksi = document.getElementById('btn-tambah-instruksi');
             if (btnTambahInstruksi) btnTambahInstruksi.classList.add('hidden');
         } else {
+            // ADMIN DAN PEGAWAI TETAP BISA AKSES & EDIT FORM
             document.querySelectorAll('.form-input, textarea, select').forEach(el => {
                 if (el.id !== 'f_pptkNip' && el.id !== 'f_pptkPangkat' && el.id !== 'f_pptkJabatan' && el.id !== 'set-username' && el.id !== 'set-role') {
                     el.disabled = false;
