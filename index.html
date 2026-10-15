@@ -322,7 +322,7 @@
                 </label>
                 <select id="f_pilihPejabat" onchange="pilihPejabatOtomatis(this.value)" class="form-input text-xs font-semibold bg-white cursor-pointer border-blue-300 focus:border-blue-600">
                   <option value="">-- Pilih Pejabat Penandatangan --</option>
-                  <option value="pa">Pengguna Anggaran (Hj. SITI AMINAH, MM)</option>
+                  <option value="pa"> (Hj. SITI AMINAH, MM)</option>
                   <optgroup id="optgroup-pejabat-firebase" label="Daftar Pejabat Struktural BPPRD">
                     <!-- Otomatis diisi dari database pejabat -->
                   </optgroup>
@@ -343,7 +343,7 @@
               <!-- Ringkasan Pejabat Terpilih (Read-Only) -->
               <div id="pejabat-selected-info" class="mt-2.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700">
                 <div class="font-bold text-blue-950 text-[12px]" id="info-pejabat-nama">Hj. SITI AMINAH, MM</div>
-                <div class="text-[11px] text-slate-600 font-medium" id="info-pejabat-jabatan">Pengguna Anggaran</div>
+                <div class="text-[11px] text-slate-600 font-medium" id="info-pejabat-jabatan"></div>
                 <div class="text-[10.5px] text-slate-500 mt-0.5">NIP: <span id="info-pejabat-nip">19690805 200012 2 002</span> | Gol: <span id="info-pejabat-pangkat">Pembina Utama Muda (IV/C)</span></div>
               </div>
             </div>
@@ -939,7 +939,7 @@
         ttdTempat: "Bangko",
         ttdTanggal: "September 2026",
         ttdAn: "",
-        ttdJabatan: "Pengguna Anggaran",
+        ttdJabatan: "KEPALA BPPRD",
         ttdNama: "Hj. SITI AMINAH, MM",
         ttdPangkat: "Pembina Utama Muda (IV/C)",
         ttdNip: "19690805 200012 2 002",
@@ -2385,7 +2385,7 @@
         if (currentUser && currentUser.role === "viewer") return;
         if (val === "" || val === "pa") {
           state.ttdAn = "";
-          state.ttdJabatan = "Pengguna Anggaran";
+          state.ttdJabatan = "KEPALA BPPRD";
           state.ttdNama = "Hj. SITI AMINAH, MM";
           state.ttdPangkat = "Pembina Utama Muda (IV/C)";
           state.ttdNip = "19690805 200012 2 002";
@@ -2550,7 +2550,7 @@
           <p class="font-bold tracking-tight leading-snug mt-0.5 text-[12pt]">${state.ttdJabatan || ""}</p>
         `;
         } else {
-          return `<p class="font-bold capitalize tracking-tight text-[12.5pt]">${state.ttdJabatan || "Pengguna Anggaran"}</p>`;
+          return `<p class="font-bold capitalize tracking-tight text-[12.5pt]">${state.ttdJabatan || ""}</p>`;
         }
       }
 
@@ -2798,7 +2798,7 @@
                     <tr><td style="padding: 2px 0;"></td><td style="padding: 2px 0; white-space: nowrap;">Pada Tanggal</td><td style="text-align: center; padding: 2px 0;">:</td><td style="padding: 2px 0;">${tglPunggungFormatted}</td></tr>
                   </table>
                   <div class="text-center mb-1">
-                    <p class="font-bold text-[12.5pt] leading-tight capitalize">Pengguna Anggaran</p>
+                    <p class="font-bold text-[12.5pt] leading-tight capitalize"></p>
                     <div style="height: 55px;"></div>
                     <p class="font-bold underline text-[12.5pt] leading-tight">Hj. SITI AMINAH, MM</p>
                     <p class="text-[12pt] font-bold leading-tight">Pembina Utama Muda (IV/C)</p>
